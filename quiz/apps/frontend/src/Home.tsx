@@ -59,7 +59,7 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
     return (
       <div className="home-container" style={{ textAlign: "center", paddingTop: 80 }}>
         <LanguageSwitcher />
-        <p style={{ color: "#8b949e" }}>{t("home.loading", "Loading...")}</p>
+        <p style={{ color: "#94A3B8" }}>{t("home.loading", "Loading...")}</p>
       </div>
     );
   }
@@ -67,21 +67,28 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
   return (
     <div className="home-container">
       <LanguageSwitcher />
-      <div className="home-header">
-        <div className="home-logo">Go</div>
-        <h1 className="home-title">Middle Interview Prep</h1>
-        <p className="home-subtitle">{t("home.tagline")}</p>
-      </div>
 
-      <section className="roadmap-section">
-        <div className="section-title">{t("home.roadmap")}</div>
-        <RoadmapGraph
-          blocks={blocks}
-          edges={GRAPH_EDGES}
-          progress={progress}
-          onOpenBlock={onOpenBlock}
-        />
-      </section>
+      <div className="home-hero">
+        <div className="home-hero-left">
+          <div className="home-header">
+            <div className="home-logo">Go</div>
+            <h1 className="home-title">{t("home.title", "Go Interview Prep")}</h1>
+            <p className="home-subtitle">{t("home.tagline")}</p>
+          </div>
+        </div>
+
+        <div className="home-hero-right">
+          <section className="roadmap-section">
+            <div className="section-title">{t("home.roadmap")}</div>
+            <RoadmapGraph
+              blocks={blocks}
+              edges={GRAPH_EDGES}
+              progress={progress}
+              onOpenBlock={onOpenBlock}
+            />
+          </section>
+        </div>
+      </div>
 
       <section className="practice-section">
         <div className="section-title">{t("home.quizzes")}</div>
