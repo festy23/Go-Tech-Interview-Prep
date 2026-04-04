@@ -134,7 +134,7 @@ body > #root {
 }
 
 .score-correct {
-  color: #384721;
+  color: #0E7490;
 }
 
 .score-sep {
@@ -273,7 +273,7 @@ body > #root {
 
 .option-btn.correct .option-letter {
   background: #AEFFAC;
-  color: #384721;
+  color: #0E7490;
   transform: scale(1.1);
 }
 
@@ -321,7 +321,7 @@ body > #root {
 }
 
 .explanation-correct .explanation-header {
-  color: #384721;
+  color: #0E7490;
 }
 
 .explanation-wrong .explanation-header {
@@ -396,7 +396,7 @@ body > #root {
 }
 
 .grade-excellent {
-  color: #384721;
+  color: #0E7490;
 }
 .grade-good {
   color: #2D6BB8;
@@ -664,7 +664,7 @@ body > #root {
 
 .topic-tag:hover {
   background: #DFFFDE;
-  color: #384721;
+  color: #0E7490;
 }
 
 .quiz-card-cta {
@@ -761,7 +761,7 @@ body > #root {
 
 .difficulty-basic {
   background: #DFFFDE;
-  color: #384721;
+  color: #0E7490;
 }
 
 .difficulty-basic-intermediate {
@@ -776,7 +776,7 @@ body > #root {
 
 .difficulty-intermediate-advanced {
   background: #DFFFDE;
-  color: #384721;
+  color: #0E7490;
 }
 
 .difficulty-advanced {
@@ -909,7 +909,7 @@ body > #root {
 .block-topic-tag:hover {
   background: #DFFFDE;
   border-color: #AEFFAC;
-  color: #384721;
+  color: #0E7490;
   transform: translateY(-1px);
 }
 
@@ -919,7 +919,7 @@ body > #root {
   border-radius: 14px;
   padding: 18px 22px;
   font-size: 14px;
-  color: #384721;
+  color: #0E7490;
   margin-bottom: 24px;
   line-height: 1.55;
   animation: fadeSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
