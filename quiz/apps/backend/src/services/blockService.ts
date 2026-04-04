@@ -1,14 +1,14 @@
 import { blocksCol } from '../db/collections.js'
 import type { BlockEntity } from '../schemas/entities.js'
-import type { BlockDTO } from '@quiz/shared'
+import type { BlockDTO, Lang } from '@quiz/shared'
 
-function toDTO(entity: BlockEntity): BlockDTO {
+function toDTO(entity: BlockEntity, lang: Lang = 'ru'): BlockDTO {
   return {
     id: entity.blockId,
-    title: entity.title,
+    title: entity.title[lang],
     difficulty: entity.difficulty,
     topicCount: entity.topicCount,
-    topics: entity.topics,
+    topics: entity.topics[lang],
     quizId: entity.quizId,
     gridRow: entity.gridRow,
     gridCol: entity.gridCol,
@@ -16,14 +16,14 @@ function toDTO(entity: BlockEntity): BlockDTO {
   }
 }
 
-export async function getAllBlocks(): Promise<BlockDTO[]> {
+export async function getAllBlocks(lang: Lang = 'ru'): Promise<BlockDTO[]> {
   const col = await blocksCol()
   const docs = await col.find({}).sort({ gridRow: 1, gridCol: 1 }).toArray()
-  return docs.map(toDTO)
+  return docs.map((doc) => toDTO(doc, lang))
 }
 
-export async function getBlockById(blockId: string): Promise<BlockDTO | null> {
+export async function getBlockById(blockId: string, lang: Lang = 'ru'): Promise<BlockDTO | null> {
   const col = await blocksCol()
   const doc = await col.findOne({ blockId })
-  return doc ? toDTO(doc) : null
+  return doc ? toDTO(doc, lang) : null
 }

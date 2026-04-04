@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { RoadmapBlock, GraphEdge } from "./data/blocks";
-import { DIFFICULTY_LABEL } from "./data/blocks";
 import type { ProgressMap } from "./data/progress";
 import { getProgressPct } from "./data/progress";
 import { CircularProgress } from "./CircularProgress";
@@ -24,6 +24,7 @@ const GRID_ROWS = 5;
 const GRID_COLS = 4;
 
 export function RoadmapGraph({ blocks, edges, progress, onOpenBlock }: RoadmapGraphProps) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [lines, setLines] = useState<LineData[]>([]);
@@ -101,15 +102,15 @@ export function RoadmapGraph({ blocks, edges, progress, onOpenBlock }: RoadmapGr
                 <span
                   className={`difficulty-badge difficulty-${block.difficulty}`}
                 >
-                  {DIFFICULTY_LABEL[block.difficulty]}
+                  {t(`difficulty.${block.difficulty}`)}
                 </span>
               </div>
               <div className="roadmap-node-footer">
                 <span className="roadmap-node-footer-count">
-                  ~{block.topicCount} вопросов
+                  ~{block.topicCount} {t("roadmap.questions")}
                 </span>
                 {block.quizId && (
-                  <span style={{ color: "#3fb950", fontSize: 10 }}>● Квиз доступен</span>
+                  <span style={{ color: "#3fb950", fontSize: 10 }}>{t("roadmap.quizAvailable")}</span>
                 )}
               </div>
             </button>

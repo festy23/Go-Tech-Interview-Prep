@@ -7,13 +7,14 @@ export const questionsRouter = new Hono().get(
   '/',
   zValidator('query', QuestionQuerySchema),
   async (c) => {
-    const { quizId, blockId, shuffle, limit } = c.req.valid('query')
+    const { quizId, blockId, shuffle, limit, lang } = c.req.valid('query')
 
     const questions = await getQuestions({
       quizId,
       blockId,
       shuffle: shuffle === 'true',
       limit,
+      lang,
     })
 
     return c.json({ data: questions, count: questions.length }, 200)

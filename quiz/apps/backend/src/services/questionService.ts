@@ -1,18 +1,18 @@
 import type { Filter } from 'mongodb'
 import { questionsCol } from '../db/collections.js'
 import type { QuestionEntity, MCQQuestionEntity } from '../schemas/entities.js'
-import type { QuestionDTO, MCQQuestionDTO, CreateMCQQuestionInput } from '@quiz/shared'
+import type { QuestionDTO, MCQQuestionDTO, CreateMCQQuestionInput, Lang } from '@quiz/shared'
 
 // ── Converters ───────────────────────────────────────────────────────────────
 
-function toDTO(entity: QuestionEntity): QuestionDTO {
+function toDTO(entity: QuestionEntity, lang: Lang = 'ru'): QuestionDTO {
   const base = {
     id: entity._id.toHexString(),
     quizId: entity.quizId,
     blockId: entity.blockId,
     difficulty: entity.difficulty,
     tags: entity.tags,
-    explanation: entity.explanation,
+    explanation: entity.explanation[lang],
     createdAt: entity.createdAt.toISOString(),
     updatedAt: entity.updatedAt.toISOString(),
   }
@@ -21,8 +21,8 @@ function toDTO(entity: QuestionEntity): QuestionDTO {
     const dto: MCQQuestionDTO = {
       ...base,
       type: 'mcq',
-      question: entity.question,
-      options: entity.options,
+      question: entity.question[lang],
+      options: entity.options[lang],
       correct: entity.correct,
       ...(entity.code ? { code: entity.code } : {}),
     }
@@ -40,8 +40,10 @@ export async function getQuestions(params: {
   blockId?: string
   shuffle?: boolean
   limit?: number
+  lang?: Lang
 }): Promise<QuestionDTO[]> {
   const col = await questionsCol()
+  const lang: Lang = params.lang ?? 'ru'
 
   const filter: Filter<MCQQuestionEntity> = {}
   if (params.quizId !== undefined) filter['quizId'] = params.quizId
@@ -50,7 +52,7 @@ export async function getQuestions(params: {
   const cursor = col.find(filter)
   const docs = await cursor.toArray()
 
-  let results = docs.map(toDTO)
+  let results = docs.map((doc) => toDTO(doc, lang))
 
   if (params.shuffle) {
     // Fisher-Yates shuffle
@@ -79,10 +81,10 @@ export async function createQuestion(
     type: 'mcq',
     quizId: input.quizId,
     blockId: input.blockId,
-    question: input.question,
-    options: input.options,
+    question: { ru: input.question, en: '' },
+    options: { ru: input.options, en: input.options },
     correct: input.correct,
-    explanation: input.explanation,
+    explanation: { ru: input.explanation, en: '' },
     difficulty: input.difficulty,
     tags: input.tags,
     createdAt: now,

@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+export const LangSchema = z.enum(['ru', 'en'])
+export type Lang = z.infer<typeof LangSchema>
+
 export const DifficultyLevelSchema = z.enum([
   'basic',
   'basic-intermediate',
@@ -63,5 +66,6 @@ export const QuestionQuerySchema = z.object({
   blockId: z.string().optional(),
   shuffle: z.enum(['true', 'false']).optional(),
   limit: z.coerce.number().int().min(1).max(200).optional(),
+  lang: LangSchema.default('ru').optional(),
 })
 export type QuestionQuery = z.infer<typeof QuestionQuerySchema>

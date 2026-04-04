@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Home } from "./Home";
 import { Quiz } from "./Quiz";
 import { BlockDetail } from "./BlockDetail";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { questions } from "./data/questions";
 import { questions2 } from "./data/questions2";
 import { questions3 } from "./data/questions3";
@@ -14,6 +16,7 @@ import "./App.css";
 type Screen = "home" | "quiz1" | "quiz2" | "quiz3" | "block";
 
 export default function App() {
+  const { t } = useTranslation();
   const [screen, setScreen] = useState<Screen>("home");
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
@@ -48,44 +51,56 @@ export default function App() {
 
   if (screen === "quiz1") {
     return (
-      <Quiz
-        title="Go на собесе"
-        questions={questions}
-        onHome={goHome}
-        onComplete={(s, t) => handleQuizComplete(1, s, t)}
-      />
+      <>
+        <LanguageSwitcher />
+        <Quiz
+          title={t("quizCard.1.title")}
+          questions={questions}
+          onHome={goHome}
+          onComplete={(s, t) => handleQuizComplete(1, s, t)}
+        />
+      </>
     );
   }
 
   if (screen === "quiz2") {
     return (
-      <Quiz
-        title="Go Deep Dive"
-        questions={questions2}
-        onHome={goHome}
-        onComplete={(s, t) => handleQuizComplete(2, s, t)}
-      />
+      <>
+        <LanguageSwitcher />
+        <Quiz
+          title={t("quizCard.2.title")}
+          questions={questions2}
+          onHome={goHome}
+          onComplete={(s, t) => handleQuizComplete(2, s, t)}
+        />
+      </>
     );
   }
 
   if (screen === "quiz3") {
     return (
-      <Quiz
-        title="Go Concurrency"
-        questions={questions3}
-        onHome={goHome}
-        onComplete={(s, t) => handleQuizComplete(3, s, t)}
-      />
+      <>
+        <LanguageSwitcher />
+        <Quiz
+          title={t("quizCard.3.title")}
+          questions={questions3}
+          onHome={goHome}
+          onComplete={(s, t) => handleQuizComplete(3, s, t)}
+        />
+      </>
     );
   }
 
   if (screen === "block" && selectedBlockId) {
     return (
-      <BlockDetail
-        blockId={selectedBlockId}
-        onHome={goHome}
-        onStartQuiz={startQuiz}
-      />
+      <>
+        <LanguageSwitcher />
+        <BlockDetail
+          blockId={selectedBlockId}
+          onHome={goHome}
+          onStartQuiz={startQuiz}
+        />
+      </>
     );
   }
 

@@ -9,8 +9,13 @@
 import { QuestionDTOSchema, BlockDTOSchema, SessionProgressDTOSchema } from '@quiz/shared'
 import { z } from 'zod'
 import type { QuestionDTO, BlockDTO, SessionProgressDTO, SaveProgressInput } from '@quiz/shared'
+import i18n from '../i18n'
 
 const BASE = '/api'
+
+function getLang(): string {
+  return i18n.language || 'ru'
+}
 
 async function apiFetch<T>(
   path: string,
@@ -38,6 +43,7 @@ export async function fetchQuestions(params: {
   limit?: number
 }): Promise<QuestionDTO[]> {
   const query = new URLSearchParams()
+  query.set('lang', getLang())
   if (params.quizId !== undefined) query.set('quizId', String(params.quizId))
   if (params.blockId !== undefined) query.set('blockId', params.blockId)
   if (params.shuffle) query.set('shuffle', 'true')
@@ -51,12 +57,12 @@ export async function fetchQuestions(params: {
 // ── Blocks ────────────────────────────────────────────────────────────────────
 
 export async function fetchBlocks(): Promise<BlockDTO[]> {
-  const res = await apiFetch<{ data: unknown[] }>('/blocks')
+  const res = await apiFetch<{ data: unknown[] }>(`/blocks?lang=${getLang()}`)
   return z.array(BlockDTOSchema).parse(res.data)
 }
 
 export async function fetchBlock(id: string): Promise<BlockDTO> {
-  const res = await apiFetch<{ data: unknown }>(`/blocks/${id}`)
+  const res = await apiFetch<{ data: unknown }>(`/blocks/${id}?lang=${getLang()}`)
   return BlockDTOSchema.parse(res.data)
 }
 

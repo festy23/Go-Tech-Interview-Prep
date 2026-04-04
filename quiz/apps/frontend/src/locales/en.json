@@ -1,0 +1,52 @@
+{
+  "home.tagline": "Interview preparation roadmap",
+  "home.roadmap": "Roadmap",
+  "home.quizzes": "Practice — Quizzes",
+  "home.start": "Start →",
+  "home.questions": "questions",
+
+  "quiz.correct": "Correct!",
+  "quiz.wrong": "Wrong!",
+  "quiz.next": "Next →",
+  "quiz.results": "Results",
+  "quiz.back": "← Back",
+  "quiz.tryAgain": "Try Again",
+  "quiz.home": "Home",
+  "quiz.percentCorrect": "{{pct}}% correct",
+  "quiz.gradeExcellent": "Senior-ready!",
+  "quiz.gradeGood": "Strong Middle",
+  "quiz.gradeOk": "Middle",
+  "quiz.gradeWeak": "Keep studying!",
+
+  "block.back": "← Back",
+  "block.notFound": "Block not found.",
+  "block.questions": "questions",
+  "block.bestScore": "Best score:",
+  "block.topics": "Topics",
+  "block.comingSoon": "Questions for this block are being prepared. A full quiz of ~{{count}} questions will appear here soon.",
+  "block.startQuiz": "Start quiz →",
+  "block.inDevelopment": "Quiz in development",
+
+  "roadmap.questions": "questions",
+  "roadmap.quizAvailable": "● Quiz available",
+
+  "difficulty.basic": "Basic",
+  "difficulty.basic-intermediate": "Basic+",
+  "difficulty.intermediate": "Intermediate",
+  "difficulty.intermediate-advanced": "Intermediate+",
+  "difficulty.advanced": "Advanced",
+
+  "quizCard.1.title": "Go Interview Prep",
+  "quizCard.1.subtitle": "Based on Maxim Lukyanov's materials",
+  "quizCard.1.topics": "gRPC / REST,OOP in Go,Strings,Context,Slice / Map,Channels,Goroutines,GMP Scheduler,ACID / PostgreSQL,Kafka",
+
+  "quizCard.2.title": "Go Deep Dive",
+  "quizCard.2.subtitle": "Advanced topics for Middle level",
+  "quizCard.2.topics": "Pointers,Slices (deep),Map (deep),Structs,Interfaces,Errors / defer / recover",
+
+  "quizCard.3.title": "Go Concurrency",
+  "quizCard.3.subtitle": "Channels, sync, code review",
+  "quizCard.3.topics": "Channels,Channel patterns,Mutex / RWMutex,WaitGroup / Once,sync/atomic,Code Review",
+
+  "lang.switch": "RU"
+}

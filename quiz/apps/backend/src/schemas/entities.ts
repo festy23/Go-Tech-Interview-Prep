@@ -15,16 +15,16 @@ interface BaseQuestionEntity {
   blockId: string | null
   difficulty: DifficultyLevel
   tags: string[]
-  explanation: string
+  explanation: { ru: string; en: string }
   createdAt: Date
   updatedAt: Date
 }
 
 export interface MCQQuestionEntity extends BaseQuestionEntity {
   type: 'mcq'
-  question: string
+  question: { ru: string; en: string }
   code?: string
-  options: [string, string, string, string]
+  options: { ru: [string, string, string, string]; en: [string, string, string, string] }
   correct: 0 | 1 | 2 | 3
 }
 
@@ -35,10 +35,10 @@ export type QuestionEntity = MCQQuestionEntity
 export interface BlockEntity {
   _id: ObjectId
   blockId: string          // stable string id e.g. "concurrency"
-  title: string
+  title: { ru: string; en: string }
   difficulty: DifficultyLevel
   topicCount: number
-  topics: string[]
+  topics: { ru: string[]; en: string[] }
   quizId: 1 | 2 | 3 | null
   gridRow: number
   gridCol: number
