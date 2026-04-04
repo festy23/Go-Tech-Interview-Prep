@@ -1,0 +1,24 @@
+# Vercel
+.vercel
+.env*.local
+
+# Node
+node_modules/
+dist/
+
+# Go binaries
+01_generator
+02_pipeline
+03_fan_out_fan_in
+04_worker_pool
+05_semaphore
+06_rate_limiter
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+
+# Claude
+.claude/
