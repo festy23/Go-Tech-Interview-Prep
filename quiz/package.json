@@ -1,0 +1,27 @@
+{
+  "name": "quiz-monorepo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @quiz/frontend dev\" \"pnpm --filter @quiz/backend dev\"",
+    "build": "pnpm --filter @quiz/shared build && pnpm --filter @quiz/backend build && pnpm --filter @quiz/frontend build",
+    "typecheck": "pnpm -r typecheck",
+    "seed": "pnpm --filter @quiz/backend seed",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "concurrently": "^9.1.2",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.12",
+    "@hono/zod-validator": "^0.5.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "dotenv": "^16.6.1",
+    "hono": "4.7.10",
+    "mongodb": "^6.21.0",
+    "zod": "^4.3.6"
+  }
+}
