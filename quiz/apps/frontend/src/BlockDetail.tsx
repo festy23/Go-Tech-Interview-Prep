@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ROADMAP_BLOCKS } from "./data/blocks";
+import { fetchBlock } from "./api/client";
 import { loadProgress, getProgressPct } from "./data/progress";
 import { CircularProgress } from "./CircularProgress";
+import type { BlockDTO } from "@quiz/shared";
 
 interface BlockDetailProps {
   blockId: string;
@@ -10,10 +12,35 @@ interface BlockDetailProps {
 }
 
 export function BlockDetail({ blockId, onHome, onStartQuiz }: BlockDetailProps) {
-  const { t } = useTranslation();
-  const block = ROADMAP_BLOCKS.find((b) => b.id === blockId);
+  const { t, i18n } = useTranslation();
+  const [block, setBlock] = useState<BlockDTO | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  if (!block) {
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
+    fetchBlock(blockId)
+      .then((dto) => { if (!cancelled) setBlock(dto); })
+      .catch((err) => {
+        console.error("[BlockDetail] Failed to fetch block:", err);
+        if (!cancelled) setError(true);
+      })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [blockId, i18n.language]);
+
+  if (loading) {
+    return (
+      <div className="block-detail-container">
+        <button className="btn-back" onClick={onHome}>{t("block.back")}</button>
+        <p style={{ color: "#8b949e", marginTop: 24 }}>{t("home.loading", "Loading...")}</p>
+      </div>
+    );
+  }
+
+  if (error || !block) {
     return (
       <div className="block-detail-container">
         <button className="btn-back" onClick={onHome}>{t("block.back")}</button>
@@ -67,7 +94,7 @@ export function BlockDetail({ blockId, onHome, onStartQuiz }: BlockDetailProps) 
       </div>
 
       <div className="block-stub-notice">
-        🚧 {t("block.comingSoon", { count: block.topicCount })}
+        {t("block.comingSoon", { count: block.topicCount })}
       </div>
 
       {block.quizId ? (

@@ -1,21 +1,26 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { RoadmapGraph } from "./RoadmapGraph";
-import { ROADMAP_BLOCKS, GRAPH_EDGES } from "./data/blocks";
+import { GRAPH_EDGES } from "./data/blocks";
+import type { RoadmapBlock } from "./data/blocks";
 import { loadProgress } from "./data/progress";
+import { fetchBlocks } from "./api/client";
+import type { BlockDTO } from "@quiz/shared";
 
-interface QuizCardData {
-  id: 1 | 2 | 3;
-  count: number;
-  color: string;
+function blockDtoToRoadmapBlock(dto: BlockDTO): RoadmapBlock {
+  return {
+    id: dto.id,
+    title: dto.title,
+    difficulty: dto.difficulty,
+    topicCount: dto.topicCount,
+    topics: dto.topics,
+    quizId: dto.quizId ?? undefined,
+    gridRow: dto.gridRow,
+    gridCol: dto.gridCol,
+    color: dto.color,
+  };
 }
-
-const QUIZ_CARDS_DATA: QuizCardData[] = [
-  { id: 1, count: 50, color: "#58a6ff" },
-  { id: 2, count: 50, color: "#3fb950" },
-  { id: 3, count: 50, color: "#d29922" },
-];
 
 interface HomeProps {
   onOpenBlock: (blockId: string) => void;
@@ -23,8 +28,41 @@ interface HomeProps {
 }
 
 export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const progress = useMemo(() => loadProgress(), []);
+
+  const [blocks, setBlocks] = useState<RoadmapBlock[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchBlocks()
+      .then((dtos) => {
+        if (!cancelled) setBlocks(dtos.map(blockDtoToRoadmapBlock));
+      })
+      .catch((err) => console.error("[Home] Failed to fetch blocks:", err))
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [i18n.language]);
+
+  // Derive quiz cards from blocks that have a quizId
+  const quizCards = useMemo(
+    () =>
+      blocks
+        .filter((b): b is RoadmapBlock & { quizId: 1 | 2 | 3 } => b.quizId != null)
+        .map((b) => ({ id: b.quizId, count: b.topicCount, color: b.color })),
+    [blocks],
+  );
+
+  if (loading) {
+    return (
+      <div className="home-container" style={{ textAlign: "center", paddingTop: 80 }}>
+        <LanguageSwitcher />
+        <p style={{ color: "#8b949e" }}>{t("home.loading", "Loading...")}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="home-container">
@@ -38,7 +76,7 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
       <section className="roadmap-section">
         <div className="section-title">{t("home.roadmap")}</div>
         <RoadmapGraph
-          blocks={ROADMAP_BLOCKS}
+          blocks={blocks}
           edges={GRAPH_EDGES}
           progress={progress}
           onOpenBlock={onOpenBlock}
@@ -48,7 +86,7 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
       <section className="practice-section">
         <div className="section-title">{t("home.quizzes")}</div>
         <div className="quiz-cards">
-          {QUIZ_CARDS_DATA.map((q) => {
+          {quizCards.map((q) => {
             const title = t(`quizCard.${q.id}.title`);
             const subtitle = t(`quizCard.${q.id}.subtitle`);
             const topics = t(`quizCard.${q.id}.topics`).split(",");
