@@ -1,0 +1,341 @@
+%!TEX program = xelatex
+\documentclass[8.5pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+
+\setmainfont{SF Pro Text}[
+  BoldFont       = {SF Pro Text Semibold},
+  ItalicFont     = {SF Pro Text Regular Italic},
+  BoldItalicFont = {SF Pro Text Semibold Italic},
+]
+\setmonofont[
+  Scale=0.80,
+  Path=/Users/ivanm3/Library/Fonts/,
+  UprightFont = JetBrainsMonoNerdFontMono-Regular.ttf,
+  BoldFont    = JetBrainsMonoNerdFontMono-Bold.ttf,
+]{JetBrainsMono NFM}
+
+\usepackage[
+  top=6mm, bottom=5mm,
+  left=9mm, right=9mm,
+  columnsep=5mm,
+  textheight=284mm
+]{geometry}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{pagecolor}
+
+% ── Palette ──────────────────────────────────────────────────────────────────
+\definecolor{bg}{HTML}{0F1117}
+\definecolor{border}{HTML}{30363D}
+\definecolor{blue}{HTML}{58A6FF}
+\definecolor{green}{HTML}{3FB950}
+\definecolor{yellow}{HTML}{D29922}
+\definecolor{red}{HTML}{F85149}
+\definecolor{muted}{HTML}{8B949E}
+\definecolor{fg}{HTML}{E1E4E8}
+\definecolor{codefg}{HTML}{C9D1D9}
+\definecolor{codebg}{HTML}{0D1117}
+
+\pagecolor{bg}
+\color{fg}
+
+% ── Section headings ─────────────────────────────────────────────────────────
+\titleformat{\section}[block]
+  {\normalfont\fontsize{7.5}{9}\bfseries\color{blue}}
+  {}{0em}{}[\vspace{-1pt}\textcolor{border}{\rule{\linewidth}{0.4pt}}]
+\titlespacing{\section}{0pt}{4pt}{1.5pt}
+
+% ── Code listings ─────────────────────────────────────────────────────────────
+\lstdefinestyle{gocode}{
+  language=Go,
+  basicstyle=\ttfamily\fontsize{6.0}{7.5}\color{codefg},
+  backgroundcolor=\color{codebg},
+  frame=single, framesep=2pt, framerule=0.4pt,
+  rulecolor=\color{border},
+  breaklines=true, keepspaces=true, columns=flexible,
+  xleftmargin=3pt, xrightmargin=3pt,
+  aboveskip=1.5pt, belowskip=1.5pt,
+  keywordstyle=\color{blue},
+  stringstyle=\color{yellow},
+  commentstyle=\color{muted},
+  morekeywords={chan,go,select,defer,func,var,type,struct,interface,make,close,range,return,case,default,for,if,else,package,import,sync},
+  literate={<-}{{\texttt{<-}}}2 {<}{{\texttt{<}}}1 {>}{{\texttt{>}}}1,
+}
+
+\lstdefinestyle{sqlcode}{
+  language=SQL,
+  basicstyle=\ttfamily\fontsize{6.0}{7.5}\color{codefg},
+  backgroundcolor=\color{codebg},
+  frame=single, framesep=2pt, framerule=0.4pt,
+  rulecolor=\color{border},
+  breaklines=true, keepspaces=true, columns=flexible,
+  xleftmargin=3pt, xrightmargin=3pt,
+  aboveskip=1.5pt, belowskip=1.5pt,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{yellow},
+  commentstyle=\color{muted},
+}
+
+\lstset{style=gocode}
+
+% ── Compact bullet list ───────────────────────────────────────────────────────
+\newenvironment{clist}{%
+  \begin{itemize}[leftmargin=9pt,itemsep=0pt,topsep=0.5pt,parsep=0pt,
+    label=\textcolor{muted}{\fontsize{5}{5}\textbullet}]
+    \setlength{\itemsep}{0pt}
+}{\end{itemize}}
+
+% ── Helpers ───────────────────────────────────────────────────────────────────
+\newcommand{\hl}[2]{\textbf{\textcolor{#1}{#2}}}
+\newcommand{\note}[1]{{\fontsize{6.5}{8}\color{muted} #1}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5pt}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\pagestyle{empty}
+\enlargethispage{12mm}
+
+% ══ TITLE ════════════════════════════════════════════════════════════════════
+{\centering
+  {\fontsize{12.5}{15}\bfseries\color{blue} Go Concurrency \& SQL — Cheat Sheet}\\[-1pt]
+  {\fontsize{7}{8.5}\color{muted} Паттерны каналов · sync-примитивы · SQL задачи}\\[1pt]
+  \textcolor{border}{\rule{\linewidth}{0.5pt}}\\[1.5pt]
+}
+
+\begin{multicols}{3}
+\setlength{\columnsep}{5mm}
+
+%──────────────────────────────────────────────────────
+\section{Каналы: основы}
+
+{\fontsize{7}{8.5} Небуферизованный — синхронный (блок до получателя). Буферизованный — асинхронный до заполнения.}
+\begin{lstlisting}
+ch := make(chan int)     // sync
+ch := make(chan int, 10) // buffered
+\end{lstlisting}
+
+\hl{green}{Аксиомы:}
+\begin{clist}
+  \item send в \texttt{nil}/closed → \hl{red}{panic}
+  \item recv из closed → zero\,+\,\texttt{false}
+  \item recv/send в nil → блок навсегда
+  \item \texttt{select}: nil-ветка никогда не выбирается
+\end{clist}
+
+%──────────────────────────────────────────────────────
+\section{Pipeline}
+
+{\fontsize{7}{8.5} Цепочка горутин: каждая читает \texttt{in}, пишет в \texttt{out}, закрывает после себя.}
+\begin{lstlisting}
+func stage(in <-chan int) <-chan int {
+  out := make(chan int)
+  go func() {
+    defer close(out)
+    for v := range in { out <- v*v }
+  }()
+  return out
+}
+// usage: src -> stage -> stage -> sink
+\end{lstlisting}
+
+%──────────────────────────────────────────────────────
+\section{Fan-out / Fan-in}
+
+\hl{yellow}{Fan-out}: N воркеров читают один канал.\\
+\hl{green}{Fan-in}: слить N каналов в один.
+\begin{lstlisting}
+func merge(cs ...<-chan int) <-chan int {
+  var wg sync.WaitGroup
+  out := make(chan int)
+  wg.Add(len(cs))
+  for _, c := range cs {
+    go func(ch <-chan int) {
+      defer wg.Done()
+      for v := range ch { out <- v }
+    }(c)
+  }
+  go func() { wg.Wait(); close(out) }()
+  return out
+}
+\end{lstlisting}
+
+%──────────────────────────────────────────────────────
+\section{Done-channel / Отмена}
+
+\begin{lstlisting}
+done := make(chan struct{})
+defer close(done) // broadcast-сигнал
+
+go func() {
+  select {
+  case out <- process():
+  case <-done: return // leak-safe
+  }
+}()
+\end{lstlisting}
+
+\note{Предпочти \texttt{context.Context} в production-коде.}
+
+%──────────────────────────────────────────────────────
+\section{Timeout / Select}
+
+\begin{lstlisting}
+select {
+case v := <-ch:
+  handle(v)
+case <-time.After(2 * time.Second):
+  // timeout
+case <-ctx.Done():
+  return ctx.Err()
+}
+\end{lstlisting}
+
+%──────────────────────────────────────────────────────
+\section{Семафор (ограничение пула)}
+
+\begin{lstlisting}
+sem := make(chan struct{}, N)
+for _, job := range jobs {
+  sem <- struct{}{} // acquire slot
+  go func(j Job) {
+    defer func() { <-sem }()
+    process(j)
+  }(job)
+}
+\end{lstlisting}
+
+%──────────────────────────────────────────────────────
+\section{Mutex / RWMutex}
+
+\begin{lstlisting}
+var mu sync.RWMutex
+// чтение (параллельно):
+mu.RLock(); v := m[k]; mu.RUnlock()
+// запись (эксклюзивно):
+mu.Lock(); defer mu.Unlock()
+m[k] = v
+\end{lstlisting}
+
+\begin{clist}
+  \item \texttt{defer mu.Unlock()} сразу после \texttt{Lock()}
+  \item Pointer receiver — мьютекс \textbf{нельзя копировать}
+  \item \hl{red}{Не реентерабелен} — повторный Lock = дедлок
+\end{clist}
+
+%──────────────────────────────────────────────────────
+\section{WaitGroup / Once / Atomic}
+
+\begin{lstlisting}
+var wg sync.WaitGroup
+wg.Add(1)        // ДО go func
+go func() {
+  defer wg.Done(); work()
+}()
+wg.Wait()
+
+var once sync.Once
+once.Do(initDB)  // ровно 1 раз
+
+var cnt int64
+atomic.AddInt64(&cnt, 1)
+v := atomic.LoadInt64(&cnt)
+\end{lstlisting}
+
+%──────────────────────────────────────────────────────
+\section{Типичные ошибки}
+
+\begin{clist}
+  \item \hl{red}{Goroutine leak}: горутина заблокирована навсегда → done-ch или ctx
+  \item \hl{red}{Data race}: r/w без sync → \texttt{go test -race}
+  \item \hl{yellow}{wg.Add внутри go func} → Wait может выйти раньше
+  \item \hl{yellow}{Value-receiver + Mutex} → копирует мьютекс
+  \item \hl{yellow}{Закрывает получатель} → panic у второго отправителя
+\end{clist}
+
+%──────────────────────────────────────────────────────
+\section{SQL: схема}
+
+{\fontsize{6.5}{8}\ttfamily\color{codefg}
+employees(id, name, dept\_id, salary)\\
+departments(id, name)\\
+orders(id, cust\_id, amount, created\_at)\\
+order\_items(id, order\_id, product\_id, qty)\\
+products(id, name, price)
+}
+
+%──────────────────────────────────────────────────────
+\section{SQL задачки}
+
+\hl{blue}{1. Средняя ЗП по отделам, только > 80k}
+\begin{lstlisting}[style=sqlcode]
+SELECT d.name, AVG(e.salary) avg_sal
+FROM employees e
+JOIN departments d ON d.id = e.dept_id
+GROUP BY d.name
+HAVING AVG(e.salary) > 80000
+ORDER BY avg_sal DESC;
+\end{lstlisting}
+
+\hl{blue}{2. Топ-3 клиента по сумме заказов}
+\begin{lstlisting}[style=sqlcode]
+SELECT cust_id, SUM(amount) total
+FROM orders
+GROUP BY cust_id
+ORDER BY total DESC LIMIT 3;
+\end{lstlisting}
+
+\hl{blue}{3. Сотрудники без отдела (LEFT JOIN)}
+\begin{lstlisting}[style=sqlcode]
+SELECT e.name FROM employees e
+LEFT JOIN departments d ON d.id = e.dept_id
+WHERE d.id IS NULL;
+\end{lstlisting}
+
+\hl{blue}{4. Выручка за 7 дней по дням}
+\begin{lstlisting}[style=sqlcode]
+SELECT DATE(created_at) day,
+       SUM(amount) revenue
+FROM orders
+WHERE created_at >= NOW()-INTERVAL '7 days'
+GROUP BY day ORDER BY day;
+\end{lstlisting}
+
+\hl{blue}{5. Ранг ЗП внутри отдела (window)}
+\begin{lstlisting}[style=sqlcode]
+SELECT name, salary,
+  RANK() OVER (
+    PARTITION BY dept_id
+    ORDER BY salary DESC
+  ) rnk
+FROM employees;
+\end{lstlisting}
+
+\hl{blue}{6. Товары без заказов}
+\begin{lstlisting}[style=sqlcode]
+-- NOT IN опасен при NULL; лучше:
+SELECT p.id, p.name FROM products p
+LEFT JOIN order_items oi
+  ON oi.product_id = p.id
+WHERE oi.id IS NULL;
+\end{lstlisting}
+
+\vfill
+\textcolor{border}{\rule{\columnwidth}{0.4pt}}\\[0.5pt]
+{\fontsize{5.8}{7}\color{muted}
+  \textbf{Правила:} wg.Add \emph{до} go\,·\,канал закрывает \emph{отправитель}\,·\,Mutex нереентерабелен\,·\,%
+  -race обязателен\,·\,HAVING фильтрует агрегаты\,·\,оконные функции не убирают строки%
+}
+
+\end{multicols}
+
+\end{document}
