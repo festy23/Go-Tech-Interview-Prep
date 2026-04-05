@@ -71,7 +71,7 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
 
   return (
     <div className="relative" ref={containerRef}>
-      <div className="grid grid-cols-3 gap-[40px_20px] justify-items-center max-[600px]:grid-cols-2 max-[600px]:gap-[28px_10px]">
+      <div className="grid grid-cols-3 gap-[48px_24px] justify-items-center max-[600px]:grid-cols-2 max-[600px]:gap-[32px_12px]">
         {Array.from({ length: totalSlots }, (_, i) => {
           const block = blockBySlot[i];
           if (!block) return <div key={i} />;
@@ -80,13 +80,11 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
             <button
               key={block.id}
               ref={(el) => { nodeRefs.current[block.id] = el; }}
-              className="roadmap-node relative z-[1] inline-flex items-center justify-center rounded-[10px] px-5 py-2.5 text-center cursor-pointer w-[150px] h-[42px] border transition-all duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 max-[600px]:w-[130px] max-[600px]:px-3.5"
+              className="roadmap-node relative z-[1] flex items-center justify-center rounded-xl px-5 py-3 text-center cursor-pointer min-w-[120px] max-w-[200px] border transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:scale-[1.03] max-[600px]:min-w-[100px] max-[600px]:max-w-[160px] max-[600px]:px-3 max-[600px]:py-2.5"
               style={{ "--node-color": block.color } as React.CSSProperties}
               onClick={() => onOpenBlock(block.id)}
             >
-              <div className="flex justify-center items-center">
-                <span className="text-xs font-semibold text-carbon-100 leading-tight whitespace-nowrap overflow-hidden text-ellipsis tracking-[0.2px] max-[600px]:text-[11px]">{block.title}</span>
-              </div>
+              <span className="text-[13px] font-semibold text-carbon-100 leading-snug text-center tracking-[0.15px] max-[600px]:text-[11px]">{block.title}</span>
             </button>
           );
         })}
@@ -95,26 +93,31 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
       <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0" aria-hidden="true">
         <defs>
           <marker
-            id="roadmap-arrow"
-            markerWidth="8"
+            id="roadmap-dot"
+            markerWidth="6"
             markerHeight="6"
-            refX="7"
+            refX="3"
             refY="3"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" fill="rgba(255,255,255,0.12)" />
+            <circle cx="3" cy="3" r="2" fill="rgba(255,255,255,0.2)" />
           </marker>
         </defs>
-        {lines.map((l) => (
-          <path
-            key={l.key}
-            d={`M ${l.x1} ${l.y1} C ${l.x1} ${l.y1 + 28} ${l.x2} ${l.y2 - 28} ${l.x2} ${l.y2}`}
-            stroke="rgba(255,255,255,0.07)"
-            strokeWidth="1"
-            fill="none"
-            markerEnd="url(#roadmap-arrow)"
-          />
-        ))}
+        {lines.map((l) => {
+          const dy = l.y2 - l.y1;
+          const cp = Math.min(dy * 0.4, 40);
+          return (
+            <path
+              key={l.key}
+              d={`M ${l.x1} ${l.y1} C ${l.x1} ${l.y1 + cp} ${l.x2} ${l.y2 - cp} ${l.x2} ${l.y2}`}
+              stroke="rgba(255,255,255,0.08)"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+              fill="none"
+              markerEnd="url(#roadmap-dot)"
+            />
+          );
+        })}
       </svg>
     </div>
   );
