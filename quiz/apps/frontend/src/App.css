@@ -16,7 +16,7 @@
 
 body {
   font-family: "Outfit", sans-serif;
-  background: #1A1A2E;
+  background: #2D2D1D;
   color: #E2E8F0;
   min-height: 100vh;
   line-height: 1.5;
@@ -90,9 +90,9 @@ body > #root {
 .loading-skeleton {
   background: linear-gradient(
     90deg,
-    #1E293B 0%,
+    #3A3A28 0%,
     #2D3748 40%,
-    #1E293B 80%
+    #3A3A28 80%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
@@ -149,7 +149,7 @@ body > #root {
 /* ── PROGRESS BAR ───────────────────────────────────────────────────────── */
 .progress-track {
   height: 5px;
-  background: #0F172A;
+  background: #1F1F14;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -175,7 +175,7 @@ body > #root {
 
 /* ── QUESTION CARD ──────────────────────────────────────────────────────── */
 .question-card {
-  background: #1E293B;
+  background: #3A3A28;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 36px 28px;
@@ -195,7 +195,7 @@ body > #root {
 
 /* ── CODE BLOCK ─────────────────────────────────────────────────────────── */
 .question-code {
-  background: #0F172A;
+  background: #1F1F14;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 10px;
   padding: 16px 18px;
@@ -245,7 +245,7 @@ body > #root {
   gap: 14px;
   width: 100%;
   padding: 16px 20px;
-  background: #0F172A;
+  background: #1F1F14;
   border: 1.5px solid rgba(255,255,255,0.08);
   border-radius: 10px;
   color: #E2E8F0;
@@ -258,7 +258,7 @@ body > #root {
 }
 
 .option-btn:hover:not(:disabled) {
-  border-color: #A78BFA;
+  border-color: #AEFFAC;
   background: rgba(167, 139, 250, 0.08);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -297,7 +297,7 @@ body > #root {
 
 .option-btn.correct .option-letter {
   background: #4ADE80;
-  color: #0F172A;
+  color: #1F1F14;
   transform: scale(1.1);
 }
 
@@ -359,8 +359,8 @@ body > #root {
 .btn-next {
   margin-top: 18px;
   padding: 12px 36px;
-  background: #7C3AED;
-  color: #FFFFFF;
+  background: #AEFFAC;
+  color: #1F1F14;
   font-size: 15px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -373,13 +373,13 @@ body > #root {
 
 .btn-next:hover {
   transform: translateY(-2px);
-  background: #6D28D9;
+  background: #8ED88C;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 /* ── RESULTS ────────────────────────────────────────────────────────────── */
 .result-card {
-  background: #1E293B;
+  background: #3A3A28;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 52px 36px;
@@ -434,7 +434,7 @@ body > #root {
 
 .result-bar-track {
   height: 8px;
-  background: #0F172A;
+  background: #1F1F14;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 36px;
@@ -457,8 +457,8 @@ body > #root {
 
 .btn-restart {
   padding: 14px 44px;
-  background: #7C3AED;
-  color: #FFFFFF;
+  background: #AEFFAC;
+  color: #1F1F14;
   font-size: 16px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -471,7 +471,7 @@ body > #root {
 
 .btn-restart:hover {
   transform: translateY(-2px);
-  background: #6D28D9;
+  background: #8ED88C;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
@@ -555,7 +555,7 @@ body > #root {
   font-size: 28px;
   font-weight: 800;
   font-family: "Outfit", sans-serif;
-  color: #1A1A2E;
+  color: #2D2D1D;
   background: #AEFFAC;
   border-radius: 12px;
   padding: 8px 22px;
@@ -628,7 +628,7 @@ body > #root {
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  background: #1E293B;
+  background: #3A3A28;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 0 24px 22px;
@@ -710,7 +710,7 @@ body > #root {
 
 .topic-tag:hover {
   background: rgba(167, 139, 250, 0.15);
-  color: #A78BFA;
+  color: #AEFFAC;
 }
 
 .quiz-card-cta {
@@ -819,7 +819,7 @@ body > #root {
 
 .difficulty-intermediate-advanced {
   background: rgba(167, 139, 250, 0.15);
-  color: #A78BFA;
+  color: #AEFFAC;
 }
 
 .difficulty-advanced {
@@ -890,7 +890,7 @@ body > #root {
   display: flex;
   align-items: center;
   gap: 24px;
-  background: #0F172A;
+  background: #1F1F14;
   border: 1.5px solid rgba(255,255,255,0.1);
   border-radius: 20px;
   padding: 32px 28px;
@@ -912,8 +912,8 @@ body > #root {
   top: 0;
   bottom: 0;
   width: 4px;
-  background: var(--block-color, #7C3AED);
-  box-shadow: 0 0 20px var(--block-color, #7C3AED);
+  background: var(--block-color, #AEFFAC);
+  box-shadow: 0 0 20px var(--block-color, #AEFFAC);
   display: block;
 }
 
@@ -969,7 +969,7 @@ body > #root {
   font-size: 13px;
   font-family: "Outfit", sans-serif;
   color: #CBD5E1;
-  background: #0F172A;
+  background: #1F1F14;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
   padding: 8px 16px;
@@ -978,7 +978,7 @@ body > #root {
 }
 
 .block-topic-tag:hover {
-  background: #1E293B;
+  background: #3A3A28;
   border-color: rgba(174, 255, 172, 0.3);
   color: #AEFFAC;
   transform: translateY(-1px);
@@ -1003,7 +1003,7 @@ body > #root {
   width: 100%;
   padding: 18px 32px;
   background: linear-gradient(135deg, #AEFFAC 0%, #7CEB7A 100%);
-  color: #0F172A;
+  color: #1F1F14;
   font-size: 16px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -1037,7 +1037,7 @@ body > #root {
   display: block;
   width: 100%;
   padding: 18px 32px;
-  background: #0F172A;
+  background: #1F1F14;
   color: #475569;
   font-size: 16px;
   font-weight: 600;
@@ -1057,7 +1057,7 @@ body > #root {
   top: 16px;
   right: 16px;
   z-index: 1000;
-  background: #16213E;
+  background: #353524;
   color: #E2E8F0;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 20px;
@@ -1076,8 +1076,8 @@ body > #root {
 }
 
 .lang-switcher:hover {
-  background: #7C3AED;
-  border-color: #7C3AED;
+  background: #AEFFAC;
+  border-color: #AEFFAC;
   color: #FFFFFF;
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
@@ -1286,7 +1286,7 @@ body > #root {
 
 /* ── FOCUS VISIBLE ──────────────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid #A78BFA;
+  outline: 2px solid #AEFFAC;
   outline-offset: 2px;
   border-radius: 8px;
 }
