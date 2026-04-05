@@ -10,7 +10,6 @@ import { saveProgress, fetchQuestions, fetchBlocks } from "./api/client";
 import { getSessionId } from "./api/session";
 import { QUIZ_TO_BLOCK } from "./data/blocks";
 import type { QuestionDTO, BlockDTO } from "@quiz/shared";
-import "./App.css";
 
 type Screen = "home" | "quiz" | "block";
 
@@ -121,19 +120,19 @@ export default function App() {
   if (screen === "quiz" && (activeQuizId || activeBlockId)) {
     if (quizLoading) {
       return (
-        <div className="quiz-container" style={{ textAlign: "center", paddingTop: 80 }}>
+        <div className="max-w-[720px] mx-auto px-4 pb-10 pt-5 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
           <LanguageSwitcher />
-          <p style={{ color: "#8b949e" }}>{t("quiz.loading", "Loading...")}</p>
+          <p style={{ color: "#78788A" }}>{t("quiz.loading", "Loading...")}</p>
         </div>
       );
     }
 
     if (quizQuestions.length === 0) {
       return (
-        <div className="quiz-container" style={{ textAlign: "center", paddingTop: 80 }}>
+        <div className="max-w-[720px] mx-auto px-4 pb-10 pt-5 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
           <LanguageSwitcher />
-          <p style={{ color: "#8b949e" }}>{t("quiz.noQuestions", "No questions available.")}</p>
-          <button className="btn-home" onClick={goHome} style={{ marginTop: 16 }}>
+          <p style={{ color: "#78788A" }}>{t("quiz.noQuestions", "No questions available.")}</p>
+          <button className="py-3.5 px-8 bg-white/4 text-carbon-100 text-base font-semibold font-sans border border-white/6 rounded-xl cursor-pointer transition-all duration-200 hover:bg-white/7 hover:border-white/12 hover:-translate-y-px" onClick={goHome} style={{ marginTop: 16 }}>
             {t("quiz.home")}
           </button>
         </div>

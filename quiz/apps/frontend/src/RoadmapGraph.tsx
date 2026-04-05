@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import type { RoadmapBlock, GraphEdge } from "./data/blocks";
 import type { ProgressMap } from "./data/progress";  // kept for interface contract
+import './roadmap-nodes.css'
 
 interface LineData {
   key: string;
@@ -69,8 +70,8 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
   const totalSlots = GRID_ROWS * GRID_COLS;
 
   return (
-    <div className="roadmap-graph-container" ref={containerRef}>
-      <div className="roadmap-grid">
+    <div className="relative" ref={containerRef}>
+      <div className="grid grid-cols-3 gap-[40px_20px] justify-items-center max-[600px]:grid-cols-2 max-[600px]:gap-[28px_10px]">
         {Array.from({ length: totalSlots }, (_, i) => {
           const block = blockBySlot[i];
           if (!block) return <div key={i} />;
@@ -79,19 +80,19 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
             <button
               key={block.id}
               ref={(el) => { nodeRefs.current[block.id] = el; }}
-              className="roadmap-node"
-              style={{ "--node-color": block.color, background: block.color } as React.CSSProperties}
+              className="roadmap-node relative z-[1] inline-flex items-center justify-center rounded-[10px] px-5 py-2.5 text-center cursor-pointer w-[150px] h-[42px] border transition-all duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 max-[600px]:w-[130px] max-[600px]:px-3.5"
+              style={{ "--node-color": block.color } as React.CSSProperties}
               onClick={() => onOpenBlock(block.id)}
             >
-              <div className="roadmap-node-header">
-                <span className="roadmap-node-title">{block.title}</span>
+              <div className="flex justify-center items-center">
+                <span className="text-xs font-semibold text-carbon-100 leading-tight whitespace-nowrap overflow-hidden text-ellipsis tracking-[0.2px] max-[600px]:text-[11px]">{block.title}</span>
               </div>
             </button>
           );
         })}
       </div>
 
-      <svg className="roadmap-svg-overlay" aria-hidden="true">
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0" aria-hidden="true">
         <defs>
           <marker
             id="roadmap-arrow"
@@ -101,15 +102,15 @@ export function RoadmapGraph({ blocks, edges, onOpenBlock }: RoadmapGraphProps) 
             refY="3"
             orient="auto"
           >
-            <polygon points="0 0, 8 3, 0 6" fill="rgba(255,255,255,0.25)" />
+            <polygon points="0 0, 8 3, 0 6" fill="rgba(255,255,255,0.12)" />
           </marker>
         </defs>
         {lines.map((l) => (
           <path
             key={l.key}
             d={`M ${l.x1} ${l.y1} C ${l.x1} ${l.y1 + 28} ${l.x2} ${l.y2 - 28} ${l.x2} ${l.y2}`}
-            stroke="rgba(255,255,255,0.15)"
-            strokeWidth="1.5"
+            stroke="rgba(255,255,255,0.07)"
+            strokeWidth="1"
             fill="none"
             markerEnd="url(#roadmap-arrow)"
           />

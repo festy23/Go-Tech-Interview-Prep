@@ -36,12 +36,12 @@ export const CodeBlock = memo(function CodeBlock({ code, lang = 'go' }: CodeBloc
   }, [code, lang])
 
   if (!html) {
-    return <pre className="question-code"><code>{code}</code></pre>
+    return <pre className="bg-carbon-850 border border-white/5 rounded-[10px] p-[16px_18px] mb-[22px] font-mono text-[13px] leading-[1.65] text-carbon-100 overflow-x-auto whitespace-pre"><code>{code}</code></pre>
   }
 
   return (
     <div
-      className="question-code-highlighted"
+      className="mb-[22px] rounded-[10px] overflow-hidden [&_pre]:m-0 [&_pre]:p-[16px_18px] [&_pre]:rounded-[10px] [&_pre]:border [&_pre]:border-white/5 [&_pre]:font-mono [&_pre]:text-[13px] [&_pre]:leading-[1.65] [&_pre]:overflow-x-auto [&_pre]:tab-[4] [&_code]:font-[inherit] [&_code]:bg-transparent"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
