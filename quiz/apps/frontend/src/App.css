@@ -16,7 +16,7 @@
 
 body {
   font-family: "Outfit", sans-serif;
-  background: #2D2D1D;
+  background: #2D2D2D;
   color: #E2E8F0;
   min-height: 100vh;
   line-height: 1.5;
@@ -90,9 +90,9 @@ body > #root {
 .loading-skeleton {
   background: linear-gradient(
     90deg,
-    #3A3A28 0%,
+    #3A3A3A 0%,
     #2D3748 40%,
-    #3A3A28 80%
+    #3A3A3A 80%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
@@ -149,7 +149,7 @@ body > #root {
 /* ── PROGRESS BAR ───────────────────────────────────────────────────────── */
 .progress-track {
   height: 5px;
-  background: #1F1F14;
+  background: #1E1E1E;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -175,7 +175,7 @@ body > #root {
 
 /* ── QUESTION CARD ──────────────────────────────────────────────────────── */
 .question-card {
-  background: #3A3A28;
+  background: #3A3A3A;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 36px 28px;
@@ -195,7 +195,7 @@ body > #root {
 
 /* ── CODE BLOCK ─────────────────────────────────────────────────────────── */
 .question-code {
-  background: #1F1F14;
+  background: #1E1E1E;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 10px;
   padding: 16px 18px;
@@ -245,7 +245,7 @@ body > #root {
   gap: 14px;
   width: 100%;
   padding: 16px 20px;
-  background: #1F1F14;
+  background: #1E1E1E;
   border: 1.5px solid rgba(255,255,255,0.08);
   border-radius: 10px;
   color: #E2E8F0;
@@ -297,7 +297,7 @@ body > #root {
 
 .option-btn.correct .option-letter {
   background: #4ADE80;
-  color: #1F1F14;
+  color: #1E1E1E;
   transform: scale(1.1);
 }
 
@@ -360,7 +360,7 @@ body > #root {
   margin-top: 18px;
   padding: 12px 36px;
   background: #AEFFAC;
-  color: #1F1F14;
+  color: #1E1E1E;
   font-size: 15px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -379,7 +379,7 @@ body > #root {
 
 /* ── RESULTS ────────────────────────────────────────────────────────────── */
 .result-card {
-  background: #3A3A28;
+  background: #3A3A3A;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 52px 36px;
@@ -434,7 +434,7 @@ body > #root {
 
 .result-bar-track {
   height: 8px;
-  background: #1F1F14;
+  background: #1E1E1E;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 36px;
@@ -458,7 +458,7 @@ body > #root {
 .btn-restart {
   padding: 14px 44px;
   background: #AEFFAC;
-  color: #1F1F14;
+  color: #1E1E1E;
   font-size: 16px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -555,7 +555,7 @@ body > #root {
   font-size: 28px;
   font-weight: 800;
   font-family: "Outfit", sans-serif;
-  color: #2D2D1D;
+  color: #2D2D2D;
   background: #AEFFAC;
   border-radius: 12px;
   padding: 8px 22px;
@@ -628,7 +628,7 @@ body > #root {
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  background: #3A3A28;
+  background: #3A3A3A;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 0 24px 22px;
@@ -890,7 +890,7 @@ body > #root {
   display: flex;
   align-items: center;
   gap: 24px;
-  background: #1F1F14;
+  background: #1E1E1E;
   border: 1.5px solid rgba(255,255,255,0.1);
   border-radius: 20px;
   padding: 32px 28px;
@@ -969,7 +969,7 @@ body > #root {
   font-size: 13px;
   font-family: "Outfit", sans-serif;
   color: #CBD5E1;
-  background: #1F1F14;
+  background: #1E1E1E;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
   padding: 8px 16px;
@@ -978,7 +978,7 @@ body > #root {
 }
 
 .block-topic-tag:hover {
-  background: #3A3A28;
+  background: #3A3A3A;
   border-color: rgba(174, 255, 172, 0.3);
   color: #AEFFAC;
   transform: translateY(-1px);
@@ -1003,7 +1003,7 @@ body > #root {
   width: 100%;
   padding: 18px 32px;
   background: linear-gradient(135deg, #AEFFAC 0%, #7CEB7A 100%);
-  color: #1F1F14;
+  color: #1E1E1E;
   font-size: 16px;
   font-weight: 700;
   font-family: "Outfit", sans-serif;
@@ -1037,7 +1037,7 @@ body > #root {
   display: block;
   width: 100%;
   padding: 18px 32px;
-  background: #1F1F14;
+  background: #1E1E1E;
   color: #475569;
   font-size: 16px;
   font-weight: 600;
@@ -1057,7 +1057,7 @@ body > #root {
   top: 16px;
   right: 16px;
   z-index: 1000;
-  background: #353524;
+  background: #353535;
   color: #E2E8F0;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 20px;
