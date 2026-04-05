@@ -29,11 +29,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm typecheck
-        name: Typecheck
+      - run: pnpm --filter @quiz/shared build
+        name: Build shared
+
+      - run: pnpm --filter @quiz/frontend typecheck
+        name: Typecheck frontend
 
       - run: pnpm build
-        name: Build
+        name: Build all
 
       - run: npx vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         name: Pull Vercel config
