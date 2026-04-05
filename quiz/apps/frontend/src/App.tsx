@@ -33,6 +33,8 @@ export default function App() {
 
   // Quiz state
   const [activeQuizId, setActiveQuizId] = useState<1 | 2 | 3 | null>(null);
+  const [activeBlockId, setActiveBlockId] = useState<string | null>(null);
+  const [quizTitle, setQuizTitle] = useState<string>("");
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [quizLoading, setQuizLoading] = useState(false);
 
@@ -55,6 +57,8 @@ export default function App() {
   const goHome = useCallback(() => {
     setScreen("home");
     setActiveQuizId(null);
+    setActiveBlockId(null);
+    setQuizTitle("");
     setQuizQuestions([]);
   }, []);
 
@@ -72,6 +76,22 @@ export default function App() {
       .then((dtos) => setQuizQuestions(dtos.map(dtoToQuestion)))
       .catch((err) => {
         console.error("[App] Failed to fetch questions for quiz", quizId, err);
+        setQuizQuestions([]);
+      })
+      .finally(() => setQuizLoading(false));
+  }, []);
+
+  const startBlockQuiz = useCallback((blockId: string, title: string) => {
+    setActiveBlockId(blockId);
+    setActiveQuizId(null);
+    setQuizTitle(title);
+    setQuizLoading(true);
+    setScreen("quiz");
+
+    fetchQuestions({ blockId })
+      .then((dtos) => setQuizQuestions(dtos.map(dtoToQuestion)))
+      .catch((err) => {
+        console.error("[App] Failed to fetch questions for block", blockId, err);
         setQuizQuestions([]);
       })
       .finally(() => setQuizLoading(false));
@@ -98,7 +118,7 @@ export default function App() {
     [blockQuizMap],
   );
 
-  if (screen === "quiz" && activeQuizId) {
+  if (screen === "quiz" && (activeQuizId || activeBlockId)) {
     if (quizLoading) {
       return (
         <div className="quiz-container" style={{ textAlign: "center", paddingTop: 80 }}>
@@ -124,10 +144,18 @@ export default function App() {
       <>
         <LanguageSwitcher />
         <Quiz
-          title={t(`quizCard.${activeQuizId}.title`)}
+          title={activeQuizId ? t(`quizCard.${activeQuizId}.title`) : quizTitle}
           questions={quizQuestions}
           onHome={goHome}
-          onComplete={(s, total) => handleQuizComplete(activeQuizId, s, total)}
+          onComplete={(s, total) => {
+            if (activeQuizId) {
+              handleQuizComplete(activeQuizId, s, total);
+            } else if (activeBlockId) {
+              saveBlockProgress({ blockId: activeBlockId, score: s, total, completedAt: new Date().toISOString() });
+              saveProgress({ sessionId: getSessionId(), blockId: activeBlockId, quizId: null as any, score: s, total })
+                .catch((err) => console.warn("[progress] Failed to sync:", err));
+            }
+          }}
         />
       </>
     );
@@ -141,6 +169,7 @@ export default function App() {
           blockId={selectedBlockId}
           onHome={goHome}
           onStartQuiz={startQuiz}
+          onStartBlockQuiz={startBlockQuiz}
         />
       </>
     );

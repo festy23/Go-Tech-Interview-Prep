@@ -9,9 +9,10 @@ interface BlockDetailProps {
   blockId: string;
   onHome: () => void;
   onStartQuiz: (quizId: 1 | 2 | 3) => void;
+  onStartBlockQuiz?: (blockId: string, title: string) => void;
 }
 
-export function BlockDetail({ blockId, onHome, onStartQuiz }: BlockDetailProps) {
+export function BlockDetail({ blockId, onHome, onStartQuiz, onStartBlockQuiz }: BlockDetailProps) {
   const { t, i18n } = useTranslation();
   const [block, setBlock] = useState<BlockDTO | null>(null);
   const [loading, setLoading] = useState(true);
@@ -93,14 +94,17 @@ export function BlockDetail({ blockId, onHome, onStartQuiz }: BlockDetailProps) 
         ))}
       </div>
 
-      <div className="block-stub-notice">
-        {t("block.comingSoon", { count: block.topicCount })}
-      </div>
-
       {block.quizId ? (
         <button
           className="btn-start-quiz"
           onClick={() => onStartQuiz(block.quizId!)}
+        >
+          {t("block.startQuiz")}
+        </button>
+      ) : onStartBlockQuiz ? (
+        <button
+          className="btn-start-quiz"
+          onClick={() => onStartBlockQuiz(block.id, block.title)}
         >
           {t("block.startQuiz")}
         </button>
