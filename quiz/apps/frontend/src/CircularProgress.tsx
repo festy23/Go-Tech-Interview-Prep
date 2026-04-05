@@ -13,7 +13,7 @@ export function CircularProgress({ pct, size, strokeWidth, color, showLabel = tr
 
   return (
     <div
-      className="circular-progress-wrap"
+      className="relative inline-flex items-center justify-center shrink-0"
       style={{ width: size, height: size }}
     >
       <svg
@@ -27,7 +27,7 @@ export function CircularProgress({ pct, size, strokeWidth, color, showLabel = tr
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#21262d"
+          stroke="#1A1A1F"
           strokeWidth={strokeWidth}
         />
         {/* Progress arc */}
@@ -46,7 +46,7 @@ export function CircularProgress({ pct, size, strokeWidth, color, showLabel = tr
       </svg>
       {showLabel && (
         <span
-          className="circular-progress-label"
+          className="absolute font-bold font-mono text-carbon-300 rotate-90 leading-none pointer-events-none whitespace-nowrap"
           style={{ fontSize: Math.max(size * 0.22, 9) }}
         >
           {pct > 0 ? `${pct}%` : "—"}

@@ -1,0 +1,15 @@
+/* Roadmap node tinted-glass effect — uses color-mix() with runtime CSS variable.
+   Cannot be expressed as Tailwind utilities. */
+.roadmap-node {
+  background: color-mix(in srgb, var(--node-color, #2DD4BF) 8%, #0E0E12);
+  border-color: color-mix(in srgb, var(--node-color, #2DD4BF) 18%, transparent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--node-color, #2DD4BF) 6%, transparent);
+}
+
+.roadmap-node:hover {
+  background: color-mix(in srgb, var(--node-color, #2DD4BF) 14%, #0E0E12);
+  border-color: color-mix(in srgb, var(--node-color, #2DD4BF) 40%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--node-color, #2DD4BF) 8%, transparent),
+    0 8px 24px color-mix(in srgb, var(--node-color, #2DD4BF) 15%, transparent);
+}
