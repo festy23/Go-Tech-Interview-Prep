@@ -7,7 +7,7 @@ export const BlockDTOSchema = z.object({
   difficulty: DifficultyLevelSchema,
   topicCount: z.number().int(),
   topics: z.array(z.string()),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3)]).nullable(),
+  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).nullable(),
   gridRow: z.number().int(),
   gridCol: z.number().int(),
   color: z.string(),

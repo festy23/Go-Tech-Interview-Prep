@@ -14,6 +14,7 @@ import { env } from '../src/env.js'
 import { questions } from '../../frontend/src/data/questions.js'
 import { questions2 } from '../../frontend/src/data/questions2.js'
 import { questions3 } from '../../frontend/src/data/questions3.js'
+import { questionsOop } from '../../frontend/src/data/questions-oop.js'
 
 // ── Block mapping ─────────────────────────────────────────────────────────────
 // quiz1 covers many topics → no single blockId
@@ -23,6 +24,7 @@ const QUIZ_TO_BLOCK: Record<number, string | null> = {
   1: null,
   2: null,
   3: 'concurrency',
+  4: 'oop',
 }
 
 // ── Block definitions (for seeding the blocks collection) ──────────────────────
@@ -47,14 +49,14 @@ const BLOCKS = [
     blockId: 'oop',
     title: 'ООП в Go',
     difficulty: 'basic-intermediate' as const,
-    topicCount: 35,
+    topicCount: 50,
     topics: [
-      'Интерфейсы и неявная реализация', 'Встраивание структур',
-      'Композиция вместо наследования', 'Полиморфизм через интерфейсы',
-      'Пустой интерфейс (any)', 'Утверждения типов', 'Type switch',
+      'Методы и ресиверы', 'Интерфейсы — продвинутое',
+      'Композиция и встраивание', 'Полиморфизм через интерфейсы',
       'SOLID-принципы в Go', 'Dependency Injection',
+      'Стандартные интерфейсы', 'Паттерны проектирования',
     ],
-    quizId: null,
+    quizId: 4 as const,
     gridRow: 2,
     gridCol: 1,
     color: '#79c0ff',
@@ -170,7 +172,7 @@ function mapDifficulty(
 
 function buildQuestionDoc(
   q: LegacyQuestion,
-  quizId: 1 | 2 | 3,
+  quizId: 1 | 2 | 3 | 4,
   index: number,
   total: number,
 ) {
@@ -220,10 +222,11 @@ async function main() {
 
   // ── Seed questions ────────────────────────────────────────────────────────────
   console.log('\n[seed] Seeding questions...')
-  const batches: Array<{ quizId: 1 | 2 | 3; qs: LegacyQuestion[] }> = [
+  const batches: Array<{ quizId: 1 | 2 | 3 | 4; qs: LegacyQuestion[] }> = [
     { quizId: 1, qs: questions as LegacyQuestion[] },
     { quizId: 2, qs: questions2 as LegacyQuestion[] },
     { quizId: 3, qs: questions3 as LegacyQuestion[] },
+    { quizId: 4, qs: questionsOop as LegacyQuestion[] },
   ]
 
   let total = 0
