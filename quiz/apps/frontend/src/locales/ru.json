@@ -52,5 +52,9 @@
   "quizCard.4.subtitle": "Интерфейсы, композиция, SOLID, паттерны",
   "quizCard.4.topics": "Методы и ресиверы,Интерфейсы,Композиция,Полиморфизм,SOLID,DI,Стандартные интерфейсы,Паттерны",
 
+  "quizCard.5.title": "SQL & Базы данных",
+  "quizCard.5.subtitle": "JOINs, индексы, транзакции, database/sql в Go",
+  "quizCard.5.topics": "JOINs,GROUP BY,CTE,Оконные функции,Индексы,Транзакции,EXPLAIN,N+1,database/sql,pgx",
+
   "lang.switch": "EN"
 }

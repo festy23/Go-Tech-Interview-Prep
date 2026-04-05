@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const SaveProgressSchema = z.object({
   sessionId: z.string().uuid(),
   blockId: z.string(),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).nullable(),
+  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).nullable(),
   score: z.number().int().min(0),
   total: z.number().int().min(1),
 })
@@ -13,7 +13,7 @@ export const ProgressEntryDTOSchema = z.object({
   id: z.string(),
   sessionId: z.string(),
   blockId: z.string(),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).nullable(),
+  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).nullable(),
   score: z.number().int(),
   total: z.number().int(),
   pct: z.number().int(),
