@@ -48,5 +48,9 @@
   "quizCard.3.subtitle": "Channels, sync, code review",
   "quizCard.3.topics": "Channels,Channel patterns,Mutex / RWMutex,WaitGroup / Once,sync/atomic,Code Review",
 
+  "quizCard.4.title": "OOP in Go",
+  "quizCard.4.subtitle": "Interfaces, composition, SOLID, patterns",
+  "quizCard.4.topics": "Methods & receivers,Interfaces,Composition,Polymorphism,SOLID,DI,Stdlib interfaces,Patterns",
+
   "lang.switch": "RU"
 }
