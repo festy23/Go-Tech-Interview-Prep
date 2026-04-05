@@ -66,7 +66,7 @@ export function BlockDetail({ blockId, onHome, onStartQuiz, onStartBlockQuiz }: 
         </span>
       </header>
 
-      <div className="block-detail-hero">
+      <div className="block-detail-hero" style={{ "--block-color": block.color } as React.CSSProperties}>
         <div className="block-detail-info">
           <h1 className="block-detail-title">{block.title}</h1>
           <div className="block-detail-meta">
