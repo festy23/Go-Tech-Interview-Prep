@@ -17,7 +17,7 @@ const difficultyStyles: Record<string, string> = {
 interface BlockDetailProps {
   blockId: string;
   onHome: () => void;
-  onStartQuiz: (quizId: 1 | 2 | 3 | 4) => void;
+  onStartQuiz: (quizId: 1 | 2 | 3 | 4 | 5) => void;
   onStartBlockQuiz?: (blockId: string, title: string) => void;
 }
 

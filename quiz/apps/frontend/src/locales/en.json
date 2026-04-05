@@ -52,5 +52,9 @@
   "quizCard.4.subtitle": "Interfaces, composition, SOLID, patterns",
   "quizCard.4.topics": "Methods & receivers,Interfaces,Composition,Polymorphism,SOLID,DI,Stdlib interfaces,Patterns",
 
+  "quizCard.5.title": "SQL & Databases",
+  "quizCard.5.subtitle": "JOINs, indexes, transactions, database/sql in Go",
+  "quizCard.5.topics": "JOINs,GROUP BY,CTEs,Window functions,Indexes,Transactions,EXPLAIN,N+1,database/sql,pgx",
+
   "lang.switch": "RU"
 }

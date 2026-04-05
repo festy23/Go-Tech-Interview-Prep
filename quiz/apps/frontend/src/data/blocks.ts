@@ -11,7 +11,7 @@ export interface RoadmapBlock {
   difficulty: DifficultyLevel;
   topicCount: number;
   topics: string[];
-  quizId?: 1 | 2 | 3 | 4;
+  quizId?: 1 | 2 | 3 | 4 | 5;
   gridRow: number;
   gridCol: number;
   color: string;

@@ -24,7 +24,7 @@ function blockDtoToRoadmapBlock(dto: BlockDTO): RoadmapBlock {
 
 interface HomeProps {
   onOpenBlock: (blockId: string) => void;
-  onStartQuiz: (quizId: 1 | 2 | 3 | 4) => void;
+  onStartQuiz: (quizId: 1 | 2 | 3 | 4 | 5) => void;
 }
 
 export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
@@ -50,7 +50,7 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
   const quizCards = useMemo(
     () =>
       blocks
-        .filter((b): b is RoadmapBlock & { quizId: 1 | 2 | 3 | 4 } => b.quizId != null)
+        .filter((b): b is RoadmapBlock & { quizId: 1 | 2 | 3 | 4 | 5 } => b.quizId != null)
         .map((b) => ({ id: b.quizId, count: b.topicCount, color: b.color })),
     [blocks],
   );

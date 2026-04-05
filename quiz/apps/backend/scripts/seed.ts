@@ -15,6 +15,7 @@ import { questions } from '../../frontend/src/data/questions.js'
 import { questions2 } from '../../frontend/src/data/questions2.js'
 import { questions3 } from '../../frontend/src/data/questions3.js'
 import { questionsOop } from '../../frontend/src/data/questions-oop.js'
+import { questionsSql } from '../../frontend/src/data/questions-sql.js'
 
 // ── Block mapping ─────────────────────────────────────────────────────────────
 // quiz1 covers many topics → no single blockId
@@ -25,6 +26,7 @@ const QUIZ_TO_BLOCK: Record<number, string | null> = {
   2: null,
   3: 'concurrency',
   4: 'oop',
+  5: 'sql',
 }
 
 // ── Block definitions (for seeding the blocks collection) ──────────────────────
@@ -65,15 +67,15 @@ const BLOCKS = [
     blockId: 'sql',
     title: 'SQL',
     difficulty: 'intermediate' as const,
-    topicCount: 40,
+    topicCount: 50,
     topics: [
-      'SELECT, JOIN, GROUP BY, HAVING', 'Индексы: B-tree, составные, покрывающие',
-      'Транзакции и ACID', 'Уровни изоляции', 'Дедлоки в БД',
-      'Оконные функции: RANK, ROW_NUMBER, LEAD/LAG',
-      'CTE и рекурсивные запросы', 'EXPLAIN ANALYZE',
+      'JOINs и подзапросы', 'GROUP BY, HAVING, агрегация',
+      'CTE и рекурсивные запросы', 'Оконные функции',
+      'Индексы: B-tree, составные, покрывающие',
+      'Транзакции и блокировки', 'EXPLAIN ANALYZE',
       'N+1 проблема', 'database/sql в Go', 'Пул соединений',
     ],
-    quizId: null,
+    quizId: 5 as const,
     gridRow: 2,
     gridCol: 3,
     color: '#d2a679',
@@ -172,7 +174,7 @@ function mapDifficulty(
 
 function buildQuestionDoc(
   q: LegacyQuestion,
-  quizId: 1 | 2 | 3 | 4,
+  quizId: 1 | 2 | 3 | 4 | 5,
   index: number,
   total: number,
 ) {
@@ -222,11 +224,12 @@ async function main() {
 
   // ── Seed questions ────────────────────────────────────────────────────────────
   console.log('\n[seed] Seeding questions...')
-  const batches: Array<{ quizId: 1 | 2 | 3 | 4; qs: LegacyQuestion[] }> = [
+  const batches: Array<{ quizId: 1 | 2 | 3 | 4 | 5; qs: LegacyQuestion[] }> = [
     { quizId: 1, qs: questions as LegacyQuestion[] },
     { quizId: 2, qs: questions2 as LegacyQuestion[] },
     { quizId: 3, qs: questions3 as LegacyQuestion[] },
     { quizId: 4, qs: questionsOop as LegacyQuestion[] },
+    { quizId: 5, qs: questionsSql as LegacyQuestion[] },
   ]
 
   let total = 0
