@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { CodeBlock } from "./CodeBlock";
 import type { Question } from "./data/questions";
 
 type AnswerState = {
@@ -109,7 +110,7 @@ export function Quiz({ title, questions, onHome, onComplete }: QuizProps) {
         <h2 className="question-text">{current.question}</h2>
 
         {current.code && (
-          <pre className="question-code"><code>{current.code}</code></pre>
+          <CodeBlock code={current.code} />
         )}
 
         <div className="options">

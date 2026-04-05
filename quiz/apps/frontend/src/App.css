@@ -208,6 +208,30 @@ body > #root {
   white-space: pre;
 }
 
+/* Shiki highlighted code */
+.question-code-highlighted {
+  margin-bottom: 22px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.question-code-highlighted pre {
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  font-family: "Space Mono", "JetBrains Mono", "Fira Code", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  overflow-x: auto;
+  tab-size: 4;
+}
+
+.question-code-highlighted code {
+  font-family: inherit;
+  background: none;
+}
+
 /* ── OPTIONS ────────────────────────────────────────────────────────────── */
 .options {
   display: flex;
