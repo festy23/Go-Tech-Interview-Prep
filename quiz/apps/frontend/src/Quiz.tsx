@@ -135,8 +135,8 @@ export function Quiz({ title, questions, onHome, onComplete }: QuizProps) {
                 key={i}
                 className={clsx(
                   optionBase,
-                  isCorrectAnswer && "!border-emerald-400 !bg-emerald-400/7 shadow-[0_1px_3px_rgba(0,0,0,0.3)]",
-                  isWrongAnswer && "!border-rose-400 !bg-rose-400/7 shadow-[0_1px_3px_rgba(0,0,0,0.3)]",
+                  isCorrectAnswer && "border-emerald-400! bg-emerald-400/7! shadow-[0_1px_3px_rgba(0,0,0,0.3)]",
+                  isWrongAnswer && "border-rose-400! bg-rose-400/7! shadow-[0_1px_3px_rgba(0,0,0,0.3)]",
                   isDimmed && "opacity-35",
                 )}
                 onClick={() => handleSelect(i)}
@@ -144,8 +144,8 @@ export function Quiz({ title, questions, onHome, onComplete }: QuizProps) {
               >
                 <span className={clsx(
                   "shrink-0 w-7 h-7 flex items-center justify-center rounded-full font-bold text-xs font-mono bg-white/4 text-carbon-300 mt-px transition-all duration-200",
-                  isCorrectAnswer && "!bg-emerald-400 !text-carbon-950 scale-110",
-                  isWrongAnswer && "!bg-rose-400 !text-white scale-110",
+                  isCorrectAnswer && "bg-emerald-400! text-carbon-950! scale-110",
+                  isWrongAnswer && "bg-rose-400! text-white! scale-110",
                 )}>
                   {letters[i]}
                 </span>
