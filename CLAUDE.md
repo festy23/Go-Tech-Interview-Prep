@@ -37,19 +37,16 @@ pnpm exec tsx --tsconfig tsconfig.seed.json scripts/migrate-i18n.ts
 # Production: prefix with DOTENV_CONFIG_PATH=../../.env.local
 ```
 
-### Adding a new quizId
-Requires updating ALL of these files:
-- `packages/shared/src/schemas/question.ts` — add z.literal(N)
-- `packages/shared/src/schemas/block.ts` — add z.literal(N)
-- `packages/shared/src/schemas/progress.ts` — add z.literal(N)
-- `apps/frontend/src/data/blocks.ts` — add N to union type
-- `apps/frontend/src/App.tsx` — add N to union type
-- `apps/frontend/src/Home.tsx` — add N to union type
-- `apps/frontend/src/BlockDetail.tsx` — add N to union type
-- `apps/frontend/src/api/client.ts` — add N to union type
-- `apps/frontend/src/locales/ru.json` — add quizCard.N.*
-- `apps/frontend/src/locales/en.json` — add quizCard.N.*
-- `apps/backend/scripts/seed.ts` — import, add to batches, update block
+### Adding a new quiz
+Adding a quiz is a **data-only operation** — no code changes required:
+
+1. Add a block entry to `BLOCKS` in `apps/backend/scripts/seed.ts`:
+   - `blockId`, `title: { ru, en }`, `subtitle: { ru, en }`, `topics: { ru[], en[] }`
+   - `quizId: N` (any positive integer not already used), `difficulty`, `gridRow`, `gridCol`, `color`
+2. Add a questions import and a `{ quizId: N, qs: ... }` entry to `batches` in the same file
+3. Run seed + migrate-i18n (see Seed + i18n migration section above)
+
+The frontend derives all display data (title, subtitle, topics) from the API automatically.
 
 ## Code Style
 
