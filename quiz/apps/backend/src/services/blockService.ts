@@ -6,6 +6,7 @@ function toDTO(entity: BlockEntity, lang: Lang = 'ru'): BlockDTO {
   return {
     id: entity.blockId,
     title: entity.title[lang],
+    subtitle: entity.subtitle[lang],
     difficulty: entity.difficulty,
     topicCount: entity.topicCount,
     topics: entity.topics[lang],

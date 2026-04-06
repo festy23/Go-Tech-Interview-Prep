@@ -11,7 +11,7 @@ import type { DifficultyLevel } from '@quiz/shared'
 interface BaseQuestionEntity {
   _id: ObjectId
   legacyId?: number        // original numeric id from the TS files
-  quizId: 1 | 2 | 3 | null
+  quizId: number | null
   blockId: string | null
   difficulty: DifficultyLevel
   tags: string[]
@@ -36,10 +36,11 @@ export interface BlockEntity {
   _id: ObjectId
   blockId: string          // stable string id e.g. "concurrency"
   title: { ru: string; en: string }
+  subtitle: { ru: string; en: string }
   difficulty: DifficultyLevel
   topicCount: number
   topics: { ru: string[]; en: string[] }
-  quizId: 1 | 2 | 3 | null
+  quizId: number | null
   gridRow: number
   gridCol: number
   color: string
@@ -53,7 +54,7 @@ export interface ProgressEntity {
   _id: ObjectId
   sessionId: string
   blockId: string
-  quizId: 1 | 2 | 3 | null
+  quizId: number | null
   score: number
   total: number
   completedAt: Date
