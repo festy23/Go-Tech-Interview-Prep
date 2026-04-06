@@ -15,6 +15,7 @@ import { questions3 } from '../../frontend/src/data/questions3.js'
 import { questionsOop } from '../../frontend/src/data/questions-oop.js'
 import { questionsSql } from '../../frontend/src/data/questions-sql.js'
 import { questionsNetworks } from '../../frontend/src/data/questions-networks.js'
+import { questionsServer } from '../../frontend/src/data/questions-server.js'
 
 // ── Block mapping ─────────────────────────────────────────────────────────────
 const QUIZ_TO_BLOCK: Record<number, string | null> = {
@@ -24,6 +25,7 @@ const QUIZ_TO_BLOCK: Record<number, string | null> = {
   4: 'oop',
   5: 'sql',
   6: 'networks',
+  7: 'server',
 }
 
 // ── Block definitions (for seeding the blocks collection) ──────────────────────
@@ -113,7 +115,7 @@ const BLOCKS = [
       ru: ['net/http: Handler, ServeMux, Middleware', 'gRPC и protobuf', 'WebSockets', 'Graceful shutdown с context + os/signal', 'Health checks и readiness probes', 'Structured logging: slog/zap/zerolog', 'Configuration management: viper, 12-factor', 'Dependency Injection в Go', 'Hexagonal Architecture', 'OpenTelemetry и трейсинг'],
       en: ['net/http: Handler, ServeMux, Middleware', 'gRPC and protobuf', 'WebSockets', 'Graceful shutdown with context + os/signal', 'Health checks and readiness probes', 'Structured logging: slog/zap/zerolog', 'Configuration management: viper, 12-factor', 'Dependency Injection in Go', 'Hexagonal Architecture', 'OpenTelemetry and tracing'],
     },
-    quizId: null,
+    quizId: 7,
     gridRow: 4,
     gridCol: 2,
     color: '#3fb950',
@@ -215,6 +217,7 @@ async function main() {
     { quizId: 4, qs: questionsOop as LegacyQuestion[] },
     { quizId: 5, qs: questionsSql as LegacyQuestion[] },
     { quizId: 6, qs: questionsNetworks as LegacyQuestion[] },
+    { quizId: 7, qs: questionsServer as LegacyQuestion[] },
   ]
 
   let total = 0
