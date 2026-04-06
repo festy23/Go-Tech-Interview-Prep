@@ -17,7 +17,7 @@ const difficultyStyles: Record<string, string> = {
 interface BlockDetailProps {
   blockId: string;
   onHome: () => void;
-  onStartQuiz: (quizId: 1 | 2 | 3 | 4 | 5) => void;
+  onStartQuiz: (quizId: number, title: string) => void;
   onStartBlockQuiz?: (blockId: string, title: string) => void;
 }
 
@@ -112,7 +112,7 @@ export function BlockDetail({ blockId, onHome, onStartQuiz, onStartBlockQuiz }: 
       {block.quizId ? (
         <button
           className="block w-full py-[18px] px-8 bg-linear-to-br from-teal-400 to-teal-700 text-carbon-950 text-base font-bold font-sans border-none rounded-[14px] cursor-pointer text-center tracking-[0.3px] relative overflow-hidden transition-all duration-200 animate-fade-slide-up [animation-delay:0.25s] hover:-translate-y-0.5 hover:shadow-[0_6px_24px_rgba(45,212,191,0.2)] after:content-['_→'] after:inline-block after:transition-transform after:duration-200 hover:after:animate-arrow-bounce"
-          onClick={() => onStartQuiz(block.quizId!)}
+          onClick={() => onStartQuiz(block.quizId!, block.title)}
         >
           {t("block.startQuiz")}
         </button>
