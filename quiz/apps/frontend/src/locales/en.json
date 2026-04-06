@@ -36,25 +36,5 @@
   "difficulty.intermediate-advanced": "Intermediate+",
   "difficulty.advanced": "Advanced",
 
-  "quizCard.1.title": "Go Interview Prep",
-  "quizCard.1.subtitle": "Based on Maxim Lukyanov's materials",
-  "quizCard.1.topics": "gRPC / REST,OOP in Go,Strings,Context,Slice / Map,Channels,Goroutines,GMP Scheduler,ACID / PostgreSQL,Kafka",
-
-  "quizCard.2.title": "Go Deep Dive",
-  "quizCard.2.subtitle": "Advanced topics for Middle level",
-  "quizCard.2.topics": "Pointers,Slices (deep),Map (deep),Structs,Interfaces,Errors / defer / recover",
-
-  "quizCard.3.title": "Go Concurrency",
-  "quizCard.3.subtitle": "Channels, sync, code review",
-  "quizCard.3.topics": "Channels,Channel patterns,Mutex / RWMutex,WaitGroup / Once,sync/atomic,Code Review",
-
-  "quizCard.4.title": "OOP in Go",
-  "quizCard.4.subtitle": "Interfaces, composition, SOLID, patterns",
-  "quizCard.4.topics": "Methods & receivers,Interfaces,Composition,Polymorphism,SOLID,DI,Stdlib interfaces,Patterns",
-
-  "quizCard.5.title": "SQL & Databases",
-  "quizCard.5.subtitle": "JOINs, indexes, transactions, database/sql in Go",
-  "quizCard.5.topics": "JOINs,GROUP BY,CTEs,Window functions,Indexes,Transactions,EXPLAIN,N+1,database/sql,pgx",
-
   "lang.switch": "RU"
 }
