@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(pnpm *)",
+      "Bash(cd *)",
+      "Bash(curl *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(lsof *)",
+      "Bash(kill *)",
+      "Bash(gh *)",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Write(.env)",
+      "Write(.env.local)",
+      "Edit(.env)",
+      "Edit(.env.local)"
+    ]
+  }
+}
