@@ -4,10 +4,11 @@ import { DifficultyLevelSchema } from './question.js'
 export const BlockDTOSchema = z.object({
   id: z.string(),
   title: z.string(),
+  subtitle: z.string(),
   difficulty: DifficultyLevelSchema,
   topicCount: z.number().int(),
   topics: z.array(z.string()),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).nullable(),
+  quizId: z.number().int().positive().nullable(),
   gridRow: z.number().int(),
   gridCol: z.number().int(),
   color: z.string(),
