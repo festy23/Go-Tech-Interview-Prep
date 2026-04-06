@@ -12,10 +12,9 @@ export const DifficultyLevelSchema = z.enum([
 ])
 export type DifficultyLevel = z.infer<typeof DifficultyLevelSchema>
 
-// Base fields common to all question types
 const BaseQuestionDTOSchema = z.object({
   id: z.string(),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).nullable(),
+  quizId: z.number().int().positive().nullable(),
   blockId: z.string().nullable(),
   difficulty: DifficultyLevelSchema,
   tags: z.array(z.string()),
@@ -24,7 +23,6 @@ const BaseQuestionDTOSchema = z.object({
   updatedAt: z.string().datetime(),
 })
 
-// Multiple choice question (with optional code snippet)
 export const MCQQuestionDTOSchema = BaseQuestionDTOSchema.extend({
   type: z.literal('mcq'),
   question: z.string(),
@@ -34,16 +32,14 @@ export const MCQQuestionDTOSchema = BaseQuestionDTOSchema.extend({
 })
 export type MCQQuestionDTO = z.infer<typeof MCQQuestionDTOSchema>
 
-// Discriminated union — extend here when adding new question types
 export const QuestionDTOSchema = z.discriminatedUnion('type', [
   MCQQuestionDTOSchema,
 ])
 export type QuestionDTO = z.infer<typeof QuestionDTOSchema>
 
-// Input schema for creating a question (no id/timestamps — server generates those)
 export const CreateMCQQuestionSchema = z.object({
   type: z.literal('mcq'),
-  quizId: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]).nullable(),
+  quizId: z.number().int().positive().nullable(),
   blockId: z.string().nullable(),
   question: z.string().min(5).max(2000),
   code: z.string().max(5000).optional(),
@@ -60,9 +56,8 @@ export const CreateMCQQuestionSchema = z.object({
 })
 export type CreateMCQQuestionInput = z.infer<typeof CreateMCQQuestionSchema>
 
-// Query params for listing questions
 export const QuestionQuerySchema = z.object({
-  quizId: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)])).optional(),
+  quizId: z.coerce.number().int().positive().optional(),
   blockId: z.string().optional(),
   shuffle: z.enum(['true', 'false']).optional(),
   limit: z.coerce.number().int().min(1).max(200).optional(),

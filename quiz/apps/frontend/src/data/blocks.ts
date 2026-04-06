@@ -8,10 +8,11 @@ export type DifficultyLevel =
 export interface RoadmapBlock {
   id: string;
   title: string;
+  subtitle: string;
   difficulty: DifficultyLevel;
   topicCount: number;
   topics: string[];
-  quizId?: 1 | 2 | 3 | 4 | 5;
+  quizId?: number;
   gridRow: number;
   gridCol: number;
   color: string;

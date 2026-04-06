@@ -36,25 +36,5 @@
   "difficulty.intermediate-advanced": "Средний+",
   "difficulty.advanced": "Продвинутый",
 
-  "quizCard.1.title": "Go на собесе",
-  "quizCard.1.subtitle": "По материалам Максима Лукьянова",
-  "quizCard.1.topics": "gRPC / REST,ООП в Go,Строки,Context,Slice / Map,Каналы,Горутины,Планировщик GMP,ACID / PostgreSQL,Kafka",
-
-  "quizCard.2.title": "Go Deep Dive",
-  "quizCard.2.subtitle": "Углублённые темы для Middle",
-  "quizCard.2.topics": "Указатели,Слайсы (глубоко),Map (глубоко),Структуры,Интерфейсы,Ошибки / defer / recover",
-
-  "quizCard.3.title": "Go Concurrency",
-  "quizCard.3.subtitle": "Каналы, sync, code review",
-  "quizCard.3.topics": "Каналы,Паттерны каналов,Mutex / RWMutex,WaitGroup / Once,sync/atomic,Code Review",
-
-  "quizCard.4.title": "ООП в Go",
-  "quizCard.4.subtitle": "Интерфейсы, композиция, SOLID, паттерны",
-  "quizCard.4.topics": "Методы и ресиверы,Интерфейсы,Композиция,Полиморфизм,SOLID,DI,Стандартные интерфейсы,Паттерны",
-
-  "quizCard.5.title": "SQL & Базы данных",
-  "quizCard.5.subtitle": "JOINs, индексы, транзакции, database/sql в Go",
-  "quizCard.5.topics": "JOINs,GROUP BY,CTE,Оконные функции,Индексы,Транзакции,EXPLAIN,N+1,database/sql,pgx",
-
   "lang.switch": "EN"
 }
