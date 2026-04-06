@@ -31,7 +31,7 @@ export default function App() {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
   // Quiz state
-  const [activeQuizId, setActiveQuizId] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
+  const [activeQuizId, setActiveQuizId] = useState<number | null>(null);
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null);
   const [quizTitle, setQuizTitle] = useState<string>("");
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
@@ -66,8 +66,9 @@ export default function App() {
     setScreen("block");
   }, []);
 
-  const startQuiz = useCallback((quizId: 1 | 2 | 3 | 4 | 5) => {
+  const startQuiz = useCallback((quizId: number, title: string) => {
     setActiveQuizId(quizId);
+    setQuizTitle(title);
     setQuizLoading(true);
     setScreen("quiz");
 
@@ -97,7 +98,7 @@ export default function App() {
   }, []);
 
   const handleQuizComplete = useCallback(
-    (quizId: 1 | 2 | 3 | 4 | 5, score: number, total: number) => {
+    (quizId: number, score: number, total: number) => {
       const blockId = blockQuizMap[quizId] ?? null;
 
       // 1. Save to localStorage (instant, works offline)
@@ -143,7 +144,7 @@ export default function App() {
       <>
         <LanguageSwitcher />
         <Quiz
-          title={activeQuizId ? t(`quizCard.${activeQuizId}.title`) : quizTitle}
+          title={quizTitle}
           questions={quizQuestions}
           onHome={goHome}
           onComplete={(s, total) => {
