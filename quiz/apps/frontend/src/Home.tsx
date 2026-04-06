@@ -69,7 +69,6 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
       <div className="flex gap-15 items-start min-h-[500px] mb-15 max-[768px]:flex-col max-[768px]:gap-8 max-[768px]:min-h-auto max-[768px]:mb-10">
         <div className="flex-[0_0_380px] pt-15 max-[768px]:flex-none max-[768px]:pt-5 max-[768px]:w-full">
           <div className="text-left mb-0 animate-fade-slide-up [animation-delay:0.05s] max-[768px]:text-center">
-            <div className="inline-block text-[28px] font-extrabold font-sans text-carbon-950 bg-teal-400 rounded-[10px] px-[22px] py-2 mb-[18px] tracking-[-1px] transition-all duration-200 hover:scale-105 hover:shadow-[0_4px_20px_rgba(45,212,191,0.25)]">Go</div>
             <h1 className="text-4xl font-extrabold text-carbon-100 tracking-[-0.8px] mb-3.5 leading-[1.15] max-[480px]:text-2xl">{t("home.title", "Go Interview Prep")}</h1>
             <p className="text-[15px] text-carbon-300 leading-relaxed max-w-[340px] max-[768px]:max-w-none">{t("home.tagline")}</p>
           </div>
