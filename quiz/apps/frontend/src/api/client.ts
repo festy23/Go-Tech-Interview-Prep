@@ -37,7 +37,7 @@ async function apiFetch<T>(
 // ── Questions ─────────────────────────────────────────────────────────────────
 
 export async function fetchQuestions(params: {
-  quizId?: 1 | 2 | 3 | 4 | 5
+  quizId?: number
   blockId?: string
   shuffle?: boolean
   limit?: number
