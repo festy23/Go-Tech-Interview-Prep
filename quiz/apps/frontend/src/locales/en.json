@@ -4,6 +4,10 @@
   "home.quizzes": "Practice — Quizzes",
   "home.start": "Start →",
   "home.questions": "questions",
+  "home.subquizzes": "sub-quizzes",
+  "subquiz.progress": "{{n}}/{{m}} sub-quizzes completed",
+  "subquiz.notStarted": "Not started",
+  "subquiz.questions": "questions",
 
   "quiz.correct": "Correct!",
   "quiz.wrong": "Wrong!",

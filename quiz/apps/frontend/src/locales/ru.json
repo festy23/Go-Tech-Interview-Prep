@@ -4,6 +4,10 @@
   "home.quizzes": "Практика — квизы",
   "home.start": "Начать →",
   "home.questions": "вопросов",
+  "home.subquizzes": "подквизов",
+  "subquiz.progress": "{{n}}/{{m}} подквизов пройдено",
+  "subquiz.notStarted": "Не начат",
+  "subquiz.questions": "вопросов",
 
   "quiz.correct": "Верно!",
   "quiz.wrong": "Неверно!",
