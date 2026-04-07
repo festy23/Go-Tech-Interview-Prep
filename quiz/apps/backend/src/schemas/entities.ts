@@ -44,6 +44,7 @@ export interface BlockEntity {
   gridRow: number
   gridCol: number
   color: string
+  parentBlockId?: string   // undefined for top-level blocks
   createdAt: Date
   updatedAt: Date
 }

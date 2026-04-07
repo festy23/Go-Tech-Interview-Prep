@@ -14,6 +14,7 @@ function toDTO(entity: BlockEntity, lang: Lang = 'ru'): BlockDTO {
     gridRow: entity.gridRow,
     gridCol: entity.gridCol,
     color: entity.color,
+    ...(entity.parentBlockId !== undefined && { parentBlockId: entity.parentBlockId }),
   }
 }
 
