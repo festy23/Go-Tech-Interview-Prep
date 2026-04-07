@@ -12,5 +12,6 @@ export const BlockDTOSchema = z.object({
   gridRow: z.number().int(),
   gridCol: z.number().int(),
   color: z.string(),
+  parentBlockId: z.string().optional(),
 })
 export type BlockDTO = z.infer<typeof BlockDTOSchema>
