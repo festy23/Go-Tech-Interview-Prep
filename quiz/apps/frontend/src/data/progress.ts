@@ -37,13 +37,21 @@ export function getProgressPct(progress: ProgressMap, blockId: string): number {
   return Math.round((entry.score / entry.total) * 100);
 }
 
+/** A sub-quiz counts as "completed" when the user scores at least this fraction correct. */
+const COMPLETION_THRESHOLD = 0.6;
+
+/**
+ * Returns sub-quiz completion counts for a parent block.
+ * When `childBlockIds` is empty, returns `{ completed: 0, total: 0 }` —
+ * callers should treat `total === 0` as "not available yet".
+ */
 export function getSubQuizProgress(
   childBlockIds: string[],
   progress: ProgressMap,
 ): { completed: number; total: number } {
   const completed = childBlockIds.filter((id) => {
     const e = progress[id];
-    return e && e.total > 0 && e.score / e.total >= 0.6;
+    return e && e.total > 0 && e.score / e.total >= COMPLETION_THRESHOLD;
   }).length;
   return { completed, total: childBlockIds.length };
 }
