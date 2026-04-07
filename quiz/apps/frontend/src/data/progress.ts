@@ -36,3 +36,14 @@ export function getProgressPct(progress: ProgressMap, blockId: string): number {
   if (!entry || entry.total === 0) return 0;
   return Math.round((entry.score / entry.total) * 100);
 }
+
+export function getSubQuizProgress(
+  childBlockIds: string[],
+  progress: ProgressMap,
+): { completed: number; total: number } {
+  const completed = childBlockIds.filter((id) => {
+    const e = progress[id];
+    return e && e.total > 0 && e.score / e.total >= 0.6;
+  }).length;
+  return { completed, total: childBlockIds.length };
+}
