@@ -16,6 +16,7 @@ export interface RoadmapBlock {
   gridRow: number;
   gridCol: number;
   color: string;
+  parentBlockId?: string;
 }
 
 export interface GraphEdge {

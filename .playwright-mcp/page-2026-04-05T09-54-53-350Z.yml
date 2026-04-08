@@ -1,0 +1,27 @@
+- generic [ref=e2]:
+  - button "Switch language" [ref=e55] [cursor=pointer]: EN
+  - generic [ref=e56]:
+    - banner [ref=e57]:
+      - button "← Назад" [ref=e58] [cursor=pointer]
+      - generic [ref=e59]: Базовый
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - heading "Примитивы Go" [level=1] [ref=e62]
+        - generic [ref=e64]: ~40 вопросов
+      - generic [ref=e65]:
+        - img [ref=e66]
+        - generic: —
+    - heading "Темы" [level=2] [ref=e69]
+    - generic [ref=e70]:
+      - generic [ref=e71]: Типы данных
+      - generic [ref=e72]: Строки и руны
+      - generic [ref=e73]: Константы и iota
+      - generic [ref=e74]: Указатели
+      - generic [ref=e75]: Массивы и слайсы
+      - generic [ref=e76]: Карты (map)
+      - generic [ref=e77]: Структуры и теги
+      - generic [ref=e78]: Функции и замыкания
+      - generic [ref=e79]: Пакеты и модули
+      - generic [ref=e80]: Видимость и init()
+      - generic [ref=e81]: Дженерики (Go 1.18+)
+    - button "Пройти квиз → →" [ref=e82] [cursor=pointer]

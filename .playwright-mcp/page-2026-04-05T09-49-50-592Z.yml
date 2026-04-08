@@ -1,0 +1,12 @@
+- generic [ref=e3]:
+  - button "Switch language" [ref=e4] [cursor=pointer]: EN
+  - generic [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]: Go
+      - heading "Go Interview Prep" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Дорожная карта подготовки к собеседованию
+    - generic [ref=e12]:
+      - generic [ref=e13]: Дорожная карта
+      - generic [ref=e14]:
+        - img
+  - generic [ref=e17]: Практика — квизы

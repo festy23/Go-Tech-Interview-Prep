@@ -1,0 +1,4 @@
+- generic [ref=e162]:
+  - button "Switch language" [ref=e163] [cursor=pointer]: EN
+  - paragraph [ref=e164]: No questions available.
+  - button "Home" [ref=e165] [cursor=pointer]

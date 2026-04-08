@@ -5,7 +5,6 @@ import type { BlockDTO, Lang } from '@quiz/shared'
 function toDTO(entity: BlockEntity, lang: Lang = 'ru'): BlockDTO {
   return {
     id: entity.blockId,
-    parentBlockId: entity.parentBlockId,
     title: entity.title[lang],
     subtitle: entity.subtitle[lang],
     difficulty: entity.difficulty,
@@ -15,6 +14,7 @@ function toDTO(entity: BlockEntity, lang: Lang = 'ru'): BlockDTO {
     gridRow: entity.gridRow,
     gridCol: entity.gridCol,
     color: entity.color,
+    ...(entity.parentBlockId !== undefined && { parentBlockId: entity.parentBlockId }),
   }
 }
 

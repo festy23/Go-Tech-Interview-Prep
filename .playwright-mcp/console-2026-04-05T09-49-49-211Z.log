@@ -1,0 +1,3102 @@
+[     479ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[     578ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[     639ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[     639ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[     640ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[   44778ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[   44816ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[   44821ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[   44826ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[   44831ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100414ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[  100447ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100454ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100461ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100469ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100916ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[  100933ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100939ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100944ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  100950ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  139924ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[  139976ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  139980ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  139983ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  139988ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  140623ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5174/node_modules/.vite/deps/react-dom_client.js?v=dccfacf4:14337
+[  140641ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  140648ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  140654ms] [ERROR] [Home] Failed to fetch blocks: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509
+[  140678ms] [WARNING] [App] Failed to fetch blocks for quiz mapping: ZodError: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      0,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      1,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      2,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      3,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      4,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      5,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  },
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "title"
+    ],
+    "message": "Invalid input: expected string, received undefined"
+  },
+  {
+    "expected": "array",
+    "code": "invalid_type",
+    "path": [
+      6,
+      "topics"
+    ],
+    "message": "Invalid input: expected array, received undefined"
+  }
+]
+    at fetchBlocks (http://localhost:5174/src/api/client.ts:42:33) @ http://localhost:5174/@vite/client:509

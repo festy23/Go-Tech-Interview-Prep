@@ -1,0 +1,23 @@
+- generic [ref=e2]:
+  - button "Switch language" [ref=e85] [cursor=pointer]: EN
+  - generic [ref=e86]:
+    - banner [ref=e87]:
+      - button "← Back" [ref=e88] [cursor=pointer]
+      - generic [ref=e89]: Go Concurrency
+      - generic [ref=e90]: 0/50
+    - generic [ref=e93]: 1 / 50
+    - generic [ref=e94]:
+      - heading "Чем небуферизованный канал отличается от буферизованного?" [level=2] [ref=e95]
+      - generic [ref=e96]:
+        - button "A Небуферизованный блокирует отправителя до тех пор, пока получатель не будет готов принять" [ref=e97] [cursor=pointer]:
+          - generic [ref=e98]: A
+          - generic [ref=e99]: Небуферизованный блокирует отправителя до тех пор, пока получатель не будет готов принять
+        - button "B Небуферизованный никогда не блокирует — отправка всегда мгновенна" [ref=e100] [cursor=pointer]:
+          - generic [ref=e101]: B
+          - generic [ref=e102]: Небуферизованный никогда не блокирует — отправка всегда мгновенна
+        - button "C Буферизованный блокирует при любой отправке, небуферизованный — нет" [ref=e103] [cursor=pointer]:
+          - generic [ref=e104]: C
+          - generic [ref=e105]: Буферизованный блокирует при любой отправке, небуферизованный — нет
+        - button "D Буферизованный может хранить бесконечное количество значений" [ref=e106] [cursor=pointer]:
+          - generic [ref=e107]: D
+          - generic [ref=e108]: Буферизованный может хранить бесконечное количество значений
