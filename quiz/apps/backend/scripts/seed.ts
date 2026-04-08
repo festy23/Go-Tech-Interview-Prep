@@ -446,6 +446,64 @@ const BLOCKS = [
     topics: { ru: ['CAP теорема', 'Шардирование', 'Репликация', 'NoSQL vs SQL', 'Consistent hashing'], en: ['CAP theorem', 'Sharding', 'Replication', 'NoSQL vs SQL', 'Consistent hashing'] },
     quizId: null, gridRow: 0, gridCol: 0, color: '#f85149',
   },
+  {
+    blockId: 'sysdesign-microservices',
+    parentBlockId: 'sysdesign',
+    title: { ru: 'Паттерны микросервисов', en: 'Microservice Patterns' },
+    subtitle: { ru: 'Saga, Outbox, CQRS, трейсинг, service mesh', en: 'Saga, Outbox, CQRS, tracing, service mesh' },
+    difficulty: 'advanced' as const,
+    topicCount: 20,
+    topics: { ru: ['Saga pattern', 'Transactional Outbox', 'CQRS', 'Distributed tracing', 'Service mesh', 'Circuit Breaker', 'API Gateway'], en: ['Saga pattern', 'Transactional Outbox', 'CQRS', 'Distributed tracing', 'Service mesh', 'Circuit Breaker', 'API Gateway'] },
+    quizId: null, gridRow: 0, gridCol: 0, color: '#f85149',
+  },
+
+  // ── Go Runtime ────────────────────────────────────────────────────────────
+  {
+    blockId: 'runtime',
+    title: { ru: 'Планировщик и Runtime Go', en: 'Go Scheduler & Runtime' },
+    subtitle: { ru: 'GMP модель, GC, memory management, internals', en: 'GMP model, GC, memory management, internals' },
+    difficulty: 'advanced' as const,
+    topicCount: 60,
+    topics: {
+      ru: ['GMP модель', 'Work stealing', 'Preemptive scheduling', 'Garbage Collector', 'GOGC и GOMEMLIMIT', 'Escape analysis', 'Внутреннее устройство map/slice/channel', 'Interface internals', 'Defer/panic/recover'],
+      en: ['GMP model', 'Work stealing', 'Preemptive scheduling', 'Garbage Collector', 'GOGC & GOMEMLIMIT', 'Escape analysis', 'Map/slice/channel internals', 'Interface internals', 'Defer/panic/recover'],
+    },
+    quizId: null,
+    gridRow: 5,
+    gridCol: 1,
+    color: '#a371f7',
+  },
+  // ── runtime sub-blocks ────────────────────────────────────────────────────
+  {
+    blockId: 'runtime-scheduler',
+    parentBlockId: 'runtime',
+    title: { ru: 'Планировщик (GMP)', en: 'Scheduler (GMP)' },
+    subtitle: { ru: 'Горутины, потоки, процессоры, work stealing', en: 'Goroutines, threads, processors, work stealing' },
+    difficulty: 'advanced' as const,
+    topicCount: 20,
+    topics: { ru: ['GMP модель', 'GOMAXPROCS', 'Work stealing', 'Preemption', 'Sysmon', 'Stack growth'], en: ['GMP model', 'GOMAXPROCS', 'Work stealing', 'Preemption', 'Sysmon', 'Stack growth'] },
+    quizId: null, gridRow: 0, gridCol: 0, color: '#a371f7',
+  },
+  {
+    blockId: 'runtime-memory',
+    parentBlockId: 'runtime',
+    title: { ru: 'Память и GC', en: 'Memory & GC' },
+    subtitle: { ru: 'Tricolor GC, GOGC, GOMEMLIMIT, escape analysis', en: 'Tricolor GC, GOGC, GOMEMLIMIT, escape analysis' },
+    difficulty: 'advanced' as const,
+    topicCount: 20,
+    topics: { ru: ['Tricolor mark-and-sweep', 'GOGC', 'GOMEMLIMIT', 'Escape analysis', 'sync.Pool', 'Memory alignment'], en: ['Tricolor mark-and-sweep', 'GOGC', 'GOMEMLIMIT', 'Escape analysis', 'sync.Pool', 'Memory alignment'] },
+    quizId: null, gridRow: 0, gridCol: 0, color: '#a371f7',
+  },
+  {
+    blockId: 'runtime-internals',
+    parentBlockId: 'runtime',
+    title: { ru: 'Runtime Internals', en: 'Runtime Internals' },
+    subtitle: { ru: 'Interface, map, channel, defer/panic под капотом', en: 'Interface, map, channel, defer/panic under the hood' },
+    difficulty: 'advanced' as const,
+    topicCount: 20,
+    topics: { ru: ['Interface internals', 'Map internals', 'Channel internals', 'Defer механизм', 'Panic/recover', 'Compiler optimizations'], en: ['Interface internals', 'Map internals', 'Channel internals', 'Defer mechanism', 'Panic/recover', 'Compiler optimizations'] },
+    quizId: null, gridRow: 0, gridCol: 0, color: '#a371f7',
+  },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -7338,6 +7396,2542 @@ const questionsSysdesignDatabases: BilingualQuestion[] = [
   },
 ]
 
+const questionsSysdesignMicroservices: BilingualQuestion[] = [
+  // ── 1. Transactional Outbox ──────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какую проблему решает паттерн Transactional Outbox?',
+      en: 'What problem does the Transactional Outbox pattern solve?',
+    },
+    options: {
+      ru: [
+        'Проблему dual write: атомарное обновление БД и публикация события в брокер сообщений',
+        'Проблему медленных SQL-запросов при большом объёме данных',
+        'Проблему конкурентного доступа к общему ресурсу между горутинами',
+        'Проблему маршрутизации запросов между микросервисами',
+      ],
+      en: [
+        'The dual write problem: atomically updating the DB and publishing an event to a message broker',
+        'The problem of slow SQL queries with large data volumes',
+        'The problem of concurrent access to shared resources between goroutines',
+        'The problem of routing requests between microservices',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Dual write возникает, когда сервис должен одновременно записать данные в БД и отправить событие в брокер. Если одна операция успешна, а другая нет — система приходит в неконсистентное состояние. Transactional Outbox решает это, записывая событие в outbox-таблицу в той же транзакции, что и бизнес-данные.',
+      en: 'A dual write occurs when a service must simultaneously write data to the DB and send an event to a broker. If one operation succeeds and the other fails, the system becomes inconsistent. Transactional Outbox solves this by writing the event to an outbox table in the same transaction as the business data.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'transactional-outbox', 'dual-write'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Как Change Data Capture (CDC) используется совместно с паттерном Transactional Outbox?',
+      en: 'How is Change Data Capture (CDC) used together with the Transactional Outbox pattern?',
+    },
+    options: {
+      ru: [
+        'CDC отслеживает изменения в outbox-таблице через WAL/binlog и автоматически публикует события в брокер',
+        'CDC заменяет outbox-таблицу, записывая события напрямую в Kafka',
+        'CDC шифрует данные перед записью в outbox-таблицу',
+        'CDC реплицирует outbox-таблицу между разными дата-центрами',
+      ],
+      en: [
+        'CDC monitors changes in the outbox table via WAL/binlog and automatically publishes events to the broker',
+        'CDC replaces the outbox table by writing events directly to Kafka',
+        'CDC encrypts data before writing to the outbox table',
+        'CDC replicates the outbox table across different data centers',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'CDC (например, Debezium) читает WAL/binlog базы данных и при появлении новой записи в outbox-таблице автоматически публикует её в Kafka. Это устраняет необходимость поллинга, снижает задержку и не нагружает БД дополнительными запросами.',
+      en: 'CDC (e.g., Debezium) reads the database WAL/binlog and automatically publishes new outbox table entries to Kafka. This eliminates polling, reduces latency, and avoids additional database load.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'transactional-outbox', 'cdc', 'debezium'] as string[],
+  },
+
+  // ── 2. Saga Pattern ──────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'В чём ключевое различие между оркестрацией и хореографией в паттерне Saga?',
+      en: 'What is the key difference between orchestration and choreography in the Saga pattern?',
+    },
+    options: {
+      ru: [
+        'Оркестрация использует центральный координатор, хореография — децентрализованный обмен событиями между сервисами',
+        'Оркестрация работает синхронно, хореография — асинхронно',
+        'Оркестрация поддерживает только два сервиса, хореография — неограниченное количество',
+        'Хореография требует распределённой БД, оркестрация — нет',
+      ],
+      en: [
+        'Orchestration uses a central coordinator, choreography uses decentralized event exchange between services',
+        'Orchestration works synchronously, choreography works asynchronously',
+        'Orchestration supports only two services, choreography supports unlimited',
+        'Choreography requires a distributed database, orchestration does not',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'В оркестрации центральный сервис-оркестратор управляет потоком саги, отправляя команды участникам. В хореографии каждый сервис публикует доменные события, на которые реагируют другие сервисы. Оркестрация проще для мониторинга, хореография — более отказоустойчива.',
+      en: 'In orchestration, a central orchestrator service manages the saga flow by sending commands to participants. In choreography, each service publishes domain events that other services react to. Orchestration is easier to monitor, choreography is more fault-tolerant.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'saga', 'orchestration', 'choreography'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Что такое компенсирующая транзакция в контексте паттерна Saga?',
+      en: 'What is a compensating transaction in the context of the Saga pattern?',
+    },
+    options: {
+      ru: [
+        'Операция, отменяющая эффект ранее выполненного локального шага саги при сбое последующего шага',
+        'Повторная попытка выполнить неудавшуюся транзакцию с экспоненциальным backoff',
+        'Транзакция, выполняемая параллельно с основной для повышения надёжности',
+        'Механизм блокировки ресурсов до завершения всех шагов саги',
+      ],
+      en: [
+        'An operation that undoes the effect of a previously completed local saga step when a subsequent step fails',
+        'A retry of the failed transaction with exponential backoff',
+        'A transaction executed in parallel with the main one for improved reliability',
+        'A mechanism for locking resources until all saga steps complete',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Компенсирующие транзакции — ключевая часть Saga. Если шаг N+1 терпит неудачу, выполняются компенсации для шагов N, N-1, ..., 1 в обратном порядке. Например, если оплата прошла, но доставка невозможна, компенсация вернёт деньги клиенту.',
+      en: 'Compensating transactions are a key part of the Saga pattern. If step N+1 fails, compensations are executed for steps N, N-1, ..., 1 in reverse order. For example, if payment succeeded but delivery is impossible, the compensation refunds the customer.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'saga', 'compensating-transaction'] as string[],
+  },
+
+  // ── 3. 2PC (Two-Phase Commit) ────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Почему Two-Phase Commit (2PC) считается неподходящим для микросервисной архитектуры?',
+      en: 'Why is Two-Phase Commit (2PC) considered unsuitable for microservices architecture?',
+    },
+    options: {
+      ru: [
+        'Блокирующий протокол с единой точкой отказа (координатор), нарушающий принцип независимости сервисов',
+        '2PC работает только с реляционными базами данных',
+        '2PC не поддерживает более двух участников',
+        '2PC требует использования gRPC и не работает с REST API',
+      ],
+      en: [
+        'A blocking protocol with a single point of failure (coordinator) that violates service independence',
+        '2PC only works with relational databases',
+        '2PC does not support more than two participants',
+        '2PC requires gRPC and does not work with REST APIs',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: '2PC — блокирующий протокол: участники удерживают блокировки до решения координатора. Если координатор падает после фазы Prepare, участники «зависают» в неопределённости. Это создаёт тесную связанность, снижает пропускную способность и масштабируемость — всё, чего микросервисы стараются избегать.',
+      en: '2PC is a blocking protocol: participants hold locks until the coordinator decides. If the coordinator crashes after the Prepare phase, participants are stuck in uncertainty. This creates tight coupling, reduces throughput and scalability — everything microservices try to avoid.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', '2pc', 'distributed-transactions'] as string[],
+  },
+
+  // ── 4. CQRS ──────────────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Что такое CQRS и какую проблему он решает?',
+      en: 'What is CQRS and what problem does it solve?',
+    },
+    options: {
+      ru: [
+        'Разделение моделей чтения и записи, позволяющее независимо оптимизировать и масштабировать каждую сторону',
+        'Централизация всех запросов через единый API Gateway',
+        'Репликация данных между микросервисами в реальном времени',
+        'Кэширование результатов запросов на стороне клиента',
+      ],
+      en: [
+        'Separating read and write models to independently optimize and scale each side',
+        'Centralizing all requests through a single API Gateway',
+        'Real-time data replication between microservices',
+        'Client-side caching of query results',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'CQRS (Command Query Responsibility Segregation) использует разные модели для команд (записи) и запросов (чтения). Это позволяет использовать нормализованную модель для записи и денормализованные проекции для чтения, масштабируя их независимо.',
+      en: 'CQRS (Command Query Responsibility Segregation) uses different models for commands (writes) and queries (reads). This allows using a normalized model for writes and denormalized projections for reads, scaling them independently.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'cqrs', 'architecture'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Чем Event Sourcing отличается от традиционного хранения состояния?',
+      en: 'How does Event Sourcing differ from traditional state storage?',
+    },
+    options: {
+      ru: [
+        'Event Sourcing хранит каждое изменение состояния как неизменяемое событие, а текущее состояние восстанавливается из последовательности событий',
+        'Event Sourcing хранит только последнее состояние сущности и удаляет историю',
+        'Event Sourcing записывает состояние в файловую систему вместо базы данных',
+        'Event Sourcing использует кэш вместо постоянного хранилища',
+      ],
+      en: [
+        'Event Sourcing stores every state change as an immutable event, and current state is reconstructed from the event sequence',
+        'Event Sourcing stores only the latest entity state and deletes history',
+        'Event Sourcing writes state to the file system instead of a database',
+        'Event Sourcing uses cache instead of persistent storage',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Event Sourcing сохраняет все события (OrderCreated, PaymentProcessed, ItemShipped) как append-only лог. Текущее состояние восстанавливается путём проигрывания событий. Это даёт полный аудит, возможность восстановления и отладки, но усложняет запросы — отсюда частое сочетание с CQRS.',
+      en: 'Event Sourcing persists all events (OrderCreated, PaymentProcessed, ItemShipped) as an append-only log. Current state is rebuilt by replaying events. This provides full audit trail, recovery and debugging capability, but complicates queries — hence the frequent pairing with CQRS.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'event-sourcing', 'cqrs'] as string[],
+  },
+
+  // ── 5. Distributed Tracing (OpenTelemetry) ───────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какой код на Go корректно создаёт span с помощью OpenTelemetry?',
+      en: 'Which Go code correctly creates a span using OpenTelemetry?',
+    },
+    code: `// Вариант A
+ctx, span := otel.Tracer("myservice").Start(ctx, "operation")
+defer span.End()
+
+// Вариант B
+span := otel.NewSpan("operation")
+defer span.Close()
+
+// Вариант C
+span := trace.StartSpan(ctx, "operation")
+defer span.Finish()
+
+// Вариант D
+ctx, span := otel.BeginTrace(ctx, "operation")
+defer span.Stop()`,
+    options: {
+      ru: [
+        'Вариант A: otel.Tracer().Start(ctx, name) возвращает обновлённый ctx и span',
+        'Вариант B: otel.NewSpan(name) создаёт span без контекста',
+        'Вариант C: trace.StartSpan(ctx, name) из пакета trace',
+        'Вариант D: otel.BeginTrace(ctx, name) начинает новый трейс',
+      ],
+      en: [
+        'Option A: otel.Tracer().Start(ctx, name) returns updated ctx and span',
+        'Option B: otel.NewSpan(name) creates a span without context',
+        'Option C: trace.StartSpan(ctx, name) from the trace package',
+        'Option D: otel.BeginTrace(ctx, name) begins a new trace',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'В OpenTelemetry Go SDK span создаётся через Tracer.Start(ctx, name), который возвращает новый context (с span внутри) и сам span. Контекст передаётся далее по цепочке вызовов для установления parent-child связей между span-ами.',
+      en: 'In the OpenTelemetry Go SDK, a span is created via Tracer.Start(ctx, name), which returns a new context (with the span inside) and the span itself. The context is passed down the call chain to establish parent-child relationships between spans.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'opentelemetry', 'distributed-tracing', 'go-code'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Как W3C Trace Context обеспечивает propagation трейса между микросервисами?',
+      en: 'How does W3C Trace Context ensure trace propagation between microservices?',
+    },
+    options: {
+      ru: [
+        'Через HTTP-заголовок traceparent, содержащий trace-id, parent-id и флаги сэмплирования',
+        'Через cookie с идентификатором сессии',
+        'Через специальный gRPC-метод GetTraceContext()',
+        'Через DNS TXT-запись с метаданными трейса',
+      ],
+      en: [
+        'Via the traceparent HTTP header containing trace-id, parent-id, and sampling flags',
+        'Via a cookie with a session identifier',
+        'Via a special gRPC method GetTraceContext()',
+        'Via a DNS TXT record with trace metadata',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Стандарт W3C Trace Context определяет заголовок traceparent в формате: version-traceid-parentid-traceflags (например, 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01). OpenTelemetry по умолчанию использует этот стандарт для propagation. Метод Inject сериализует контекст в заголовки, Extract — восстанавливает.',
+      en: 'The W3C Trace Context standard defines the traceparent header in the format: version-traceid-parentid-traceflags (e.g., 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01). OpenTelemetry uses this standard by default for propagation. The Inject method serializes context into headers, Extract restores it.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'distributed-tracing', 'w3c-trace-context', 'propagation'] as string[],
+  },
+
+  // ── 6. Service Mesh ──────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какую роль выполняет sidecar-прокси в архитектуре service mesh?',
+      en: 'What role does a sidecar proxy play in a service mesh architecture?',
+    },
+    options: {
+      ru: [
+        'Перехватывает весь входящий/исходящий трафик пода, обеспечивая mTLS, маршрутизацию и телеметрию без изменения кода приложения',
+        'Выступает кэширующим прокси для ускорения ответов от базы данных',
+        'Компилирует и деплоит бизнес-логику в Kubernetes',
+        'Обеспечивает автомасштабирование подов на основе нагрузки CPU',
+      ],
+      en: [
+        'Intercepts all inbound/outbound pod traffic, providing mTLS, routing, and telemetry without changing application code',
+        'Acts as a caching proxy to speed up database responses',
+        'Compiles and deploys business logic to Kubernetes',
+        'Provides auto-scaling of pods based on CPU load',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Sidecar-прокси (Envoy в Istio, linkerd2-proxy в Linkerd) деплоится в каждом поде рядом с приложением. Весь сетевой трафик проходит через него, что позволяет прозрачно добавлять mTLS, retry, circuit breaking, трейсинг и метрики — без модификации кода сервиса.',
+      en: 'A sidecar proxy (Envoy in Istio, linkerd2-proxy in Linkerd) is deployed in every pod alongside the application. All network traffic flows through it, enabling transparent mTLS, retries, circuit breaking, tracing, and metrics — without modifying service code.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'service-mesh', 'sidecar-proxy'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Чем отличаются data plane и control plane в service mesh?',
+      en: 'How do the data plane and control plane differ in a service mesh?',
+    },
+    options: {
+      ru: [
+        'Data plane — совокупность sidecar-прокси, обрабатывающих трафик; control plane — централизованный компонент, конфигурирующий прокси',
+        'Data plane хранит данные в базе данных; control plane управляет репликацией',
+        'Data plane — сеть между дата-центрами; control plane — мониторинг',
+        'Data plane и control plane — синонимы для input/output',
+      ],
+      en: [
+        'Data plane is the collection of sidecar proxies handling traffic; control plane is the centralized component configuring the proxies',
+        'Data plane stores data in a database; control plane manages replication',
+        'Data plane is the inter-datacenter network; control plane is monitoring',
+        'Data plane and control plane are synonyms for input/output',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Data plane (Envoy/linkerd2-proxy) обрабатывает реальный трафик между сервисами — маршрутизация, балансировка, TLS. Control plane (Istiod, Linkerd controller) распределяет конфигурацию, сертификаты и политики по всем прокси через xDS API.',
+      en: 'The data plane (Envoy/linkerd2-proxy) handles actual traffic between services — routing, load balancing, TLS. The control plane (Istiod, Linkerd controller) distributes configuration, certificates, and policies to all proxies via the xDS API.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'service-mesh', 'data-plane', 'control-plane'] as string[],
+  },
+
+  // ── 7. Circuit Breaker (deep dive) ───────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какой Go-код корректно настраивает circuit breaker с помощью библиотеки sony/gobreaker?',
+      en: 'Which Go code correctly configures a circuit breaker using the sony/gobreaker library?',
+    },
+    code: `// Вариант A
+cb := gobreaker.NewCircuitBreaker(gobreaker.Settings{
+    Name:        "my-service",
+    MaxRequests: 3,
+    Timeout:     10 * time.Second,
+    ReadyToTrip: func(counts gobreaker.Counts) bool {
+        return counts.ConsecutiveFailures > 5
+    },
+})
+result, err := cb.Execute(func() (interface{}, error) {
+    return http.Get("https://api.example.com/data")
+})
+
+// Вариант B
+cb := gobreaker.New("my-service", 5, 10*time.Second)
+result := cb.Call(func() interface{} {
+    return http.Get("https://api.example.com/data")
+})`,
+    options: {
+      ru: [
+        'Вариант A: Settings задаёт параметры, ReadyToTrip определяет условие открытия, Execute оборачивает вызов',
+        'Вариант B: конструктор New принимает имя, порог и таймаут позиционно',
+        'Оба варианта корректны, но используют разные версии библиотеки',
+        'Ни один вариант некорректен — gobreaker работает только как HTTP middleware',
+      ],
+      en: [
+        'Option A: Settings configures parameters, ReadyToTrip defines the trip condition, Execute wraps the call',
+        'Option B: the New constructor takes name, threshold, and timeout positionally',
+        'Both options are correct but use different library versions',
+        'Neither option is correct — gobreaker only works as HTTP middleware',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'sony/gobreaker использует структуру Settings для конфигурации. MaxRequests — число запросов в half-open состоянии, Timeout — время до перехода из open в half-open, ReadyToTrip — функция, определяющая, когда перейти из closed в open. Execute оборачивает вызов и управляет состоянием.',
+      en: 'sony/gobreaker uses the Settings struct for configuration. MaxRequests is the number of requests in half-open state, Timeout is the time before transitioning from open to half-open, ReadyToTrip is the function that determines when to transition from closed to open. Execute wraps the call and manages state.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'circuit-breaker', 'gobreaker', 'go-code'] as string[],
+  },
+
+  // ── 8. API Gateway ───────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какие основные задачи решает API Gateway в микросервисной архитектуре?',
+      en: 'What are the main responsibilities of an API Gateway in microservices architecture?',
+    },
+    options: {
+      ru: [
+        'Маршрутизация запросов, аутентификация, rate limiting, агрегация ответов, TLS termination',
+        'Хранение бизнес-логики всех микросервисов в одном месте',
+        'Репликация данных между микросервисами и базой данных',
+        'Компиляция и деплой всех микросервисов из единой точки',
+      ],
+      en: [
+        'Request routing, authentication, rate limiting, response aggregation, TLS termination',
+        'Storing business logic of all microservices in one place',
+        'Data replication between microservices and the database',
+        'Compiling and deploying all microservices from a single point',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'API Gateway — единая точка входа для клиентов. Он маршрутизирует запросы к нужным сервисам, выполняет аутентификацию/авторизацию, ограничивает частоту запросов, агрегирует данные из нескольких сервисов и терминирует TLS. Это позволяет сервисам не реализовывать cross-cutting concerns самостоятельно.',
+      en: 'An API Gateway is the single entry point for clients. It routes requests to appropriate services, handles authentication/authorization, enforces rate limits, aggregates data from multiple services, and terminates TLS. This frees services from implementing cross-cutting concerns themselves.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'api-gateway', 'routing'] as string[],
+  },
+
+  // ── 9. Event-Driven Architecture ─────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'В чём разница между Event Notification и Event-Carried State Transfer?',
+      en: 'What is the difference between Event Notification and Event-Carried State Transfer?',
+    },
+    options: {
+      ru: [
+        'Event Notification сообщает "что-то произошло" (минимум данных); Event-Carried State Transfer передаёт полное состояние, чтобы потребитель не обращался к источнику',
+        'Event Notification синхронный, Event-Carried State Transfer асинхронный',
+        'Event Notification используется только в монолитах, Event-Carried State Transfer — в микросервисах',
+        'Event Notification быстрее, так как использует UDP вместо TCP',
+      ],
+      en: [
+        'Event Notification says "something happened" (minimal data); Event-Carried State Transfer includes full state so the consumer doesn\'t need to call the source',
+        'Event Notification is synchronous, Event-Carried State Transfer is asynchronous',
+        'Event Notification is only used in monoliths, Event-Carried State Transfer in microservices',
+        'Event Notification is faster because it uses UDP instead of TCP',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Event Notification содержит минимум данных (например, {orderId: 123, event: "created"}) — потребитель при необходимости запрашивает детали у источника. Event-Carried State Transfer включает полные данные ({order: {...все поля...}}), что снижает связанность, но увеличивает размер событий.',
+      en: 'Event Notification contains minimal data (e.g., {orderId: 123, event: "created"}) — the consumer queries the source for details if needed. Event-Carried State Transfer includes full data ({order: {...all fields...}}), reducing coupling but increasing event size.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'event-driven', 'event-notification', 'state-transfer'] as string[],
+  },
+
+  // ── 10. Idempotency ──────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Как реализуется идемпотентный потребитель сообщений в микросервисе?',
+      en: 'How is an idempotent message consumer implemented in a microservice?',
+    },
+    options: {
+      ru: [
+        'Идентификатор сообщения записывается в таблицу processed_messages в той же транзакции, что и бизнес-операция; дубликаты отклоняются по unique constraint',
+        'Потребитель проверяет timestamp сообщения и отклоняет старые',
+        'Брокер гарантирует exactly-once доставку, поэтому дополнительная логика не нужна',
+        'Потребитель использует mutex для блокировки повторных сообщений в памяти',
+      ],
+      en: [
+        'The message ID is written to a processed_messages table in the same transaction as the business operation; duplicates are rejected by unique constraint',
+        'The consumer checks the message timestamp and rejects old ones',
+        'The broker guarantees exactly-once delivery, so no additional logic is needed',
+        'The consumer uses a mutex to block duplicate messages in memory',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'При at-least-once доставке сообщение может прийти повторно. Идемпотентный потребитель записывает messageId в таблицу с уникальным ключом в той же транзакции, что и бизнес-логику. Если INSERT нарушает constraint — сообщение уже обработано, транзакция откатывается.',
+      en: 'With at-least-once delivery, a message may arrive more than once. An idempotent consumer writes the messageId to a table with a unique key in the same transaction as the business logic. If the INSERT violates the constraint, the message was already processed and the transaction is rolled back.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'idempotency', 'at-least-once', 'deduplication'] as string[],
+  },
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Для чего клиент передаёт Idempotency-Key в HTTP-заголовке при вызове API?',
+      en: 'Why does a client pass an Idempotency-Key in an HTTP header when calling an API?',
+    },
+    options: {
+      ru: [
+        'Чтобы сервер мог распознать повторный запрос и вернуть закэшированный результат вместо повторного выполнения операции',
+        'Чтобы зашифровать тело запроса уникальным ключом',
+        'Чтобы идентифицировать пользователя вместо JWT-токена',
+        'Чтобы указать приоритет обработки запроса в очереди',
+      ],
+      en: [
+        'So the server can recognize a repeated request and return the cached result instead of re-executing the operation',
+        'To encrypt the request body with a unique key',
+        'To identify the user instead of a JWT token',
+        'To indicate the request processing priority in a queue',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Idempotency-Key (обычно UUID, сгенерированный клиентом) позволяет серверу обнаружить повторный запрос (например, при retry из-за таймаута). Сервер хранит ключ и результат; при повторном запросе с тем же ключом возвращает сохранённый ответ без повторного списания средств, создания заказа и т.д.',
+      en: 'An Idempotency-Key (typically a client-generated UUID) allows the server to detect a repeated request (e.g., a retry after a timeout). The server stores the key and result; on a repeated request with the same key it returns the stored response without re-charging, creating a duplicate order, etc.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'idempotency', 'idempotency-key', 'api-design'] as string[],
+  },
+
+  // ── 11. Bulkhead Pattern ─────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какой Go-код демонстрирует реализацию паттерна Bulkhead с помощью семафора?',
+      en: 'Which Go code demonstrates a Bulkhead pattern implementation using a semaphore?',
+    },
+    code: `// Вариант A
+sem := make(chan struct{}, 10) // макс. 10 параллельных вызовов
+func callService(ctx context.Context) error {
+    select {
+    case sem <- struct{}{}:
+        defer func() { <-sem }()
+        return doRequest(ctx)
+    case <-ctx.Done():
+        return ctx.Err()
+    }
+}
+
+// Вариант B
+var mu sync.Mutex
+func callService(ctx context.Context) error {
+    mu.Lock()
+    defer mu.Unlock()
+    return doRequest(ctx)
+}`,
+    options: {
+      ru: [
+        'Вариант A: буферизованный канал ограничивает параллелизм, изолируя ресурсы для конкретного downstream-сервиса',
+        'Вариант B: mutex обеспечивает эксклюзивный доступ, что является основой Bulkhead',
+        'Оба варианта реализуют Bulkhead одинаково эффективно',
+        'Ни один вариант не является Bulkhead — паттерн требует отдельных goroutine pool',
+      ],
+      en: [
+        'Option A: a buffered channel limits concurrency, isolating resources for a specific downstream service',
+        'Option B: a mutex provides exclusive access, which is the foundation of Bulkhead',
+        'Both options implement Bulkhead equally effectively',
+        'Neither option is Bulkhead — the pattern requires separate goroutine pools',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Bulkhead изолирует ресурсы: каждому downstream-сервису выделяется свой пул (семафор). Буферизованный канал на 10 элементов ограничивает параллелизм до 10 вызовов. Mutex (вариант B) пропускает только 1 запрос — это не изоляция, а сериализация. Ключевая идея Bulkhead: сбой одного сервиса не исчерпает ресурсы, выделенные другим.',
+      en: 'Bulkhead isolates resources: each downstream service gets its own pool (semaphore). A buffered channel of 10 limits concurrency to 10 calls. A mutex (option B) allows only 1 request — that\'s serialization, not isolation. The key Bulkhead idea: one service\'s failure won\'t exhaust resources allocated to others.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['microservices', 'bulkhead', 'semaphore', 'go-code'] as string[],
+  },
+
+  // ── 12. Health Checks (Kubernetes context) ───────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Какой Go-код корректно реализует раздельные liveness и readiness эндпоинты для Kubernetes?',
+      en: 'Which Go code correctly implements separate liveness and readiness endpoints for Kubernetes?',
+    },
+    code: `mux := http.NewServeMux()
+
+mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
+    // liveness: процесс жив
+    w.WriteHeader(http.StatusOK)
+})
+
+mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+    // readiness: проверяем зависимости
+    if err := db.PingContext(r.Context()); err != nil {
+        w.WriteHeader(http.StatusServiceUnavailable)
+        return
+    }
+    w.WriteHeader(http.StatusOK)
+})`,
+    options: {
+      ru: [
+        'Код корректен: /healthz проверяет жизнеспособность процесса, /readyz — готовность к приёму трафика включая проверку зависимостей',
+        'Код некорректен: оба эндпоинта должны проверять зависимости',
+        'Код некорректен: Kubernetes использует только один эндпоинт /health',
+        'Код некорректен: readiness не должен проверять БД, только CPU и память',
+      ],
+      en: [
+        'The code is correct: /healthz checks process liveness, /readyz checks readiness to accept traffic including dependency checks',
+        'The code is incorrect: both endpoints should check dependencies',
+        'The code is incorrect: Kubernetes uses only a single /health endpoint',
+        'The code is incorrect: readiness should not check the DB, only CPU and memory',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Liveness probe (/healthz) должна быть легковесной — если не отвечает, Kubernetes перезапускает контейнер. Проверка БД в liveness опасна: недоступность БД приведёт к каскадному рестарту всех подов. Readiness probe (/readyz) проверяет готовность к трафику — если БД недоступна, под убирается из Service, но не перезапускается.',
+      en: 'A liveness probe (/healthz) must be lightweight — if it fails, Kubernetes restarts the container. Checking the DB in liveness is dangerous: DB unavailability would cause cascading restarts of all pods. A readiness probe (/readyz) checks readiness for traffic — if the DB is down, the pod is removed from the Service but not restarted.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'health-checks', 'kubernetes', 'go-code'] as string[],
+  },
+
+  // ── 13. Service Discovery ────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Чем client-side service discovery отличается от server-side?',
+      en: 'How does client-side service discovery differ from server-side?',
+    },
+    options: {
+      ru: [
+        'Client-side: клиент запрашивает реестр и сам выбирает инстанс; server-side: балансировщик скрывает реестр, клиент обращается к единому адресу',
+        'Client-side работает только в локальной сети, server-side — через интернет',
+        'Client-side быстрее, так как использует кэш DNS; server-side использует HTTP redirect',
+        'Client-side требует Consul, server-side — только DNS',
+      ],
+      en: [
+        'Client-side: the client queries the registry and chooses an instance; server-side: a load balancer hides the registry, the client calls a single address',
+        'Client-side only works on local networks, server-side works over the internet',
+        'Client-side is faster because it uses DNS caching; server-side uses HTTP redirects',
+        'Client-side requires Consul, server-side requires only DNS',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'При client-side discovery (Netflix Eureka + Ribbon) клиент получает список инстансов из реестра и самостоятельно балансирует нагрузку. При server-side discovery (Kubernetes Service, AWS ELB) клиент обращается к стабильному адресу, а балансировщик маршрутизирует запрос. Server-side проще для клиентов, но добавляет дополнительный hop.',
+      en: 'With client-side discovery (Netflix Eureka + Ribbon), the client gets the instance list from the registry and load-balances itself. With server-side discovery (Kubernetes Service, AWS ELB), the client calls a stable address and the load balancer routes the request. Server-side is simpler for clients but adds an extra hop.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'service-discovery', 'client-side', 'server-side'] as string[],
+  },
+
+  // ── 14. Strangler Fig ────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'sysdesign-microservices', quizId: null,
+    question: {
+      ru: 'Как паттерн Strangler Fig обеспечивает безопасную миграцию с монолита на микросервисы?',
+      en: 'How does the Strangler Fig pattern ensure safe migration from a monolith to microservices?',
+    },
+    options: {
+      ru: [
+        'Через постепенное перенаправление запросов: новая функциональность реализуется в микросервисе, прокси/API Gateway маршрутизирует трафик между монолитом и новыми сервисами',
+        'Через одномоментную замену всего монолита новой системой (big bang)',
+        'Через дублирование всей базы данных в каждый микросервис',
+        'Через замораживание монолита и параллельную разработку всех микросервисов с нуля',
+      ],
+      en: [
+        'Through gradual request redirection: new functionality is built in a microservice, a proxy/API Gateway routes traffic between the monolith and new services',
+        'Through a one-time replacement of the entire monolith (big bang)',
+        'Through duplicating the entire database in each microservice',
+        'Through freezing the monolith and developing all microservices from scratch in parallel',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Strangler Fig (названный в честь фигового дерева-душителя) позволяет инкрементально извлекать функции из монолита. API Gateway/прокси направляет запросы: мигрированные — в микросервис, остальные — в монолит. Это снижает риск, позволяет тестировать каждую часть отдельно и не останавливает разработку.',
+      en: 'Strangler Fig (named after the strangler fig tree) allows incrementally extracting features from the monolith. An API Gateway/proxy routes requests: migrated ones go to the microservice, the rest go to the monolith. This reduces risk, allows testing each part separately, and doesn\'t halt development.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['microservices', 'strangler-fig', 'migration', 'monolith'] as string[],
+  },
+]
+
+
+
+const questionsRuntimeScheduler: BilingualQuestion[] = [
+  // ── 1. GMP model basics ──────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какова роль компонента P (Processor) в модели GMP планировщика Go?',
+      en: 'What is the role of the P (Processor) component in the Go scheduler GMP model?',
+    },
+    options: {
+      ru: [
+        'Логический процессор, владеющий локальной очередью горутин и ресурсами (mcache)',
+        'Физическое ядро CPU, непосредственно выполняющее машинный код',
+        'Пул потоков ОС, создаваемых для выполнения горутин',
+        'Процесс ОС, изолирующий горутины от системных вызовов',
+      ],
+      en: [
+        'A logical processor that owns a local run queue and resources (mcache)',
+        'A physical CPU core that directly executes machine code',
+        'A pool of OS threads created for goroutine execution',
+        'An OS process that isolates goroutines from system calls',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'P — логический процессор. Каждый P владеет локальной очередью горутин (LRQ), mcache для аллокаций и другими ресурсами. Горутина может выполняться только на M, который привязан к P. Количество P определяется GOMAXPROCS.',
+      en: 'P is a logical processor. Each P owns a local run queue (LRQ), an mcache for allocations, and other resources. A goroutine can only execute on an M that is attached to a P. The number of Ps is determined by GOMAXPROCS.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'gmp', 'processor'],
+  },
+  // ── 2. Local run queue capacity ──────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какова максимальная длина локальной очереди (LRQ) каждого P в планировщике Go?',
+      en: 'What is the maximum length of each P\'s local run queue (LRQ) in the Go scheduler?',
+    },
+    options: {
+      ru: ['256 горутин', '128 горутин', '1024 горутины', 'Ограничена только объёмом памяти'],
+      en: ['256 goroutines', '128 goroutines', '1024 goroutines', 'Limited only by available memory'],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Локальная очередь каждого P — это lock-free кольцевой буфер на 256 элементов. Когда она переполняется, половина горутин перемещается в глобальную очередь (GRQ). Это позволяет минимизировать конкуренцию между P.',
+      en: 'Each P\'s local run queue is a lock-free ring buffer of 256 elements. When it overflows, half the goroutines are moved to the global run queue (GRQ). This minimizes contention between Ps.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'gmp', 'local-run-queue'],
+  },
+  // ── 3. Global run queue fairness — every 61st tick ────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Как планировщик Go предотвращает голодание горутин в глобальной очереди (GRQ)?',
+      en: 'How does the Go scheduler prevent starvation of goroutines in the global run queue (GRQ)?',
+    },
+    options: {
+      ru: [
+        'Каждый 61-й вызов schedule() P берёт горутину из GRQ, прежде чем проверить локальную очередь',
+        'GRQ имеет высший приоритет и всегда проверяется первой',
+        'sysmon принудительно перемещает горутины из GRQ каждые 10 мс',
+        'Горутины в GRQ автоматически распределяются по LRQ при их создании',
+      ],
+      en: [
+        'Every 61st call to schedule(), P takes a goroutine from GRQ before checking the local queue',
+        'GRQ has the highest priority and is always checked first',
+        'sysmon forcibly moves goroutines from GRQ every 10ms',
+        'Goroutines in GRQ are automatically distributed to LRQs at creation time',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'В функции schedule() есть счётчик schedtick. Каждые 61 итераций планировщик проверяет GRQ первой. Число 61 — простое, что помогает избежать систематических паттернов и обеспечивает справедливость без избыточных проверок.',
+      en: 'The schedule() function has a schedtick counter. Every 61 iterations the scheduler checks GRQ first. 61 is a prime number, helping avoid systematic patterns while ensuring fairness without excessive checking.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'global-run-queue', 'fairness'],
+  },
+  // ── 4. Work stealing ─────────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Что происходит, когда локальная очередь P пуста и глобальная очередь тоже пуста?',
+      en: 'What happens when a P\'s local run queue is empty and the global run queue is also empty?',
+    },
+    options: {
+      ru: [
+        'P пытается украсть половину горутин из локальной очереди случайного другого P (work stealing)',
+        'P переходит в спящий режим и ожидает, пока sysmon его разбудит',
+        'M отсоединяется от P и завершается',
+        'P создаёт новые горутины для поддержания загрузки',
+      ],
+      en: [
+        'P tries to steal half the goroutines from a random other P\'s local queue (work stealing)',
+        'P enters sleep mode and waits for sysmon to wake it up',
+        'M detaches from P and terminates',
+        'P creates new goroutines to maintain load',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Work stealing — ключевой механизм балансировки нагрузки. Простаивающий P выбирает случайный P-жертву и крадёт половину горутин из его LRQ. Если и это не помогает, P проверяет network poller и только затем паркуется.',
+      en: 'Work stealing is the key load-balancing mechanism. An idle P picks a random victim P and steals half the goroutines from its LRQ. If that also fails, P checks the network poller and only then parks itself.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'work-stealing'],
+  },
+  // ── 5. Blocking syscall and M handoff ────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Что происходит с P, когда горутина выполняет блокирующий системный вызов (например, file I/O)?',
+      en: 'What happens to P when a goroutine performs a blocking system call (e.g., file I/O)?',
+    },
+    options: {
+      ru: [
+        'P отсоединяется от заблокированного M и передаётся другому свободному M (handoff)',
+        'P блокируется вместе с M до завершения системного вызова',
+        'Горутина автоматически переключается на неблокирующий режим',
+        'Создаётся новый P для обработки оставшихся горутин',
+      ],
+      en: [
+        'P detaches from the blocked M and is handed off to another free M (handoff)',
+        'P blocks together with M until the syscall completes',
+        'The goroutine automatically switches to non-blocking mode',
+        'A new P is created to handle the remaining goroutines',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'При блокирующем syscall M блокируется в ядре ОС. Планировщик отсоединяет P от этого M и передаёт его другому M (или создаёт новый M). Так горутины из очереди P продолжают выполняться, не дожидаясь завершения syscall.',
+      en: 'During a blocking syscall, M is blocked in the OS kernel. The scheduler detaches P from that M and hands it off to another M (or creates a new one). This way goroutines in P\'s queue continue executing without waiting for the syscall to complete.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'syscall', 'handoff'],
+  },
+  // ── 6. Async preemption (Go 1.14+) ──────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какой сигнал ОС использует Go (начиная с 1.14) для асинхронного вытеснения горутин?',
+      en: 'Which OS signal does Go (since 1.14) use for asynchronous goroutine preemption?',
+    },
+    options: {
+      ru: ['SIGURG', 'SIGINT', 'SIGSTOP', 'SIGUSR1'],
+      en: ['SIGURG', 'SIGINT', 'SIGSTOP', 'SIGUSR1'],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Go 1.14 ввёл асинхронное вытеснение на основе сигнала SIGURG. Этот сигнал выбран потому, что он не используется большинством программ и безопасен для отправки в любой момент. sysmon отправляет SIGURG потоку M, чей обработчик сигналов останавливает горутину в безопасной точке.',
+      en: 'Go 1.14 introduced asynchronous preemption using the SIGURG signal. This signal was chosen because it is not used by most programs and is safe to send at any time. sysmon sends SIGURG to the M\'s thread, whose signal handler stops the goroutine at a safe point.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'preemption', 'sigurg'],
+  },
+  // ── 7. Cooperative vs async preemption ───────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какая проблема была у Go до версии 1.14 с кооперативным планированием?',
+      en: 'What problem did Go have before version 1.14 with cooperative scheduling?',
+    },
+    code: `func infiniteLoop() {
+    for {
+        // tight loop: no function calls, no channel ops
+    }
+}`,
+    options: {
+      ru: [
+        'Тесный цикл без вызовов функций мог монопольно занимать M/P, блокируя другие горутины',
+        'Горутины не могли выполняться параллельно на нескольких ядрах',
+        'Каналы не работали в tight-loop горутинах',
+        'Планировщик использовал слишком много CPU из-за частых проверок',
+      ],
+      en: [
+        'A tight loop without function calls could monopolize an M/P, blocking other goroutines',
+        'Goroutines could not run in parallel on multiple cores',
+        'Channels did not work in tight-loop goroutines',
+        'The scheduler consumed too much CPU due to frequent checks',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'До Go 1.14 переключение горутин происходило только в точках кооперативного прерывания (вызовы функций, операции с каналами, syscall). Горутина с tight loop без таких точек могла бесконечно занимать поток. С Go 1.14 sysmon отправляет SIGURG для принудительного вытеснения.',
+      en: 'Before Go 1.14, goroutine switching only happened at cooperative preemption points (function calls, channel ops, syscalls). A goroutine with a tight loop without such points could monopolize a thread indefinitely. Since Go 1.14, sysmon sends SIGURG for forced preemption.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'preemption', 'cooperative'],
+  },
+  // ── 8. Sysmon thread ─────────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какие задачи выполняет фоновый поток sysmon в Go runtime?',
+      en: 'What tasks does the background sysmon thread perform in the Go runtime?',
+    },
+    options: {
+      ru: [
+        'Вытесняет горутины работающие >10 мс, отбирает P у заблокированных M, опрашивает network poller',
+        'Выполняет сборку мусора и управляет выделением памяти',
+        'Обрабатывает все системные вызовы от имени горутин',
+        'Управляет ростом стека горутин и перемещает стеки в heap',
+      ],
+      en: [
+        'Preempts goroutines running >10ms, retakes P from blocked Ms, polls the network poller',
+        'Performs garbage collection and manages memory allocation',
+        'Handles all system calls on behalf of goroutines',
+        'Manages goroutine stack growth and moves stacks to heap',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'sysmon — системный поток, работающий без привязки к P. Его основные задачи: 1) вытеснение горутин, работающих дольше 10 мс (retake); 2) отбор P у M, застрявших в syscall; 3) периодический опрос network poller для пробуждения горутин, ожидающих I/O; 4) принудительный запуск GC при необходимости.',
+      en: 'sysmon is a system thread running without a P. Its main tasks: 1) preempting goroutines running longer than 10ms (retake); 2) reclaiming P from Ms stuck in syscalls; 3) periodically polling the network poller to wake goroutines waiting on I/O; 4) forcing GC when needed.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'sysmon'],
+  },
+  // ── 9. Goroutine states ──────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'В каком состоянии находится горутина, заблокированная на операции приёма из канала?',
+      en: 'In which state is a goroutine that is blocked on a channel receive operation?',
+    },
+    options: {
+      ru: ['_Gwaiting', '_Gsyscall', '_Grunnable', '_Gidle'],
+      en: ['_Gwaiting', '_Gsyscall', '_Grunnable', '_Gidle'],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Когда горутина блокируется на канале, мьютексе, select или таймере, она переходит в состояние _Gwaiting. Функция gopark() снимает горутину с M и записывает причину блокировки. При разблокировке goready() переводит её обратно в _Grunnable.',
+      en: 'When a goroutine blocks on a channel, mutex, select, or timer, it enters _Gwaiting state. The gopark() function detaches the goroutine from M and records the blocking reason. Upon unblocking, goready() moves it back to _Grunnable.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'goroutine-states', 'gwaiting'],
+  },
+  // ── 10. _Gsyscall state and P retake ─────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Чем состояние _Gsyscall отличается от _Gwaiting?',
+      en: 'How does the _Gsyscall state differ from _Gwaiting?',
+    },
+    options: {
+      ru: [
+        'В _Gsyscall горутина выполняет системный вызов ОС, и M заблокирован в ядре; P может быть отобран другим M',
+        'В _Gsyscall горутина ждёт канал; в _Gwaiting — мьютекс',
+        '_Gsyscall означает, что горутина завершилась с ошибкой syscall',
+        'Эти состояния идентичны, просто используются для разных метрик',
+      ],
+      en: [
+        'In _Gsyscall the goroutine is executing an OS syscall and M is blocked in the kernel; P can be retaken by another M',
+        'In _Gsyscall the goroutine waits on a channel; in _Gwaiting on a mutex',
+        '_Gsyscall means the goroutine terminated with a syscall error',
+        'These states are identical, just used for different metrics',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: '_Gsyscall означает, что горутина находится внутри системного вызова ОС: M заблокирован в ядре, горутина владеет стеком, но P может быть отобран sysmon через функцию retake(). В _Gwaiting горутина ждёт событие runtime (канал, мьютекс), а M свободен для других горутин.',
+      en: '_Gsyscall means the goroutine is inside an OS system call: M is blocked in the kernel, the goroutine owns the stack, but P can be retaken by sysmon via retake(). In _Gwaiting the goroutine waits for a runtime event (channel, mutex), and M is free for other goroutines.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'goroutine-states', 'gsyscall'],
+  },
+  // ── 11. Spinning threads ─────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Зачем Go runtime поддерживает "крутящиеся" (spinning) потоки M?',
+      en: 'Why does the Go runtime maintain "spinning" M threads?',
+    },
+    options: {
+      ru: [
+        'Чтобы быстро подхватить новые горутины без задержки на пробуждение спящего потока',
+        'Для более эффективного использования CPU при сборке мусора',
+        'Для выполнения системных вызовов без блокировки P',
+        'Для параллельного опроса сетевого поллера на всех ядрах',
+      ],
+      en: [
+        'To quickly pick up new goroutines without the latency of waking a sleeping thread',
+        'For more efficient CPU usage during garbage collection',
+        'To perform system calls without blocking P',
+        'For parallel polling of the network poller on all cores',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Spinning M активно ищет работу (проверяет LRQ, GRQ, netpoller, пытается украсть). Это даёт минимальную задержку при появлении новых горутин (~50-100 нс переключение). Runtime ограничивает число spinning M значением GOMAXPROCS, чтобы не тратить CPU впустую.',
+      en: 'A spinning M actively searches for work (checks LRQ, GRQ, netpoller, tries to steal). This gives minimal latency when new goroutines appear (~50-100ns context switch). The runtime limits spinning Ms to GOMAXPROCS to avoid wasting CPU.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'spinning-threads'],
+  },
+  // ── 12. Stack growth mechanism ───────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Как Go увеличивает стек горутины, когда ей не хватает места?',
+      en: 'How does Go grow a goroutine\'s stack when it runs out of space?',
+    },
+    options: {
+      ru: [
+        'Выделяет новый непрерывный блок памяти удвоенного размера, копирует содержимое старого стека и обновляет все указатели',
+        'Добавляет новый сегмент стека, связанный со старым через linked list',
+        'Перемещает горутину в heap и продолжает выполнение оттуда',
+        'Завершает горутину с ошибкой stack overflow',
+      ],
+      en: [
+        'Allocates a new contiguous memory block of double size, copies old stack contents, and updates all pointers',
+        'Adds a new stack segment linked to the old one via a linked list',
+        'Moves the goroutine to the heap and continues execution from there',
+        'Terminates the goroutine with a stack overflow error',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Go использует модель contiguous stacks (непрерывные стеки, с Go 1.4). Компилятор вставляет проверку размера стека в пролог каждой функции. При нехватке места runtime выделяет новый блок (обычно удвоенный), копирует содержимое и обновляет все указатели на стеке, включая структуры runtime (суды, ожидатели каналов и т.д.).',
+      en: 'Go uses contiguous stacks (since Go 1.4). The compiler inserts a stack size check in every function prologue. When space runs out, the runtime allocates a new block (usually doubled), copies the contents, and updates all stack pointers, including runtime structures (sudog, channel waiters, etc.).',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'stack-growth', 'contiguous-stacks'],
+  },
+  // ── 13. Network poller integration ───────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Как Go runtime обрабатывает сетевой I/O, чтобы не блокировать потоки ОС?',
+      en: 'How does the Go runtime handle network I/O to avoid blocking OS threads?',
+    },
+    options: {
+      ru: [
+        'Использует netpoller (epoll/kqueue): горутина паркуется, fd регистрируется в поллере, M освобождается',
+        'Создаёт отдельный поток ОС для каждого сетевого соединения',
+        'Все сетевые операции выполняются синхронно в пуле goroutine-воркеров',
+        'Переводит горутину в состояние _Gsyscall и блокирует M до получения данных',
+      ],
+      en: [
+        'Uses netpoller (epoll/kqueue): goroutine is parked, fd is registered with the poller, M is freed',
+        'Creates a separate OS thread for each network connection',
+        'All network operations are performed synchronously in a goroutine worker pool',
+        'Puts the goroutine in _Gsyscall state and blocks M until data arrives',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Go интегрирует сетевой I/O с планировщиком через netpoller: на Linux — epoll, на macOS/BSD — kqueue. Когда горутина делает net.Read() и данных нет, fd регистрируется в edge-triggered режиме, горутина паркуется (_Gwaiting), а M продолжает выполнять другие горутины. Когда данные готовы, поллер возвращает горутину в _Grunnable.',
+      en: 'Go integrates network I/O with the scheduler via netpoller: epoll on Linux, kqueue on macOS/BSD. When a goroutine calls net.Read() with no data available, the fd is registered in edge-triggered mode, the goroutine is parked (_Gwaiting), and M continues executing other goroutines. When data is ready, the poller moves the goroutine back to _Grunnable.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'netpoller', 'epoll', 'kqueue'],
+  },
+  // ── 14. runtime.LockOSThread ─────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Для чего используется runtime.LockOSThread()?',
+      en: 'What is runtime.LockOSThread() used for?',
+    },
+    code: `func init() {
+    runtime.LockOSThread()
+}`,
+    options: {
+      ru: [
+        'Привязывает текущую горутину к текущему потоку ОС — другие горутины не будут выполняться на этом M',
+        'Блокирует создание новых потоков ОС до вызова UnlockOSThread()',
+        'Устанавливает мьютекс на текущий поток для предотвращения data race',
+        'Запрещает планировщику вытеснять текущую горутину',
+      ],
+      en: [
+        'Pins the current goroutine to the current OS thread — no other goroutines will run on this M',
+        'Blocks creation of new OS threads until UnlockOSThread() is called',
+        'Sets a mutex on the current thread to prevent data races',
+        'Prevents the scheduler from preempting the current goroutine',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'runtime.LockOSThread() привязывает горутину к конкретному M. Это нужно для взаимодействия с C-библиотеками, OpenGL, GUI-фреймворками и другими API, требующими выполнения в определённом потоке ОС. Часто вызывается в init() пакета main для GUI-приложений.',
+      en: 'runtime.LockOSThread() pins a goroutine to a specific M. This is needed for interacting with C libraries, OpenGL, GUI frameworks, and other APIs that require execution on a specific OS thread. Often called in the main package\'s init() for GUI applications.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'lockosthread', 'runtime'],
+  },
+  // ── 15. GOMAXPROCS and thread count ──────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Может ли количество потоков ОС (M) превышать значение GOMAXPROCS?',
+      en: 'Can the number of OS threads (M) exceed the GOMAXPROCS value?',
+    },
+    code: `runtime.GOMAXPROCS(4) // P = 4
+// Запускаем 100 горутин, каждая делает блокирующий file I/O`,
+    options: {
+      ru: [
+        'Да, M заблокированные в syscall не учитываются в GOMAXPROCS; может быть создано значительно больше M',
+        'Нет, GOMAXPROCS ограничивает и количество M, и количество P',
+        'Да, но не более чем в 2 раза от GOMAXPROCS',
+        'Нет, при исчерпании M горутины будут ждать в очереди',
+      ],
+      en: [
+        'Yes, Ms blocked in syscalls are not counted against GOMAXPROCS; many more Ms can be created',
+        'No, GOMAXPROCS limits both M count and P count',
+        'Yes, but no more than 2x GOMAXPROCS',
+        'No, when Ms are exhausted, goroutines will queue up',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'GOMAXPROCS ограничивает только число P (и, соответственно, число M, одновременно выполняющих Go-код). Но M, заблокированные в системных вызовах, не считаются. Если 100 горутин делают блокирующий I/O, может быть создано 100 M. По умолчанию лимит M — 10000 (runtime/debug.SetMaxThreads).',
+      en: 'GOMAXPROCS only limits the number of Ps (and thus Ms simultaneously executing Go code). Ms blocked in syscalls don\'t count. If 100 goroutines do blocking I/O, 100 Ms may be created. The default M limit is 10000 (runtime/debug.SetMaxThreads).',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'gomaxprocs', 'threads'],
+  },
+  // ── 16. Schedule function and findRunnable ───────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'В каком порядке функция findRunnable() ищет горутину для выполнения?',
+      en: 'In what order does the findRunnable() function search for a goroutine to execute?',
+    },
+    options: {
+      ru: [
+        'Локальная очередь -> GRQ (каждый 61-й тик) -> work stealing -> netpoller -> парковка',
+        'GRQ -> локальная очередь -> netpoller -> work stealing -> парковка',
+        'Work stealing -> GRQ -> локальная очередь -> netpoller -> парковка',
+        'Netpoller -> локальная очередь -> GRQ -> work stealing -> парковка',
+      ],
+      en: [
+        'Local queue -> GRQ (every 61st tick) -> work stealing -> netpoller -> park',
+        'GRQ -> local queue -> netpoller -> work stealing -> park',
+        'Work stealing -> GRQ -> local queue -> netpoller -> park',
+        'Netpoller -> local queue -> GRQ -> work stealing -> park',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'findRunnable() — основной цикл поиска работы. Порядок: 1) проверка runnext P; 2) локальная очередь; 3) GRQ (каждый 61-й schedtick); 4) проверка netpoller; 5) попытка work stealing у случайного P. Если ничего не найдено — M паркуется до появления работы.',
+      en: 'findRunnable() is the main work-search loop. Order: 1) check P\'s runnext; 2) local queue; 3) GRQ (every 61st schedtick); 4) check netpoller; 5) attempt work stealing from a random P. If nothing is found, M parks until work appears.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'findRunnable', 'schedule'],
+  },
+  // ── 17. Channel operations and scheduling ────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Что происходит на уровне планировщика, когда горутина отправляет значение в канал и есть ожидающий получатель?',
+      en: 'What happens at the scheduler level when a goroutine sends a value to a channel and there is a waiting receiver?',
+    },
+    options: {
+      ru: [
+        'Значение копируется напрямую в стек получателя, получатель переводится в _Grunnable и помещается в runnext отправителя',
+        'Значение сохраняется в буфер канала, получатель продолжает ждать до следующего тика',
+        'Отправитель блокируется, получатель разблокируется через GRQ',
+        'Планировщик немедленно переключает контекст с отправителя на получателя',
+      ],
+      en: [
+        'The value is copied directly into the receiver\'s stack, the receiver is set to _Grunnable and placed in the sender\'s runnext',
+        'The value is stored in the channel buffer, the receiver continues waiting until the next tick',
+        'The sender blocks, the receiver is unblocked via GRQ',
+        'The scheduler immediately context-switches from sender to receiver',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Оптимизация Go: при отправке в канал с ожидающим получателем, значение копируется напрямую в стек получателя (минуя буфер). Затем goready() переводит получателя в _Grunnable и помещает в слот runnext отправителя для максимально быстрого выполнения.',
+      en: 'A Go optimization: when sending to a channel with a waiting receiver, the value is copied directly into the receiver\'s stack (bypassing the buffer). Then goready() sets the receiver to _Grunnable and places it in the sender\'s runnext slot for fastest possible execution.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'channels', 'goready'],
+  },
+  // ── 18. 10ms preemption time slice ───────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какой временной квант использует sysmon для принудительного вытеснения горутин?',
+      en: 'What time quantum does sysmon use for forced goroutine preemption?',
+    },
+    code: `// runtime/proc.go
+const forcePreemptNS = 10 * 1000 * 1000 // 10ms in nanoseconds`,
+    options: {
+      ru: ['10 мс', '1 мс', '100 мс', '50 мс'],
+      en: ['10ms', '1ms', '100ms', '50ms'],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Константа forcePreemptNS = 10 мс. Если горутина выполняется на P дольше 10 мс без переключения, sysmon устанавливает флаг preempt и (начиная с Go 1.14) отправляет SIGURG для принудительного вытеснения. Это гарантирует, что ни одна горутина не монополизирует процессор.',
+      en: 'The forcePreemptNS constant = 10ms. If a goroutine runs on a P for more than 10ms without switching, sysmon sets the preempt flag and (since Go 1.14) sends SIGURG for forced preemption. This ensures no goroutine monopolizes the processor.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'sysmon', 'preemption', 'time-slice'],
+  },
+  // ── 19. runnext slot ─────────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Что такое слот runnext в структуре P и зачем он нужен?',
+      en: 'What is the runnext slot in the P struct and why does it exist?',
+    },
+    code: `// Горутина A разблокирует горутину B (например, через канал)
+// Куда помещается B?`,
+    options: {
+      ru: [
+        'Специальный слот на 1 горутину для приоритетного запуска следующей — оптимизирует producer-consumer паттерны',
+        'Указатель на следующий P, которому будет передана работа при work stealing',
+        'Индекс в LRQ, определяющий следующую горутину для деквию',
+        'Кэш последней выполненной горутины для повторного запуска после preemption',
+      ],
+      en: [
+        'A special single-goroutine slot for priority execution — optimizes producer-consumer patterns',
+        'A pointer to the next P that will receive work during work stealing',
+        'An index in LRQ determining the next goroutine to dequeue',
+        'A cache of the last executed goroutine for restart after preemption',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'runnext — специальный слот P, хранящий одну горутину с наивысшим приоритетом. Когда горутина A разблокирует B (через канал, мьютекс), B помещается в runnext. Это оптимизирует producer-consumer паттерн: разблокированная горутина запускается следующей, улучшая локальность кэша.',
+      en: 'runnext is a special P slot holding a single highest-priority goroutine. When goroutine A unblocks B (via channel, mutex), B is placed in runnext. This optimizes the producer-consumer pattern: the unblocked goroutine runs next, improving cache locality.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['scheduler', 'runnext', 'optimization'],
+  },
+  // ── 20. GOMAXPROCS default and containers ────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-scheduler', quizId: null,
+    question: {
+      ru: 'Какая проблема возникает с GOMAXPROCS по умолчанию при запуске Go-приложения в Docker-контейнере с CPU-лимитами?',
+      en: 'What problem arises with the default GOMAXPROCS when running a Go application in a Docker container with CPU limits?',
+    },
+    code: `# Container: 2 CPU limit, host: 64 cores
+# runtime.GOMAXPROCS(0) returns?`,
+    options: {
+      ru: [
+        'GOMAXPROCS видит все 64 ядра хоста, а не лимит контейнера, что вызывает CPU throttling и избыточное переключение контекста',
+        'GOMAXPROCS корректно определяет лимит контейнера как 2 во всех версиях Go',
+        'GOMAXPROCS устанавливается в 1 в контейнерах по умолчанию',
+        'Docker автоматически устанавливает GOMAXPROCS через переменную окружения',
+      ],
+      en: [
+        'GOMAXPROCS sees all 64 host cores instead of the container limit, causing CPU throttling and excessive context switching',
+        'GOMAXPROCS correctly detects the container limit as 2 in all Go versions',
+        'GOMAXPROCS is set to 1 in containers by default',
+        'Docker automatically sets GOMAXPROCS via an environment variable',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Исторически GOMAXPROCS использовал runtime.NumCPU(), который видит все ядра хоста, игнорируя cgroup-лимиты контейнера. Это приводило к созданию слишком большого числа P и CPU throttling. Решение: библиотека automaxprocs от Uber или ручная установка GOMAXPROCS. В новых версиях Go (с 1.25+) планируется поддержка CPU-лимитов контейнеров.',
+      en: 'Historically GOMAXPROCS used runtime.NumCPU(), which sees all host cores, ignoring container cgroup limits. This created too many Ps and caused CPU throttling. Solutions: Uber\'s automaxprocs library or manual GOMAXPROCS setting. Newer Go versions (1.25+) plan container CPU limit support.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['scheduler', 'gomaxprocs', 'containers', 'docker'],
+  },
+]
+
+const questionsRuntimeMemory: BilingualQuestion[] = [
+  // ── 1. GC Algorithm — Tricolor (basic) ──────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какой алгоритм использует сборщик мусора (GC) в Go?',
+      en: 'What algorithm does Go\'s garbage collector (GC) use?',
+    },
+    options: {
+      ru: [
+        'Подсчёт ссылок (reference counting)',
+        'Трёхцветная маркировка с конкурентной очисткой (tricolor mark-and-sweep)',
+        'Копирующий сборщик с двумя полупространствами (semispace copying)',
+        'Поколенческий сборщик (generational GC)',
+      ],
+      en: [
+        'Reference counting',
+        'Tricolor concurrent mark-and-sweep',
+        'Semispace copying collector',
+        'Generational garbage collector',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'Go использует трёхцветный алгоритм mark-and-sweep с конкурентной маркировкой. Объекты делятся на три категории: белые (не посещены), серые (посещены, но потомки не проверены), чёрные (посещены, все потомки проверены). После маркировки белые объекты считаются мусором и освобождаются.',
+      en: 'Go uses a tricolor mark-and-sweep algorithm with concurrent marking. Objects are categorized into three sets: white (not visited), gray (visited but children not checked), and black (visited, all children checked). After marking, white objects are considered garbage and freed.',
+    },
+    difficulty: 'basic' as const,
+    tags: ['gc', 'tricolor', 'mark-and-sweep'],
+  },
+  // ── 2. GC Phases (intermediate) ─────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какая из фаз GC в Go требует кратковременной остановки мира (stop-the-world)?',
+      en: 'Which GC phase in Go requires a brief stop-the-world pause?',
+    },
+    options: {
+      ru: [
+        'Конкурентная маркировка (concurrent marking)',
+        'Конкурентная очистка (concurrent sweep)',
+        'Mark setup (включение write barrier) и mark termination',
+        'Все фазы требуют STW',
+      ],
+      en: [
+        'Concurrent marking',
+        'Concurrent sweep',
+        'Mark setup (enabling write barrier) and mark termination',
+        'All phases require STW',
+      ],
+    },
+    correct: 2 as const,
+    explanation: {
+      ru: 'GC в Go имеет 4 фазы: (1) sweep termination — STW для завершения предыдущей очистки; (2) mark phase — конкурентная маркировка (использует ~25% CPU); (3) mark termination — короткий STW; (4) sweep — конкурентная очистка. STW-паузы занимают микросекунды, основная работа выполняется конкурентно с приложением.',
+      en: 'Go GC has 4 phases: (1) sweep termination — STW to finish previous sweep; (2) mark phase — concurrent marking (uses ~25% CPU); (3) mark termination — brief STW; (4) sweep — concurrent. STW pauses are microseconds; main work runs concurrently with the application.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['gc', 'stw', 'gc-phases'],
+  },
+  // ── 3. Write Barrier (intermediate-advanced) ────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Зачем GC в Go использует гибридный write barrier?',
+      en: 'Why does Go\'s GC use a hybrid write barrier?',
+    },
+    options: {
+      ru: [
+        'Для ускорения записи в память на уровне процессора',
+        'Для предотвращения потери живых объектов при конкурентной маркировке — комбинация барьеров Дейкстры (insertion) и Юасы (deletion)',
+        'Для сжатия объектов в куче во время сборки мусора',
+        'Для синхронизации горутин при доступе к общей памяти',
+      ],
+      en: [
+        'To speed up memory writes at the CPU level',
+        'To prevent losing live objects during concurrent marking — combining Dijkstra (insertion) and Yuasa (deletion) barriers',
+        'To compact heap objects during garbage collection',
+        'To synchronize goroutines when accessing shared memory',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'Гибридный write barrier (Go 1.8+) комбинирует барьер Дейкстры (закрашивает новый указатель) и барьер Юасы (закрашивает старый указатель при перезаписи). Это позволяет стекам оставаться чёрными после начального сканирования, устраняя необходимость повторного сканирования стеков и сокращая STW-паузы до ~50 мкс.',
+      en: 'The hybrid write barrier (Go 1.8+) combines the Dijkstra barrier (shades the new pointer) and the Yuasa barrier (shades the old pointer on overwrite). This lets stacks stay black after initial scanning, eliminating stack re-scanning and reducing STW pauses to ~50us.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['gc', 'write-barrier', 'hybrid-barrier'],
+  },
+  // ── 4. GOGC (basic) ────────────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Что означает значение GOGC=100 (по умолчанию)?',
+      en: 'What does the default value GOGC=100 mean?',
+    },
+    options: {
+      ru: [
+        'GC запускается каждые 100 миллисекунд',
+        'GC запускается, когда куча вырастает на 100% относительно размера живых объектов после предыдущей сборки',
+        'Максимум 100 МБ выделяется под кучу',
+        'GC использует 100% одного ядра CPU для маркировки',
+      ],
+      en: [
+        'GC runs every 100 milliseconds',
+        'GC triggers when the heap grows by 100% relative to live heap size after the previous collection',
+        'Maximum 100 MB is allocated for the heap',
+        'GC uses 100% of one CPU core for marking',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'GOGC задаёт процент роста кучи, при котором запускается GC. GOGC=100 означает: если после GC живых объектов 10 МБ, следующий GC запустится при ~20 МБ. GOGC=50 — более частые сборки (при 15 МБ), GOGC=200 — более редкие (при 30 МБ). GOGC=off полностью отключает GC по росту кучи.',
+      en: 'GOGC sets the heap growth percentage that triggers GC. GOGC=100 means: if live heap after GC is 10MB, next GC triggers at ~20MB. GOGC=50 means more frequent collections (at 15MB), GOGC=200 means less frequent (at 30MB). GOGC=off disables heap-growth-based GC entirely.',
+    },
+    difficulty: 'basic' as const,
+    tags: ['gc', 'gogc', 'tuning'],
+  },
+  // ── 5. GOMEMLIMIT (intermediate) ───────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какое утверждение о GOMEMLIMIT (Go 1.19+) верно?',
+      en: 'Which statement about GOMEMLIMIT (Go 1.19+) is correct?',
+    },
+    options: {
+      ru: [
+        'GOMEMLIMIT — жёсткий лимит: программа паникует при его превышении',
+        'GOMEMLIMIT — мягкий лимит памяти: GC становится агрессивнее при приближении к нему, но лимит может быть превышен',
+        'GOMEMLIMIT заменяет GOGC и делает его недействительным',
+        'GOMEMLIMIT ограничивает только стек горутин, но не кучу',
+      ],
+      en: [
+        'GOMEMLIMIT is a hard limit: the program panics when exceeded',
+        'GOMEMLIMIT is a soft memory limit: GC becomes more aggressive near it, but the limit can be exceeded',
+        'GOMEMLIMIT replaces GOGC and makes it ineffective',
+        'GOMEMLIMIT limits only goroutine stacks, not the heap',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'GOMEMLIMIT задаёт мягкий лимит памяти для всего Go runtime (куча, стеки, внутренние структуры). При приближении к лимиту GC запускается чаще. Однако лимит может быть превышен — это не вызовет panic. GOMEMLIMIT работает совместно с GOGC: GOGC управляет частотой GC в обычных условиях, а GOMEMLIMIT подключается при нехватке памяти.',
+      en: 'GOMEMLIMIT sets a soft memory limit for the entire Go runtime (heap, stacks, internal structures). As memory approaches the limit, GC runs more frequently. However, the limit can be exceeded — it won\'t cause a panic. GOMEMLIMIT works alongside GOGC: GOGC controls GC frequency under normal conditions, while GOMEMLIMIT kicks in when memory is scarce.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['gc', 'gomemlimit', 'tuning'],
+  },
+  // ── 6. GOGC=off + GOMEMLIMIT (advanced) ───────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какой эффект даёт комбинация GOGC=off с GOMEMLIMIT=1GiB?',
+      en: 'What is the effect of combining GOGC=off with GOMEMLIMIT=1GiB?',
+    },
+    code: `GOGC=off GOMEMLIMIT=1GiB ./myapp`,
+    options: {
+      ru: [
+        'GC полностью отключён, программа упадёт с OOM при превышении 1 ГБ',
+        'GC запускается только при приближении к лимиту 1 ГБ, максимально используя доступную память',
+        'Программа не скомпилируется — эти переменные несовместимы',
+        'GC запускается каждые 100 мс независимо от потребления памяти',
+      ],
+      en: [
+        'GC is fully disabled; the program crashes with OOM when exceeding 1GB',
+        'GC only triggers when approaching the 1GB limit, maximizing available memory usage',
+        'The program won\'t compile — these variables are incompatible',
+        'GC triggers every 100ms regardless of memory consumption',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'GOGC=off отключает сборку по росту кучи, а GOMEMLIMIT=1GiB задаёт лимит. GC запускается только при приближении к лимиту. Это паттерн для максимизации throughput в контейнерах. Однако существует риск "death spiral": если живая куча приближается к лимиту, GC будет работать непрерывно, потребляя CPU.',
+      en: 'GOGC=off disables heap-growth-based collection, while GOMEMLIMIT=1GiB sets the limit. GC only runs when approaching the limit. This pattern maximizes throughput in containers. However, there\'s a "death spiral" risk: if live heap approaches the limit, GC runs continuously, consuming CPU.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['gc', 'gogc', 'gomemlimit', 'tuning'],
+  },
+  // ── 7. Memory Allocator — mcache/mcentral/mheap (intermediate) ─────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Как устроена иерархия аллокатора памяти в Go?',
+      en: 'How is Go\'s memory allocator hierarchy organized?',
+    },
+    options: {
+      ru: [
+        'malloc → free → mmap — как в C',
+        'mcache (per-P, без блокировок) → mcentral (per-class, с блокировкой) → mheap (глобальный, с глобальной блокировкой)',
+        'slab allocator → buddy allocator → kernel',
+        'goroutine pool → thread pool → OS pool',
+      ],
+      en: [
+        'malloc → free → mmap — same as C',
+        'mcache (per-P, lock-free) → mcentral (per-class, with lock) → mheap (global, with global lock)',
+        'slab allocator → buddy allocator → kernel',
+        'goroutine pool → thread pool → OS pool',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'Аллокатор Go основан на TCMalloc и имеет три уровня: mcache — кэш на каждый P (без блокировок, быстрый путь), mcentral — общий пул span-ов для каждого из ~136 size-классов (с fine-grained блокировкой), mheap — глобальный аллокатор страниц (медленный путь, запрашивает память у ОС).',
+      en: 'Go\'s allocator is based on TCMalloc with three levels: mcache — per-P cache (lock-free, fast path), mcentral — shared span pool for each of ~136 size classes (with fine-grained locking), mheap — global page allocator (slow path, requests memory from the OS).',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['allocator', 'mcache', 'mcentral', 'mheap'],
+  },
+  // ── 8. Tiny Allocator (advanced) ───────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Для каких объектов используется tiny allocator в Go?',
+      en: 'What kind of objects does Go\'s tiny allocator handle?',
+    },
+    options: {
+      ru: [
+        'Объекты любого размера без указателей',
+        'Объекты < 16 байт без указателей — несколько объектов упаковываются в один блок',
+        'Объекты > 32 КБ — они выделяются напрямую из mheap',
+        'Только строковые литералы и константы',
+      ],
+      en: [
+        'Objects of any size without pointers',
+        'Objects < 16 bytes without pointers — multiple objects are packed into one block',
+        'Objects > 32 KB — allocated directly from mheap',
+        'Only string literals and constants',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'Tiny allocator оптимизирует аллокацию мелких объектов (< 16 байт) без указателей — например, мелких int, bool, byte. Несколько таких объектов упаковываются в один 16-байтный блок, экономя память и снижая нагрузку на GC. Объекты с указателями не подходят, так как GC должен их отслеживать индивидуально.',
+      en: 'The tiny allocator optimizes allocation of small objects (< 16 bytes) without pointers — e.g., small ints, bools, bytes. Multiple such objects are packed into a single 16-byte block, saving memory and reducing GC pressure. Objects with pointers are excluded because GC must track them individually.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['allocator', 'tiny-allocator', 'memory'],
+  },
+  // ── 9. Escape Analysis (basic-intermediate) ────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Что покажет вывод go build -gcflags=\'-m\' для данного кода?',
+      en: 'What will go build -gcflags=\'-m\' show for this code?',
+    },
+    code: `func newUser(name string) *User {
+    u := User{Name: name}
+    return &u  // ?
+}`,
+    options: {
+      ru: [
+        'moved to heap: u — переменная u «убежала» в кучу, так как указатель на неё возвращается из функции',
+        'u does not escape — переменная остаётся на стеке',
+        'inlining call to newUser — функция встраивается и аллокации нет',
+        'Ошибка компиляции: нельзя возвращать указатель на локальную переменную',
+      ],
+      en: [
+        'moved to heap: u — variable u escapes to the heap because a pointer to it is returned',
+        'u does not escape — the variable stays on the stack',
+        'inlining call to newUser — the function is inlined with no allocation',
+        'Compilation error: cannot return pointer to local variable',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Escape analysis определяет, что указатель на u переживает функцию — значит, u размещается в куче. Флаг -gcflags=\'-m\' покажет "moved to heap: u". В Go это безопасно — в отличие от C, компилятор автоматически перемещает такие объекты в кучу. Чтобы увидеть детали: go build -gcflags=\'-m -m\' (два -m для подробного вывода).',
+      en: 'Escape analysis determines that the pointer to u outlives the function — so u is allocated on the heap. The -gcflags=\'-m\' flag shows "moved to heap: u". In Go this is safe — unlike C, the compiler automatically moves such objects to the heap. For detailed output: go build -gcflags=\'-m -m\' (double -m for verbose).',
+    },
+    difficulty: 'basic-intermediate' as const,
+    tags: ['escape-analysis', 'heap', 'stack', 'gcflags'],
+  },
+  // ── 10. Stack vs Heap — interface escape (intermediate) ─────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какая из ситуаций НЕ приводит к escape на кучу?',
+      en: 'Which situation does NOT cause an escape to the heap?',
+    },
+    options: {
+      ru: [
+        'Возврат указателя на локальную переменную из функции',
+        'Передача значения в параметр типа interface{}',
+        'Локальная переменная фиксированного размера, не покидающая функцию',
+        'Захват переменной замыканием, переданным в другую горутину',
+      ],
+      en: [
+        'Returning a pointer to a local variable from a function',
+        'Passing a value to an interface{} parameter',
+        'A fixed-size local variable that does not leave the function',
+        'Capturing a variable in a closure passed to another goroutine',
+      ],
+    },
+    correct: 2 as const,
+    explanation: {
+      ru: 'Локальная переменная фиксированного размера, которая не покидает scope функции, остаётся на стеке. Остальные случаи вызывают escape: возврат указателя — объект живёт дольше функции; interface{} — компилятор не может определить размер в compile-time; замыкание в горутине — переменная разделяется между горутинами.',
+      en: 'A fixed-size local variable that doesn\'t leave the function scope stays on the stack. Other cases cause escape: returning a pointer means the object outlives the function; interface{} requires boxing since the compiler can\'t determine size at compile-time; a closure in a goroutine shares the variable between goroutines.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['escape-analysis', 'heap', 'stack', 'interface'],
+  },
+  // ── 11. Heap Profiling — pprof (basic-intermediate) ─────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Как получить heap-профиль работающего Go-приложения?',
+      en: 'How do you obtain a heap profile of a running Go application?',
+    },
+    code: `import _ "net/http/pprof"
+
+func main() {
+    go http.ListenAndServe("localhost:6060", nil)
+    // ... application code
+}`,
+    options: {
+      ru: [
+        'go tool pprof http://localhost:6060/debug/pprof/heap',
+        'go test -bench=. -memprofile=mem.out',
+        'runtime.ReadMemStats(&m); fmt.Println(m)',
+        'Все перечисленные способы позволяют анализировать память',
+      ],
+      en: [
+        'go tool pprof http://localhost:6060/debug/pprof/heap',
+        'go test -bench=. -memprofile=mem.out',
+        'runtime.ReadMemStats(&m); fmt.Println(m)',
+        'All of the listed approaches can analyze memory',
+      ],
+    },
+    correct: 3 as const,
+    explanation: {
+      ru: 'Все три способа валидны: (1) pprof через HTTP — живой heap-профиль с визуализацией (top, web, list); (2) -memprofile в бенчмарках — сохраняет профиль в файл; (3) ReadMemStats — программный доступ к HeapAlloc, HeapSys, TotalAlloc и другим метрикам. Для production рекомендуется pprof на отдельном internal-порту.',
+      en: 'All three approaches are valid: (1) pprof via HTTP — live heap profile with visualization (top, web, list); (2) -memprofile in benchmarks — saves profile to a file; (3) ReadMemStats — programmatic access to HeapAlloc, HeapSys, TotalAlloc and other metrics. For production, pprof on a separate internal port is recommended.',
+    },
+    difficulty: 'basic-intermediate' as const,
+    tags: ['pprof', 'heap-profile', 'readmemstats'],
+  },
+  // ── 12. runtime.ReadMemStats (intermediate) ────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Чем отличаются поля HeapAlloc и TotalAlloc в runtime.MemStats?',
+      en: 'What is the difference between HeapAlloc and TotalAlloc in runtime.MemStats?',
+    },
+    code: `var m runtime.MemStats
+runtime.ReadMemStats(&m)
+fmt.Printf("HeapAlloc: %d, TotalAlloc: %d\\n",
+    m.HeapAlloc, m.TotalAlloc)`,
+    options: {
+      ru: [
+        'HeapAlloc — текущий размер кучи; TotalAlloc — кумулятивный объём всех аллокаций за время жизни программы',
+        'HeapAlloc включает стеки горутин; TotalAlloc — только кучу',
+        'HeapAlloc — виртуальная память; TotalAlloc — физическая (RSS)',
+        'Это синонимы, оба показывают текущее потребление кучи',
+      ],
+      en: [
+        'HeapAlloc — current live heap size; TotalAlloc — cumulative total of all allocations over the program\'s lifetime',
+        'HeapAlloc includes goroutine stacks; TotalAlloc — heap only',
+        'HeapAlloc — virtual memory; TotalAlloc — physical memory (RSS)',
+        'They are synonyms, both showing current heap usage',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'HeapAlloc — байты живых объектов в куче (уменьшается после GC). TotalAlloc — кумулятивный счётчик, который только растёт: включает все аллокации, даже уже собранные GC. Разница TotalAlloc - HeapAlloc показывает, сколько памяти было освобождено за время жизни программы.',
+      en: 'HeapAlloc — bytes of live heap objects (decreases after GC). TotalAlloc — a cumulative counter that only grows: includes all allocations, even those already collected by GC. The difference TotalAlloc - HeapAlloc shows how much memory was freed over the program\'s lifetime.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['readmemstats', 'heap-alloc', 'total-alloc', 'profiling'],
+  },
+  // ── 13. Memory Ballast vs GOMEMLIMIT (intermediate-advanced) ───────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Почему memory ballast считается устаревшим подходом с Go 1.19?',
+      en: 'Why is memory ballast considered a legacy approach since Go 1.19?',
+    },
+    code: `// Legacy ballast approach
+var ballast = make([]byte, 1<<30) // 1 GB
+_ = ballast`,
+    options: {
+      ru: [
+        'Ballast обманывает GOGC, увеличивая видимый размер живой кучи; GOMEMLIMIT решает ту же задачу штатным механизмом без лишней аллокации',
+        'Ballast блокирует работу GC полностью',
+        'Ballast запрещён начиная с Go 1.19',
+        'Ballast работает только на Linux',
+      ],
+      en: [
+        'Ballast tricks GOGC by inflating visible live heap size; GOMEMLIMIT solves the same problem natively without extra allocation',
+        'Ballast blocks GC entirely',
+        'Ballast is forbidden since Go 1.19',
+        'Ballast only works on Linux',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'Memory ballast — аллокация большого объекта (обычно 1-10 ГБ), чтобы GOGC считал живую кучу больше и запускал GC реже. Проблемы: не портабельно, занимает виртуальную память, сложно рассчитать размер. GOMEMLIMIT (Go 1.19+) решает ту же задачу штатным механизмом runtime, автоматически подстраивая агрессивность GC под лимит памяти.',
+      en: 'Memory ballast is a large allocation (typically 1-10 GB) that tricks GOGC into seeing a larger live heap, triggering GC less often. Problems: not portable, uses virtual memory, hard to size correctly. GOMEMLIMIT (Go 1.19+) solves the same problem natively in the runtime, automatically adjusting GC aggressiveness to the memory limit.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['ballast', 'gomemlimit', 'gc', 'tuning'],
+  },
+  // ── 14. runtime.SetFinalizer vs runtime.AddCleanup (advanced) ──────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какую проблему runtime.SetFinalizer решает runtime.AddCleanup (Go 1.24+)?',
+      en: 'What problem of runtime.SetFinalizer does runtime.AddCleanup (Go 1.24+) solve?',
+    },
+    code: `// Go 1.24+
+runtime.AddCleanup(&resource, func(fd int) {
+    syscall.Close(fd)
+}, resource.fd)`,
+    options: {
+      ru: [
+        'AddCleanup запрещает воскрешение объекта, позволяет несколько cleanup-функций на объект и корректно работает с циклическими ссылками',
+        'AddCleanup быстрее SetFinalizer в 10 раз',
+        'AddCleanup автоматически вызывается при panic, а SetFinalizer — нет',
+        'AddCleanup работает только с каналами и мьютексами',
+      ],
+      en: [
+        'AddCleanup forbids object resurrection, allows multiple cleanups per object, and correctly handles reference cycles',
+        'AddCleanup is 10x faster than SetFinalizer',
+        'AddCleanup is called automatically on panic, but SetFinalizer is not',
+        'AddCleanup only works with channels and mutexes',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'SetFinalizer имеет серьёзные ограничения: (1) только один финализатор на объект; (2) объект с финализатором требует минимум 2 цикла GC для освобождения; (3) финализатор может «воскресить» объект, сохранив на него ссылку; (4) циклы объектов с финализаторами никогда не освобождаются. AddCleanup (Go 1.24) решает все эти проблемы: cleanup-функция получает отдельный аргумент (не сам объект), можно регистрировать несколько, циклы обрабатываются корректно.',
+      en: 'SetFinalizer has serious limitations: (1) only one finalizer per object; (2) objects with finalizers need at least 2 GC cycles to free; (3) a finalizer can "resurrect" an object by keeping a reference; (4) cycles of finalized objects are never freed. AddCleanup (Go 1.24) solves all of these: the cleanup function receives a separate argument (not the object itself), multiple cleanups are allowed, and cycles are handled correctly.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['finalizer', 'addcleanup', 'gc', 'go-1.24'],
+  },
+  // ── 15. sync.Pool (intermediate) ───────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Как sync.Pool взаимодействует с GC?',
+      en: 'How does sync.Pool interact with the GC?',
+    },
+    code: `var bufPool = sync.Pool{
+    New: func() any {
+        return new(bytes.Buffer)
+    },
+}
+
+buf := bufPool.Get().(*bytes.Buffer)
+buf.Reset()
+defer bufPool.Put(buf)`,
+    options: {
+      ru: [
+        'Объекты в Pool защищены от GC и никогда не собираются',
+        'При каждом GC все объекты из local pool перемещаются в victim cache; при следующем GC victim cache очищается',
+        'Pool блокирует GC до тех пор, пока все объекты не будут извлечены',
+        'Pool автоматически вызывает runtime.GC() при заполнении',
+      ],
+      en: [
+        'Objects in Pool are protected from GC and never collected',
+        'On each GC, all objects from the local pool move to a victim cache; on the next GC the victim cache is cleared',
+        'Pool blocks GC until all objects are retrieved',
+        'Pool automatically calls runtime.GC() when full',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'sync.Pool использует двухуровневый механизм victim cache (Go 1.13+): при GC объекты из local pool перемещаются в victim cache, а предыдущий victim cache очищается. Это сглаживает всплески аллокаций после GC: объекты живут ~2 цикла GC вместо одного. Pool имеет per-P структуру (poolLocal) для минимизации contention.',
+      en: 'sync.Pool uses a two-level victim cache mechanism (Go 1.13+): on GC, objects from the local pool move to the victim cache, and the previous victim cache is cleared. This smooths allocation spikes after GC: objects survive ~2 GC cycles instead of one. Pool has a per-P structure (poolLocal) to minimize contention.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['sync-pool', 'gc', 'victim-cache'],
+  },
+  // ── 16. unsafe.Pointer Rules (intermediate-advanced) ───────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Почему нельзя сохранять uintptr в переменную и позже конвертировать обратно в unsafe.Pointer?',
+      en: 'Why is it unsafe to store a uintptr in a variable and later convert it back to unsafe.Pointer?',
+    },
+    code: `p := unsafe.Pointer(&x)
+addr := uintptr(p)      // сохраняем адрес
+// ... какой-то код ...
+p2 := unsafe.Pointer(addr)  // ОПАСНО!`,
+    options: {
+      ru: [
+        'uintptr не является указателем с точки зрения GC — объект может быть перемещён или собран, и адрес станет невалидным',
+        'uintptr не поддерживает адреса больше 32 бит',
+        'Конвертация uintptr → unsafe.Pointer запрещена спецификацией',
+        'uintptr автоматически обнуляется после каждого GC-цикла',
+      ],
+      en: [
+        'uintptr is not a pointer from GC\'s perspective — the object may be moved or collected, making the address invalid',
+        'uintptr doesn\'t support addresses larger than 32 bits',
+        'uintptr → unsafe.Pointer conversion is forbidden by the spec',
+        'uintptr is automatically zeroed after each GC cycle',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'uintptr — это просто целое число, GC не считает его ссылкой. Если между конвертацией в uintptr и обратно произойдёт GC: (1) объект может быть собран (нет ссылок-указателей); (2) объект может быть перемещён (стек может расти). Правило unsafe.Pointer: конвертация uintptr → Pointer допустима только в одном выражении с арифметикой, без промежуточного сохранения.',
+      en: 'uintptr is just an integer — GC doesn\'t treat it as a reference. If GC runs between converting to uintptr and back: (1) the object may be collected (no pointer references); (2) the object may be moved (stack can grow). The unsafe.Pointer rule: uintptr → Pointer conversion is only valid in a single expression with arithmetic, without intermediate storage.',
+    },
+    difficulty: 'intermediate-advanced' as const,
+    tags: ['unsafe-pointer', 'uintptr', 'gc', 'memory-safety'],
+  },
+  // ── 17. Memory Alignment (basic-intermediate) ──────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Какой размер занимает структура A и как его уменьшить?',
+      en: 'What is the size of struct A and how can it be reduced?',
+    },
+    code: `type A struct {
+    a bool    // 1 byte
+    b float64 // 8 bytes
+    c int32   // 4 bytes
+}
+// unsafe.Sizeof(A{}) = ?`,
+    options: {
+      ru: [
+        '13 байт — поля упакованы без padding',
+        '24 байта — из-за выравнивания; переупорядочивание полей (b, c, a) даст 16 байт',
+        '16 байт — компилятор автоматически оптимизирует порядок полей',
+        '32 байта — каждое поле выравнивается по 8 байт',
+      ],
+      en: [
+        '13 bytes — fields are packed without padding',
+        '24 bytes — due to alignment; reordering fields (b, c, a) gives 16 bytes',
+        '16 bytes — the compiler automatically optimizes field order',
+        '32 bytes — each field is aligned to 8 bytes',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'bool (1 байт) + 7 байт padding + float64 (8 байт) + int32 (4 байта) + 4 байта trailing padding = 24 байта. Go НЕ переупорядочивает поля автоматически. При порядке (float64, int32, bool): 8 + 4 + 1 + 3 padding = 16 байт. Экономия 33%. Для анализа: go vet с fieldalignment или go tool structlayout.',
+      en: 'bool (1 byte) + 7 bytes padding + float64 (8 bytes) + int32 (4 bytes) + 4 bytes trailing padding = 24 bytes. Go does NOT reorder fields automatically. With order (float64, int32, bool): 8 + 4 + 1 + 3 padding = 16 bytes. 33% savings. For analysis: go vet with fieldalignment or go tool structlayout.',
+    },
+    difficulty: 'basic-intermediate' as const,
+    tags: ['alignment', 'padding', 'struct', 'unsafe-sizeof'],
+  },
+  // ── 18. unsafe.Sizeof / Offsetof / Alignof (intermediate) ─────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Что возвращает unsafe.Offsetof(s.field)?',
+      en: 'What does unsafe.Offsetof(s.field) return?',
+    },
+    code: `type S struct {
+    A int32   // 4 bytes
+    B int64   // 8 bytes
+}
+fmt.Println(unsafe.Offsetof(S{}.B)) // ?`,
+    options: {
+      ru: [
+        '4 — размер предыдущего поля A',
+        '8 — смещение поля B от начала структуры (с учётом padding)',
+        '12 — сумма размеров A и padding',
+        '0 — для первого 8-байтного поля',
+      ],
+      en: [
+        '4 — the size of the previous field A',
+        '8 — offset of field B from the start of the struct (including padding)',
+        '12 — sum of sizes of A and padding',
+        '0 — for the first 8-byte field',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'int32 A занимает 4 байта, но int64 B требует выравнивания по 8 байтам. Поэтому после A добавляется 4 байта padding, и B начинается со смещения 8. unsafe.Offsetof возвращает количество байт от начала структуры до начала поля. unsafe.Alignof(S{}.B) вернёт 8 — требование выравнивания для int64.',
+      en: 'int32 A takes 4 bytes, but int64 B requires 8-byte alignment. So 4 bytes of padding are added after A, and B starts at offset 8. unsafe.Offsetof returns the number of bytes from the start of the struct to the start of the field. unsafe.Alignof(S{}.B) returns 8 — the alignment requirement for int64.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['unsafe-offsetof', 'alignment', 'padding', 'struct'],
+  },
+  // ── 19. debug.FreeOSMemory (intermediate) ──────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Когда оправдано использование debug.FreeOSMemory()?',
+      en: 'When is using debug.FreeOSMemory() justified?',
+    },
+    code: `import "runtime/debug"
+
+func handleBigJob() {
+    data := processLargeDataset() // пиковое потребление
+    _ = data
+    runtime.GC()
+    debug.FreeOSMemory()
+}`,
+    options: {
+      ru: [
+        'Всегда — вызывайте после каждого GC для экономии памяти',
+        'После обработки пикового объёма данных в долгоживущем сервисе, когда важно вернуть память ОС',
+        'Никогда — Go не умеет возвращать память ОС',
+        'Только при GOGC=off, иначе функция не имеет эффекта',
+      ],
+      en: [
+        'Always — call after every GC to save memory',
+        'After processing peak data volumes in a long-running service, when returning memory to the OS matters',
+        'Never — Go cannot return memory to the OS',
+        'Only when GOGC=off, otherwise the function has no effect',
+      ],
+    },
+    correct: 1 as const,
+    explanation: {
+      ru: 'debug.FreeOSMemory() принудительно возвращает свободные страницы ОС (Go runtime обычно делает это лениво через MADV_DONTNEED / MADV_FREE). Оправдано для долгоживущих сервисов после пиков потребления — например, после нагрузочных задач или ночного batch-processing. Частый вызов контрпродуктивен — увеличивает системные вызовы.',
+      en: 'debug.FreeOSMemory() forcibly returns free pages to the OS (Go runtime normally does this lazily via MADV_DONTNEED / MADV_FREE). Justified for long-running services after consumption peaks — e.g., after load spikes or overnight batch processing. Frequent calls are counterproductive — they increase syscalls.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['debug', 'freeOSMemory', 'memory', 'profiling'],
+  },
+  // ── 20. weak.Pointer (Go 1.24) (advanced) ─────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-memory', quizId: null,
+    question: {
+      ru: 'Для чего предназначен тип weak.Pointer[T] в Go 1.24?',
+      en: 'What is the purpose of weak.Pointer[T] in Go 1.24?',
+    },
+    code: `import "weak"
+
+p := weak.Make(&myObj)
+// ... позже ...
+if strong := p.Value(); strong != nil {
+    // объект ещё жив
+}`,
+    options: {
+      ru: [
+        'Для создания указателя, который не препятствует сборке объекта GC — если объект собран, Value() возвращает nil',
+        'Для создания указателя на объект в другом процессе (IPC)',
+        'Для обхода type safety и работы с произвольной памятью',
+        'Для создания указателя, который автоматически обнуляется при stack growth',
+      ],
+      en: [
+        'For creating a pointer that doesn\'t prevent GC from collecting the object — if collected, Value() returns nil',
+        'For creating a pointer to an object in another process (IPC)',
+        'For bypassing type safety and working with arbitrary memory',
+        'For creating a pointer that is automatically zeroed on stack growth',
+      ],
+    },
+    correct: 0 as const,
+    explanation: {
+      ru: 'weak.Pointer[T] (Go 1.24) — слабая ссылка: GC может собрать объект, если на него нет сильных ссылок. Value() возвращает *T или nil, если объект собран. Используется для кэшей, canonicalization map (package unique), слабых ассоциативных массивов. В отличие от SetFinalizer, weak.Pointer безопасно интегрирован с GC и не воскрешает объекты.',
+      en: 'weak.Pointer[T] (Go 1.24) is a weak reference: GC can collect the object if there are no strong references. Value() returns *T or nil if collected. Used for caches, canonicalization maps (package unique), weak associative arrays. Unlike SetFinalizer, weak.Pointer is safely integrated with GC and does not resurrect objects.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['weak-pointer', 'gc', 'go-1.24', 'cache'],
+  },
+]
+
+const questionsRuntimeInternals: BilingualQuestion[] = [
+  // ── 1. Runtime initialization ──────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какой порядок вызовов происходит при старте Go-программы до вызова main.main()?',
+      en: 'What is the order of calls during Go program startup before main.main() is invoked?',
+    },
+    code: `// Упрощённая последовательность запуска Go
+// 1. runtime.rt0_go (asm) -> osinit -> schedinit -> newproc(runtime.main)
+// 2. runtime.main -> запуск sysmon, runtime init, package init, main.main`,
+    options: {
+      ru: [
+        'osinit -> schedinit -> создание первой горутины с runtime.main -> планировщик -> runtime.main вызывает init() пакетов -> main.main',
+        'main.main -> init() -> schedinit -> osinit',
+        'schedinit -> main.main -> init() пакетов -> osinit',
+        'init() всех пакетов -> schedinit -> osinit -> main.main',
+      ],
+      en: [
+        'osinit -> schedinit -> first goroutine with runtime.main -> scheduler -> runtime.main calls package init() -> main.main',
+        'main.main -> init() -> schedinit -> osinit',
+        'schedinit -> main.main -> package init() -> osinit',
+        'All package init() -> schedinit -> osinit -> main.main',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'При старте Go вызывается ассемблерная точка входа rt0_go, которая инициализирует ОС (osinit -- определяет число CPU), затем schedinit настраивает планировщик, GC, стеки. Далее создаётся первая горутина с runtime.main, которая запускает sysmon, вызывает runtime init, затем все init() пакетов в порядке зависимостей, и наконец main.main().',
+      en: 'At startup, the assembly entry point rt0_go is called, which initializes the OS (osinit -- detects CPU count), then schedinit sets up the scheduler, GC, and stacks. Then the first goroutine with runtime.main is created, which starts sysmon, calls runtime init, then all package init() functions in dependency order, and finally main.main().',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'initialization', 'schedinit', 'runtime.main'] as string[],
+  },
+  // ── 2. Defer mechanism: open-coded defers ──────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Что такое open-coded defer, появившийся в Go 1.14, и при каких условиях он применяется?',
+      en: 'What is an open-coded defer introduced in Go 1.14, and under what conditions is it applied?',
+    },
+    options: {
+      ru: [
+        'Компилятор инлайнит код defer прямо перед return; применяется при <=8 defer и произведении defer*return <=15, без defer в циклах',
+        'Defer всегда аллоцируется на куче, open-coded -- просто другое название',
+        'Open-coded defer -- это defer, который вызывается до основного тела функции',
+        'Это defer, который компилятор заменяет на goroutine для асинхронного выполнения',
+      ],
+      en: [
+        'Compiler inlines defer code right before return; applies when <=8 defers and defer*return product <=15, with no defer in loops',
+        'Defer is always heap-allocated, open-coded is just another name',
+        'Open-coded defer is a defer called before the function body',
+        'It is a defer the compiler replaces with a goroutine for async execution',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Open-coded defer -- оптимизация компилятора Go 1.14+: вместо создания структуры _defer на куче, код отложенной функции вставляется прямо перед каждым return. Управляется 8-битной маской (отсюда лимит в 8 defer). Условия: не более 8 defer, произведение defer*return <= 15, нет defer внутри циклов. Накладные расходы снижаются с ~35 нс до ~6 нс.',
+      en: 'Open-coded defer is a Go 1.14+ compiler optimization: instead of creating a _defer struct on the heap, the deferred function code is inserted inline before each return. It is managed by an 8-bit bitmask (hence the limit of 8 defers). Conditions: at most 8 defers, defer*return product <= 15, no defer inside loops. Overhead drops from ~35ns to ~6ns.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'defer', 'open-coded', 'optimization'] as string[],
+  },
+  // ── 3. Defer: heap vs stack vs open-coded ──────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какие три внутренние реализации defer существуют в Go (начиная с 1.14+)?',
+      en: 'What three internal defer implementations exist in Go (since 1.14+)?',
+    },
+    options: {
+      ru: [
+        'Heap-allocated (куча), stack-allocated (стек), open-coded (инлайн)',
+        'Sync defer, async defer, goroutine defer',
+        'Fast defer, slow defer, panic defer',
+        'Static defer, dynamic defer, runtime defer',
+      ],
+      en: [
+        'Heap-allocated, stack-allocated, open-coded (inline)',
+        'Sync defer, async defer, goroutine defer',
+        'Fast defer, slow defer, panic defer',
+        'Static defer, dynamic defer, runtime defer',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'В Go существуют три вида defer: 1) Heap-allocated -- структура _defer создаётся на куче (самый медленный, используется когда defer в цикле). 2) Stack-allocated (Go 1.13+) -- _defer размещается на стеке вызывающей функции. 3) Open-coded (Go 1.14+) -- код defer инлайнится перед return, самый быстрый вариант (~6 нс vs ~35 нс для heap).',
+      en: 'Go has three kinds of defer: 1) Heap-allocated -- _defer struct created on the heap (slowest, used when defer is in a loop). 2) Stack-allocated (Go 1.13+) -- _defer placed on the caller\'s stack. 3) Open-coded (Go 1.14+) -- defer code inlined before return, the fastest variant (~6ns vs ~35ns for heap).',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'defer', 'performance', 'heap', 'stack'] as string[],
+  },
+  // ── 4. Panic/recover mechanism ─────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Как работает механизм panic/recover на уровне runtime?',
+      en: 'How does the panic/recover mechanism work at the runtime level?',
+    },
+    code: `func safeCall() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("recovered:", r)
+        }
+    }()
+    panic("oops")
+}`,
+    options: {
+      ru: [
+        'runtime.gopanic обходит связный список _defer горутины; если gorecover помечает _panic.recovered=true, восстановление прыгает к deferreturn через сохранённые pc/sp',
+        'panic вызывает os.Exit, а recover перехватывает сигнал SIGABRT',
+        'panic создаёт новую горутину, recover ожидает её завершения',
+        'runtime.gopanic сохраняет стек в файл, а recover читает его обратно',
+      ],
+      en: [
+        'runtime.gopanic walks the goroutine\'s _defer linked list; if gorecover marks _panic.recovered=true, recovery jumps to deferreturn via saved pc/sp',
+        'panic calls os.Exit, and recover intercepts the SIGABRT signal',
+        'panic creates a new goroutine, recover waits for it to complete',
+        'runtime.gopanic saves the stack to a file, and recover reads it back',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Компилятор преобразует panic в runtime.gopanic, а recover -- в runtime.gorecover. При panic runtime последовательно извлекает структуры _defer из связного списка горутины и выполняет их. Если в deferred-функции вызван recover, поле _panic.recovered устанавливается в true. После этого gopanic извлекает pc (program counter) и sp (stack pointer) из _defer и вызывает runtime.recovery для возврата к нормальному потоку через deferreturn.',
+      en: 'The compiler transforms panic into runtime.gopanic and recover into runtime.gorecover. During panic, the runtime sequentially extracts _defer structs from the goroutine\'s linked list and executes them. If recover is called in a deferred function, _panic.recovered is set to true. Then gopanic extracts pc and sp from _defer and calls runtime.recovery to return to normal flow via deferreturn.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'panic', 'recover', 'gopanic', 'gorecover'] as string[],
+  },
+  // ── 5. Interface internals: iface vs eface ─────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Чем отличаются внутренние структуры iface и eface в runtime Go?',
+      en: 'How do the internal structures iface and eface differ in Go runtime?',
+    },
+    code: `// runtime/runtime2.go
+type iface struct {
+    tab  *itab          // указатель на itab (таблицу методов + типы)
+    data unsafe.Pointer // указатель на данные
+}
+
+type eface struct {
+    _type *_type         // указатель на информацию о типе
+    data  unsafe.Pointer // указатель на данные
+}`,
+    options: {
+      ru: [
+        'iface используется для интерфейсов с методами (содержит itab с таблицей методов), eface -- для пустого интерфейса any (содержит только _type)',
+        'eface используется для интерфейсов с методами, а iface -- для пустого интерфейса',
+        'iface и eface идентичны, но eface оптимизирован для маленьких значений',
+        'iface хранит данные inline, а eface всегда использует указатель на кучу',
+      ],
+      en: [
+        'iface is used for interfaces with methods (contains itab with method table), eface is for empty interface any (contains only _type)',
+        'eface is used for interfaces with methods, iface is for the empty interface',
+        'iface and eface are identical but eface is optimized for small values',
+        'iface stores data inline while eface always uses a heap pointer',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'В Go два типа представления интерфейсов: iface для интерфейсов с методами (io.Reader и т.д.) и eface для пустого интерфейса (any/interface{}). iface содержит *itab (таблица методов + информация о типах интерфейса и конкретного типа) и указатель на данные. eface проще -- содержит *_type (только тип) и указатель на данные, так как для empty interface таблица методов не нужна.',
+      en: 'Go has two interface representations: iface for interfaces with methods (io.Reader, etc.) and eface for the empty interface (any/interface{}). iface contains *itab (method table + interface and concrete type info) and a data pointer. eface is simpler -- it contains *_type (type only) and a data pointer, since no method table is needed for the empty interface.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'interfaces', 'iface', 'eface', 'itab'] as string[],
+  },
+  // ── 6. Interface: itab caching ─────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Как Go кэширует itab (таблицу методов интерфейса) и зачем это нужно?',
+      en: 'How does Go cache itab (the interface method table) and why is it needed?',
+    },
+    options: {
+      ru: [
+        'itab кэшируются в глобальной хеш-таблице (itabTable) и защищены мьютексом; при повторном приведении типа к интерфейсу itab берётся из кэша за O(1)',
+        'itab кэшируются в стеке каждой горутины для быстрого доступа',
+        'itab не кэшируются -- они пересоздаются при каждом вызове метода через интерфейс',
+        'itab хранятся в отдельном файле .itab рядом с бинарником',
+      ],
+      en: [
+        'itabs are cached in a global hash table (itabTable) protected by a mutex; on repeated type-to-interface conversions, itab is fetched from cache in O(1)',
+        'itabs are cached in each goroutine\'s stack for fast access',
+        'itabs are not cached -- they are recreated on every method call through an interface',
+        'itabs are stored in a separate .itab file next to the binary',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'При первом приведении конкретного типа к интерфейсу runtime вызывает runtime.getitab(), который ищет нужные методы в наборе методов типа и формирует itab. Результат сохраняется в глобальную хеш-таблицу itabTable (защищена мьютексом). При повторных приведениях того же типа к тому же интерфейсу itab берётся из кэша, что делает type assertion и interface conversion быстрыми.',
+      en: 'On the first concrete-type-to-interface conversion, the runtime calls runtime.getitab(), which searches the type\'s method set and builds an itab. The result is stored in a global hash table itabTable (protected by a mutex). On subsequent conversions of the same type to the same interface, the itab is fetched from cache, making type assertions and interface conversions fast.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'interfaces', 'itab', 'caching'] as string[],
+  },
+  // ── 7. Map internals: Swiss Tables in Go 1.24 ─────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какая новая реализация map появилась в Go 1.24 и как она работает?',
+      en: 'What new map implementation appeared in Go 1.24 and how does it work?',
+    },
+    options: {
+      ru: [
+        'Swiss Tables: данные хранятся группами по 8 слотов с control word; хеш делится на h1 (57 бит -- индекс группы) и h2 (7 бит -- быстрый поиск внутри группы)',
+        'Red-Black Tree maps: деревья для гарантированного O(log n) поиска',
+        'Cuckoo hashing: каждый ключ имеет ровно два возможных положения',
+        'Consistent hashing: для распределённых map между горутинами',
+      ],
+      en: [
+        'Swiss Tables: data stored in groups of 8 slots with a control word; hash is split into h1 (57 bits -- group index) and h2 (7 bits -- fast lookup within group)',
+        'Red-Black Tree maps: trees for guaranteed O(log n) lookup',
+        'Cuckoo hashing: each key has exactly two possible positions',
+        'Consistent hashing: for distributed maps between goroutines',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'В Go 1.24 встроенный тип map переписан на основе Swiss Tables (дизайн Google). Карта состоит из групп по 8 пар ключ-значение. Каждая группа имеет 64-битное control word (по 7 бит h2 на каждый слот). При поиске: h1 (57 бит) определяет группу, h2 (7 бит) сравнивается с control word для всех 8 слотов параллельно (поддерживается SIMD). Производительность выросла на ~63% по сравнению с предыдущей реализацией с бакетами.',
+      en: 'In Go 1.24, the built-in map type was rewritten based on Swiss Tables (Google\'s design). A map consists of groups of 8 key-value pairs. Each group has a 64-bit control word (7 bits of h2 per slot). During lookup: h1 (57 bits) identifies the group, h2 (7 bits) is compared against the control word for all 8 slots in parallel (SIMD support). Performance improved by ~63% compared to the previous bucket-based implementation.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'map', 'swiss-tables', 'go1.24'] as string[],
+  },
+  // ── 8. Map internals: evacuation (pre-1.24 buckets) ────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какие два типа роста (grow) карты существовали в классической реализации map (до Go 1.24)?',
+      en: 'What two types of map growth existed in the classic map implementation (before Go 1.24)?',
+    },
+    options: {
+      ru: [
+        'Удвоение числа бакетов (при overload factor > 6.5) и same-size grow (перераспределение при избытке overflow-бакетов)',
+        'Линейный рост на 1 бакет и экспоненциальный рост на x4',
+        'Копирование всей карты в новый участок памяти и создание нового хеша',
+        'Рост невозможен -- карта создаётся фиксированного размера',
+      ],
+      en: [
+        'Doubling bucket count (when overload factor > 6.5) and same-size grow (redistribution when too many overflow buckets)',
+        'Linear growth by 1 bucket and exponential growth by x4',
+        'Copying the entire map to a new memory area and creating a new hash',
+        'Growth is impossible -- maps are created with a fixed size',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'В классической реализации (до Swiss Tables) карта растёт двумя способами: 1) Удвоение бакетов -- когда load factor превышает 6.5 (в среднем 6.5 ключей на бакет). 2) Same-size grow (эвакуация) -- когда слишком много overflow-бакетов из-за неравномерного распределения ключей. В обоих случаях эвакуация инкрементальная: записи перемещаются постепенно при обычных операциях с картой.',
+      en: 'In the classic implementation (before Swiss Tables), maps grow in two ways: 1) Bucket doubling -- when load factor exceeds 6.5 (average 6.5 keys per bucket). 2) Same-size grow (evacuation) -- when there are too many overflow buckets due to uneven key distribution. In both cases, evacuation is incremental: entries are moved gradually during normal map operations.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'map', 'buckets', 'evacuation', 'growth'] as string[],
+  },
+  // ── 9. Slice internals: growth algorithm ───────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Как изменился алгоритм роста слайсов в Go 1.18+?',
+      en: 'How did the slice growth algorithm change in Go 1.18+?',
+    },
+    code: `// runtime/slice.go (simplified)
+func growslice(oldCap, newCap int) int {
+    if newCap > 2*oldCap {
+        return newCap
+    }
+    const threshold = 256
+    if oldCap < threshold {
+        return 2 * oldCap
+    }
+    for cap := oldCap; cap < newCap; {
+        cap += (cap + 3*threshold) / 4
+    }
+    return cap
+}`,
+    options: {
+      ru: [
+        'Порог снижен до 256 (был 1024); при cap < 256 удваивается, выше -- плавно растёт от x2.0 к x1.25 по формуле cap += (cap + 3*256) / 4',
+        'Алгоритм не менялся -- всегда удвоение до 1024, затем x1.25',
+        'Слайс всегда утраивается при переполнении',
+        'Рост происходит только при явном вызове make с новой ёмкостью',
+      ],
+      en: [
+        'Threshold reduced to 256 (was 1024); when cap < 256 it doubles, above -- smooth growth from x2.0 to x1.25 via cap += (cap + 3*256) / 4',
+        'The algorithm did not change -- always double up to 1024, then x1.25',
+        'Slices always triple on overflow',
+        'Growth only occurs with an explicit make call with new capacity',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'До Go 1.18 порог был 1024: удвоение до 1024, затем рост на 25%. В Go 1.18+ порог снижен до 256 и введена плавная кривая: cap += (cap + 3*256) / 4. Это обеспечивает фактор роста ~2.0 при cap = 256, плавно снижающийся до ~1.25 для больших слайсов. Дополнительно финальная ёмкость выравнивается по размерным классам аллокатора памяти.',
+      en: 'Before Go 1.18, the threshold was 1024: double up to 1024, then grow by 25%. In Go 1.18+, the threshold was lowered to 256 with a smooth curve: cap += (cap + 3*256) / 4. This provides a growth factor of ~2.0 at cap = 256, smoothly decreasing to ~1.25 for large slices. Additionally, the final capacity is rounded up to memory allocator size classes.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'slice', 'growth', 'append', 'go1.18'] as string[],
+  },
+  // ── 10. String internals ───────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Из чего состоит внутреннее представление строки в Go и почему unsafe-конвертация string <-> []byte опасна?',
+      en: 'What does the internal representation of a string in Go consist of, and why is unsafe string <-> []byte conversion dangerous?',
+    },
+    code: `// Internal representation (reflect/value.go)
+type StringHeader struct {
+    Data uintptr // pointer to bytes
+    Len  int     // length in bytes
+}
+// Unsafe conversion (zero-copy):
+s := "hello"
+b := unsafe.Slice(unsafe.StringData(s), len(s))`,
+    options: {
+      ru: [
+        'Строка -- это {Data uintptr, Len int}; unsafe-конвертация опасна, потому что модификация полученного []byte нарушает контракт иммутабельности строк и может вызвать UB',
+        'Строка -- это {Data, Len, Cap}; unsafe-конвертация безопасна всегда',
+        'Строка -- это массив рун фиксированной длины; unsafe-конвертация невозможна',
+        'Строка -- это указатель на null-terminated C-строку; unsafe-конвертация может вызвать segfault из-за отсутствия нуля',
+      ],
+      en: [
+        'String is {Data uintptr, Len int}; unsafe conversion is dangerous because modifying the resulting []byte violates string immutability contract and may cause UB',
+        'String is {Data, Len, Cap}; unsafe conversion is always safe',
+        'String is a fixed-length rune array; unsafe conversion is impossible',
+        'String is a pointer to a null-terminated C string; unsafe conversion may segfault due to missing null',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Строка в Go -- это двухсловная структура: указатель на массив байт (Data) и длина (Len). В отличие от слайса, у строки нет Cap, и она иммутабельна. Unsafe zero-copy конвертация (через unsafe.StringData/unsafe.SliceData в Go 1.20+ или reflect.StringHeader) позволяет избежать копирования, но модификация полученного []byte -- неопределённое поведение, так как строки могут ссылаться на read-only память.',
+      en: 'A string in Go is a two-word structure: pointer to byte array (Data) and length (Len). Unlike a slice, a string has no Cap and is immutable. Unsafe zero-copy conversion (via unsafe.StringData/unsafe.SliceData in Go 1.20+ or reflect.StringHeader) avoids copying, but modifying the resulting []byte is undefined behavior since strings may reference read-only memory.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'string', 'StringHeader', 'unsafe', 'immutability'] as string[],
+  },
+  // ── 11. Channel internals: hchan struct ────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какие ключевые поля содержит структура hchan (внутреннее представление канала)?',
+      en: 'What key fields does the hchan struct (internal channel representation) contain?',
+    },
+    code: `// runtime/chan.go (simplified)
+type hchan struct {
+    qcount   uint           // total data in the queue
+    dataqsiz uint           // size of the circular queue
+    buf      unsafe.Pointer // points to circular buffer
+    elemsize uint16
+    closed   uint32
+    sendx    uint           // send index
+    recvx    uint           // receive index
+    recvq    waitq          // list of recv waiters
+    sendq    waitq          // list of send waiters
+    lock     mutex
+}`,
+    options: {
+      ru: [
+        'Кольцевой буфер (buf, sendx, recvx), очереди ожидающих горутин (sendq, recvq как двусвязные списки sudog), мьютекс (lock), флаг closed',
+        'Только указатель на массив и длина, аналогично слайсу',
+        'Lock-free очередь без мьютекса, использующая CAS-операции',
+        'Отдельные буферы для каждой горутины и глобальный GC-маркер',
+      ],
+      en: [
+        'Ring buffer (buf, sendx, recvx), waiting goroutine queues (sendq, recvq as doubly-linked sudog lists), mutex (lock), closed flag',
+        'Just a pointer to an array and length, similar to a slice',
+        'Lock-free queue without mutex, using CAS operations',
+        'Separate buffers per goroutine and a global GC marker',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Канал в Go -- это структура hchan, защищённая мьютексом (не lock-free!). Буферизованный канал имеет кольцевой буфер (buf) с индексами sendx/recvx. sendq и recvq -- двусвязные списки структур sudog (suspended goroutine), представляющих горутины, ожидающие отправки/получения. Для небуферизованных каналов buf=nil, dataqsiz=0, и данные передаются напрямую между горутинами.',
+      en: 'A channel in Go is an hchan struct protected by a mutex (not lock-free!). A buffered channel has a ring buffer (buf) with sendx/recvx indices. sendq and recvq are doubly-linked lists of sudog structs (suspended goroutines) representing goroutines waiting to send/receive. For unbuffered channels, buf=nil, dataqsiz=0, and data is transferred directly between goroutines.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'channels', 'hchan', 'sudog', 'mutex'] as string[],
+  },
+  // ── 12. Channel: direct send optimization ──────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какая оптимизация используется при отправке в канал, если получатель уже ждёт в recvq?',
+      en: 'What optimization is used when sending to a channel if a receiver is already waiting in recvq?',
+    },
+    options: {
+      ru: [
+        'Данные копируются напрямую в стек ожидающей горутины-получателя, минуя буфер канала',
+        'Данные помещаются в буфер, а получатель уведомляется через системный вызов',
+        'Создаётся временная горутина-посредник для передачи данных',
+        'Данные сериализуются в shared memory и получатель делает mmap',
+      ],
+      en: [
+        'Data is copied directly to the waiting receiver goroutine\'s stack, bypassing the channel buffer',
+        'Data is placed in the buffer and the receiver is notified via a system call',
+        'A temporary intermediary goroutine is created for data transfer',
+        'Data is serialized to shared memory and the receiver does mmap',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Когда отправитель вызывает chansend и находит горутину в recvq, runtime копирует данные напрямую из стека отправителя в стек получателя (через sudog.elem), минуя кольцевой буфер. Это ключевая оптимизация для небуферизованных каналов и для буферизованных при пустом буфере. После копирования получатель помечается как готовый к запуску (goready).',
+      en: 'When a sender calls chansend and finds a goroutine in recvq, the runtime copies data directly from the sender\'s stack to the receiver\'s stack (via sudog.elem), bypassing the ring buffer. This is a key optimization for unbuffered channels and for buffered channels with an empty buffer. After copying, the receiver is marked as ready to run (goready).',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'channels', 'optimization', 'direct-send'] as string[],
+  },
+  // ── 13. Select internals ───────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Как select определяет порядок проверки case-ов и порядок блокировки каналов?',
+      en: 'How does select determine the order of checking cases and the order of locking channels?',
+    },
+    options: {
+      ru: [
+        'pollorder -- псевдослучайная перестановка (через cheaprandn) для проверки case-ов; lockorder -- сортировка по адресу hchan для предотвращения deadlock',
+        'Case-ы проверяются сверху вниз по порядку в коде; блокировка не требуется',
+        'Каналы блокируются в порядке создания; проверяются по приоритету буфера',
+        'Select использует lock-free алгоритм без какой-либо блокировки каналов',
+      ],
+      en: [
+        'pollorder -- pseudorandom permutation (via cheaprandn) for checking cases; lockorder -- sorted by hchan address to prevent deadlock',
+        'Cases are checked top-to-bottom in source code order; no locking is needed',
+        'Channels are locked in creation order; checked by buffer priority',
+        'Select uses a lock-free algorithm without any channel locking',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Runtime поддерживает два массива: pollorder и lockorder. pollorder заполняется случайной перестановкой индексов case-ов (через cheaprandn), чтобы гарантировать, что ни один case не имеет приоритета. lockorder сортирует case-ы по адресам hchan (heap sort для O(n log n) и постоянного стека), чтобы все горутины блокировали каналы в одинаковом порядке -- это предотвращает deadlock.',
+      en: 'The runtime maintains two arrays: pollorder and lockorder. pollorder is filled with a random permutation of case indices (via cheaprandn) to ensure no case has priority. lockorder sorts cases by hchan addresses (heap sort for O(n log n) and constant stack) so all goroutines lock channels in the same order -- this prevents deadlocks.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'select', 'pollorder', 'lockorder', 'randomization'] as string[],
+  },
+  // ── 14. Reflection performance ─────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Почему рефлексия в Go медленная и как reflect.TypeFor[T]() (Go 1.22+) помогает?',
+      en: 'Why is reflection in Go slow and how does reflect.TypeFor[T]() (Go 1.22+) help?',
+    },
+    code: `// Before Go 1.22:
+t := reflect.TypeOf((*io.Reader)(nil)).Elem()
+
+// Go 1.22+:
+t := reflect.TypeFor[io.Reader]()`,
+    options: {
+      ru: [
+        'Рефлексия медленная из-за runtime-обёрток (reflect.Value), динамического определения типов и невозможности инлайнинга; TypeFor[T]() получает тип на этапе компиляции без создания фиктивного значения',
+        'Рефлексия медленная из-за сетевых вызовов к type server; TypeFor использует локальный кэш',
+        'Рефлексия не медленная, TypeFor -- просто синтаксический сахар без влияния на производительность',
+        'Рефлексия медленная из-за GC-пауз; TypeFor отключает GC на время работы',
+      ],
+      en: [
+        'Reflection is slow due to runtime wrappers (reflect.Value), dynamic type discovery, and inability to inline; TypeFor[T]() obtains the type at compile time without creating a dummy value',
+        'Reflection is slow due to network calls to a type server; TypeFor uses a local cache',
+        'Reflection is not slow, TypeFor is just syntactic sugar with no performance impact',
+        'Reflection is slow due to GC pauses; TypeFor disables GC during execution',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Рефлексия в Go медленная по нескольким причинам: 1) Все значения оборачиваются в reflect.Value -- лишнее выделение. 2) Типы определяются в runtime -- компилятор не может оптимизировать. 3) reflect.Value.Call невозможно заинлайнить. reflect.TypeFor[T]() (Go 1.22+) -- дженерик-функция, которая возвращает reflect.Type для типа T, известного на этапе компиляции, без создания фиктивного значения reflect.TypeOf((*T)(nil)).Elem().',
+      en: 'Reflection in Go is slow for several reasons: 1) All values are wrapped in reflect.Value -- extra allocation. 2) Types are discovered at runtime -- the compiler cannot optimize. 3) reflect.Value.Call cannot be inlined. reflect.TypeFor[T]() (Go 1.22+) is a generic function that returns reflect.Type for a type T known at compile time, without creating a dummy value like reflect.TypeOf((*T)(nil)).Elem().',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'reflect', 'TypeFor', 'performance', 'go1.22'] as string[],
+  },
+  // ── 15. Compiler: escape analysis ──────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Что такое escape analysis в компиляторе Go и как посмотреть его результаты?',
+      en: 'What is escape analysis in the Go compiler and how can you view its results?',
+    },
+    code: `// View escape analysis results:
+// go build -gcflags='-m' ./...
+//
+// Example output:
+// ./main.go:5:6: x escapes to heap
+// ./main.go:10:6: y does not escape`,
+    options: {
+      ru: [
+        'Escape analysis определяет, можно ли разместить переменную на стеке или она должна "убежать" на кучу; результаты видны через go build -gcflags="-m"',
+        'Escape analysis -- это проверка утечек памяти при работе программы; включается через go run -race',
+        'Escape analysis определяет, какие горутины можно завершить безопасно; результаты в pprof',
+        'Escape analysis -- это оптимизация GC, которая перемещает объекты между поколениями; видна через GODEBUG=gctrace=1',
+      ],
+      en: [
+        'Escape analysis determines whether a variable can be placed on the stack or must "escape" to the heap; results are visible via go build -gcflags="-m"',
+        'Escape analysis is a runtime memory leak check; enabled via go run -race',
+        'Escape analysis determines which goroutines can be safely terminated; results in pprof',
+        'Escape analysis is a GC optimization that moves objects between generations; visible via GODEBUG=gctrace=1',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Escape analysis -- статический анализ компилятора, определяющий, переживает ли переменная время жизни функции. Если нет -- она размещается на стеке (быстрее, не нагружает GC). Если да -- "убегает" на кучу. Результаты видны через -gcflags="-m" (или -m -m для подробностей). Факторы, вызывающие escape: возврат указателя, присваивание интерфейсу, замыкания, слишком большие объекты.',
+      en: 'Escape analysis is a static compiler analysis that determines whether a variable outlives the function. If not -- it is placed on the stack (faster, no GC pressure). If yes -- it "escapes" to the heap. Results are visible via -gcflags="-m" (or -m -m for details). Factors causing escape: returning a pointer, assigning to an interface, closures, objects that are too large.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['compiler', 'escape-analysis', 'optimization', 'stack', 'heap'] as string[],
+  },
+  // ── 16. Compiler: inlining and BCE ─────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Каков бюджет инлайнинга функций в компиляторе Go и что такое BCE (bounds check elimination)?',
+      en: 'What is the function inlining budget in the Go compiler and what is BCE (bounds check elimination)?',
+    },
+    code: `// Helping the compiler with BCE:
+func sum(s []int) int {
+    _ = s[3] // hint: compiler knows len(s) >= 4
+    return s[0] + s[1] + s[2] + s[3] // no bounds checks
+}`,
+    options: {
+      ru: [
+        'Бюджет инлайнинга -- 80 AST-узлов; BCE -- удаление проверок границ массивов/слайсов, когда компилятор может доказать, что индекс в допустимом диапазоне',
+        'Бюджет -- 1000 строк кода; BCE -- замена bounds check на panic',
+        'Бюджет -- 20 параметров функции; BCE -- кэширование результатов проверок',
+        'Инлайнинг не имеет бюджета и применяется ко всем функциям; BCE не существует в Go',
+      ],
+      en: [
+        'Inlining budget is 80 AST nodes; BCE removes array/slice bounds checks when the compiler can prove the index is within range',
+        'Budget is 1000 lines of code; BCE replaces bounds check with panic',
+        'Budget is 20 function parameters; BCE caches check results',
+        'Inlining has no budget and applies to all functions; BCE does not exist in Go',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'Компилятор Go инлайнит функции, чьё AST-представление не превышает 80 узлов (можно проверить через -gcflags="-m"). BCE (bounds check elimination) -- оптимизация, убирающая проверки границ при индексации, когда компилятор может доказать безопасность (например, после проверки len или предварительного обращения к s[n]). Просмотр: go build -gcflags="-d=ssa/check_bce/debug=1".',
+      en: 'The Go compiler inlines functions whose AST representation does not exceed 80 nodes (verifiable via -gcflags="-m"). BCE (bounds check elimination) is an optimization that removes bounds checks during indexing when the compiler can prove safety (e.g., after a len check or a prior access to s[n]). View with: go build -gcflags="-d=ssa/check_bce/debug=1".',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['compiler', 'inlining', 'bce', 'optimization'] as string[],
+  },
+  // ── 17. Build tags and conditional compilation ─────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Какой синтаксис build-тегов является предпочтительным начиная с Go 1.17?',
+      en: 'Which build tag syntax is preferred starting from Go 1.17?',
+    },
+    code: `// Old syntax (Go 1.16 and earlier):
+// +build linux,amd64
+
+// New syntax (Go 1.17+):
+//go:build linux && amd64`,
+    options: {
+      ru: [
+        '//go:build с логическими операторами (&&, ||, !) -- новый синтаксис Go 1.17+; gofmt автоматически добавляет эквивалентный //go:build при обнаружении старого // +build',
+        '// +build остаётся единственным поддерживаемым синтаксисом',
+        '#ifdef как в C/C++ препроцессоре',
+        '@build аннотации в комментариях к пакету',
+      ],
+      en: [
+        '//go:build with logical operators (&&, ||, !) -- new Go 1.17+ syntax; gofmt auto-adds equivalent //go:build when it finds old // +build',
+        '// +build remains the only supported syntax',
+        '#ifdef as in C/C++ preprocessor',
+        '@build annotations in package comments',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'С Go 1.17 предпочтительный синтаксис -- //go:build с привычными логическими операторами: && (AND), || (OR), ! (NOT), скобки. Старый // +build всё ещё работает, но gofmt автоматически добавит //go:build строку. Выражения оцениваются против GOOS, GOARCH и пользовательских тегов (-tags). Файл включается в сборку только если условие истинно.',
+      en: 'Since Go 1.17, the preferred syntax is //go:build with familiar logical operators: && (AND), || (OR), ! (NOT), parentheses. The old // +build still works but gofmt will auto-add a //go:build line. Expressions are evaluated against GOOS, GOARCH, and user tags (-tags). A file is included in the build only if the condition is true.',
+    },
+    difficulty: 'basic' as const,
+    tags: ['compiler', 'build-tags', 'conditional-compilation', 'go1.17'] as string[],
+  },
+  // ── 18. runtime.KeepAlive ──────────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Для чего используется runtime.KeepAlive и какую проблему она решает?',
+      en: 'What is runtime.KeepAlive used for and what problem does it solve?',
+    },
+    code: `type File struct { fd int }
+
+func NewFile(fd int) *File {
+    f := &File{fd: fd}
+    runtime.SetFinalizer(f, func(f *File) {
+        syscall.Close(f.fd)
+    })
+    return f
+}
+
+func (f *File) Read(buf []byte) {
+    syscall.Read(f.fd, buf)
+    runtime.KeepAlive(f) // without this, GC may collect f BEFORE syscall.Read
+}`,
+    options: {
+      ru: [
+        'KeepAlive помечает объект как достижимый в точке вызова, предотвращая преждевременное срабатывание финализатора до завершения syscall',
+        'KeepAlive предотвращает утечку памяти, явно удерживая объект навечно',
+        'KeepAlive блокирует горутину до завершения GC-цикла',
+        'KeepAlive копирует объект в non-GC память для постоянного хранения',
+      ],
+      en: [
+        'KeepAlive marks an object as reachable at the call point, preventing premature finalizer execution before syscall completion',
+        'KeepAlive prevents memory leaks by permanently retaining the object',
+        'KeepAlive blocks the goroutine until the GC cycle completes',
+        'KeepAlive copies the object to non-GC memory for permanent storage',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'runtime.KeepAlive(x) -- это no-op, которая сообщает компилятору, что x считается достижимым до этой точки. Без неё GC может определить, что объект больше не используется ещё до завершения системного вызова, и запустить финализатор (например, закрыть файловый дескриптор). Это особенно важно при работе с SetFinalizer и unsafe.Pointer.',
+      en: 'runtime.KeepAlive(x) is a no-op that tells the compiler x is considered reachable up to this point. Without it, the GC may determine the object is no longer used before the syscall completes and run the finalizer (e.g., close the file descriptor). This is especially important when working with SetFinalizer and unsafe.Pointer.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'KeepAlive', 'finalizer', 'gc'] as string[],
+  },
+  // ── 19. runtime.LockOSThread ───────────────────────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Когда необходимо использовать runtime.LockOSThread() и каковы последствия?',
+      en: 'When is runtime.LockOSThread() necessary and what are the consequences?',
+    },
+    options: {
+      ru: [
+        'Нужен для API, зависящих от thread-local state (OpenGL, Cocoa, C-библиотеки с TLS); горутина привязывается к OS-потоку, другие горутины не выполняются на нём -- возможно снижение производительности из-за роста context switch',
+        'Используется для увеличения приоритета горутины над всеми остальными',
+        'Блокирует все остальные горутины до вызова UnlockOSThread',
+        'Нужен для предотвращения гонок данных вместо мьютекса',
+      ],
+      en: [
+        'Needed for APIs depending on thread-local state (OpenGL, Cocoa, C libraries with TLS); goroutine is pinned to an OS thread, no other goroutines run on it -- possible performance degradation due to increased context switches',
+        'Used to increase goroutine priority above all others',
+        'Blocks all other goroutines until UnlockOSThread is called',
+        'Needed to prevent data races instead of a mutex',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'runtime.LockOSThread() привязывает текущую горутину к текущему OS-потоку. Это необходимо для библиотек с thread-local state (OpenGL, GTK, некоторые C-библиотеки). Последствия: M (machine/поток) исключается из пула доступных для других горутин, что может привести к 10-кратному увеличению context switch. Вызовы Lock/Unlock должны быть парными -- горутина заблокирована до соответствующего числа UnlockOSThread.',
+      en: 'runtime.LockOSThread() pins the current goroutine to the current OS thread. This is necessary for libraries with thread-local state (OpenGL, GTK, some C libraries). Consequences: the M (machine/thread) is excluded from the pool available to other goroutines, which can lead to a 10x increase in context switches. Lock/Unlock calls must be paired -- the goroutine is locked until a matching number of UnlockOSThread calls.',
+    },
+    difficulty: 'intermediate' as const,
+    tags: ['runtime', 'LockOSThread', 'thread-local', 'cgo'] as string[],
+  },
+  // ── 20. runtime.Goexit and runtime.AddCleanup ──────────────────────────────
+  {
+    type: 'mcq' as const, blockId: 'runtime-internals', quizId: null,
+    question: {
+      ru: 'Чем runtime.Goexit() отличается от panic, и что такое runtime.AddCleanup (Go 1.24)?',
+      en: 'How does runtime.Goexit() differ from panic, and what is runtime.AddCleanup (Go 1.24)?',
+    },
+    options: {
+      ru: [
+        'Goexit завершает горутину с выполнением всех defer, но без panic -- recover вернёт nil; AddCleanup -- замена SetFinalizer, поддерживающая множественные cleanup-функции, циклы объектов и interior-указатели',
+        'Goexit -- синоним panic("exit"); AddCleanup -- обёртка над SetFinalizer без новых возможностей',
+        'Goexit завершает всю программу немедленно; AddCleanup регистрирует обработчик сигналов ОС',
+        'Goexit работает только в main-горутине; AddCleanup запускает cleanup в отдельной горутине',
+      ],
+      en: [
+        'Goexit terminates the goroutine running all defers but without panic -- recover returns nil; AddCleanup replaces SetFinalizer, supporting multiple cleanup functions, object cycles, and interior pointers',
+        'Goexit is a synonym for panic("exit"); AddCleanup is a wrapper over SetFinalizer with no new capabilities',
+        'Goexit terminates the entire program immediately; AddCleanup registers an OS signal handler',
+        'Goexit only works in the main goroutine; AddCleanup runs cleanup in a separate goroutine',
+      ],
+    },
+    correct: 0,
+    explanation: {
+      ru: 'runtime.Goexit() завершает текущую горутину, выполняя все deferred-функции, но это не panic: recover() внутри defer вернёт nil. Используется в t.Fatal() тестового фреймворка. runtime.AddCleanup (Go 1.24) -- улучшенная альтернатива SetFinalizer: позволяет прикреплять несколько cleanup-функций к одному объекту, работает с циклическими ссылками, не задерживает освобождение памяти объекта и поддерживает interior-указатели.',
+      en: 'runtime.Goexit() terminates the current goroutine, running all deferred functions, but it is not a panic: recover() inside defer returns nil. Used in the testing framework\'s t.Fatal(). runtime.AddCleanup (Go 1.24) is an improved alternative to SetFinalizer: allows attaching multiple cleanup functions to a single object, works with cyclic references, does not delay object memory reclamation, and supports interior pointers.',
+    },
+    difficulty: 'advanced' as const,
+    tags: ['runtime', 'Goexit', 'AddCleanup', 'SetFinalizer', 'go1.24'] as string[],
+  },
+]
+
 // ── Bilingual batches ───────────────────────────────────────────────────────
 const bilingualBatches: Array<{ blockId: string; qs: BilingualQuestion[] }> = [
   { blockId: 'primitives-strings', qs: questionsPrimitivesStrings },
@@ -7368,6 +9962,10 @@ const bilingualBatches: Array<{ blockId: string; qs: BilingualQuestion[] }> = [
   { blockId: 'sysdesign-caching', qs: questionsSysdesignCaching },
   { blockId: 'sysdesign-queues', qs: questionsSysdesignQueues },
   { blockId: 'sysdesign-databases', qs: questionsSysdesignDatabases },
+  { blockId: 'sysdesign-microservices', qs: questionsSysdesignMicroservices },
+  { blockId: 'runtime-scheduler', qs: questionsRuntimeScheduler },
+  { blockId: 'runtime-memory', qs: questionsRuntimeMemory },
+  { blockId: 'runtime-internals', qs: questionsRuntimeInternals },
 ]
 
 // ── Main ──────────────────────────────────────────────────────────────────────

@@ -101,7 +101,7 @@ export default function App() {
     setQuizLoading(true);
     setScreen("quiz");
 
-    fetchQuestions({ quizId })
+    fetchQuestions({ quizId, shuffle: true })
       .then((dtos) => setQuizQuestions(dtos.map(dtoToQuestion)))
       .catch((err) => {
         console.error("[App] Failed to fetch questions for quiz", quizId, err);
@@ -117,7 +117,7 @@ export default function App() {
     setQuizLoading(true);
     setScreen("quiz");
 
-    fetchQuestions({ blockId })
+    fetchQuestions({ blockId, shuffle: true })
       .then((dtos) => setQuizQuestions(dtos.map(dtoToQuestion)))
       .catch((err) => {
         console.error("[App] Failed to fetch questions for block", blockId, err);
