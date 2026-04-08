@@ -3,6 +3,7 @@ import { DifficultyLevelSchema } from './question.js'
 
 export const BlockDTOSchema = z.object({
   id: z.string(),
+  parentBlockId: z.string().optional(),
   title: z.string(),
   subtitle: z.string(),
   difficulty: DifficultyLevelSchema,

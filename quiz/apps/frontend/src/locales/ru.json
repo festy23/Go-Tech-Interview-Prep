@@ -36,5 +36,17 @@
   "difficulty.intermediate-advanced": "Средний+",
   "difficulty.advanced": "Продвинутый",
 
-  "lang.switch": "EN"
+  "lang.switch": "EN",
+
+  "playground.title": "Go Песочница",
+  "playground.run": "Запустить",
+  "playground.running": "Выполняется...",
+  "playground.clear": "Очистить",
+  "playground.version": "Версия Go",
+  "playground.back": "← Назад",
+  "playground.emptyOutput": "Запустите код, чтобы увидеть результат",
+  "playground.error": "Ошибка компиляции",
+  "playground.openInPlayground": "▶ Playground",
+  "home.playground": "Go Песочница",
+  "home.playgroundDesc": "Пишите и запускайте Go код прямо в браузере"
 }

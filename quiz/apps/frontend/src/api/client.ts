@@ -81,3 +81,27 @@ export async function fetchSessionProgress(
   const res = await apiFetch<{ data: unknown }>(`/progress/${sessionId}`)
   return SessionProgressDTOSchema.parse(res.data)
 }
+
+// ── Playground ───────────────────────────────────────────────────────────────
+
+export interface PlaygroundEvent {
+  Message: string
+  Kind: string
+  Delay: number
+}
+
+export interface PlaygroundResult {
+  Errors: string
+  Events?: PlaygroundEvent[]
+}
+
+export async function runPlayground(input: {
+  body: string
+  goVersion?: string
+  withVet?: boolean
+}): Promise<PlaygroundResult> {
+  return apiFetch<PlaygroundResult>('/playground/run', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+}

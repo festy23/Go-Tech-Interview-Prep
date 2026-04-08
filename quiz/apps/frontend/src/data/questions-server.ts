@@ -181,15 +181,20 @@ go srv.ListenAndServe()
   },
   {
     id: 15,
-    question: "Что такое health check endpoint и какие статусы он должен возвращать?",
+    question: "Какой новый синтаксис маршрутизации появился в http.ServeMux в Go 1.22?",
+    code: `mux := http.NewServeMux()
+mux.HandleFunc("GET /users/{id}", getUser)
+mux.HandleFunc("POST /users", createUser)
+mux.HandleFunc("GET /files/{path...}", serveFile)`,
     options: [
-      "Всегда возвращает 200 OK если процесс жив",
-      "200 если сервис полностью готов, 503 если нет; /healthz — liveness, /readyz — readiness",
-      "204 No Content при успехе, 500 при ошибке",
-      "Возвращает JSON с метриками CPU и памяти"
+      "Метод-специфичные маршруты (GET /path), именованные параметры ({id}), wildcard ({path...}) и r.PathValue(\"id\")",
+      "Только именованные параметры — методы по-прежнему нужно проверять вручную через r.Method",
+      "Маршруты с regexp и middleware — полная замена gorilla/mux",
+      "Только wildcard пути, без поддержки методов HTTP",
     ],
-    correct: 1,
-    explanation: "Liveness (/healthz): жив ли процесс — 200/503. Readiness (/readyz): готов ли принимать трафик (БД, кэш доступны) — 200/503. Kubernetes использует оба: liveness для рестарта, readiness для исключения из балансировки."
+    correct: 0,
+    explanation:
+      "Go 1.22 добавил в http.ServeMux: 1) метод в паттерне: \"GET /users\" обрабатывает только GET; 2) именованные параметры: /users/{id} → r.PathValue(\"id\"); 3) wildcard: /files/{path...} захватывает остаток пути. Более специфичные маршруты приоритетнее общих.",
   },
   {
     id: 16,
@@ -242,15 +247,22 @@ go srv.ListenAndServe()
   },
   {
     id: 20,
-    question: "Как безопасно читать конфигурацию из переменных окружения в Go?",
+    question: "Чем t.Context() из Go 1.24 лучше context.Background() в тестах?",
+    code: `func TestFetchData(t *testing.T) {
+    ctx := t.Context() // вместо context.Background()
+    result, err := fetchData(ctx)
+    if err != nil { t.Fatal(err) }
+    // ...
+}`,
     options: [
-      "os.Getenv везде по коду где нужно значение",
-      "Читать все env в struct при старте приложения и завершаться с ошибкой если обязательные не заданы",
-      "Использовать os.LookupEnv и игнорировать ошибки",
-      "Хранить в глобальных переменных типа var dbURL = os.Getenv(\"DB_URL\")"
+      "t.Context() автоматически отменяется при завершении теста — предотвращает утечки горутин",
+      "t.Context() быстрее, потому что не создаёт новый контекст",
+      "t.Context() содержит имя теста для логирования",
+      "t.Context() нужен только для параллельных тестов с t.Parallel()",
     ],
-    correct: 1,
-    explanation: "Лучшая практика: читать все env в config-struct при старте, валидировать обязательные поля, завершаться с os.Exit(1) если конфиг невалиден. Библиотеки: envconfig, cleanenv. Это явно документирует зависимости сервиса."
+    correct: 0,
+    explanation:
+      "t.Context() из Go 1.24 возвращает контекст, автоматически отменяемый при завершении теста (или вызове t.Cleanup). Заменяет паттерн ctx, cancel := context.WithCancel(context.Background()); defer cancel(). Предотвращает goroutine leak в тестах.",
   },
   {
     id: 21,
@@ -332,11 +344,11 @@ go srv.ListenAndServe()
     options: [
       "net/websocket из stdlib: websocket.Upgrade(w, r, nil, 1024, 1024)",
       "gorilla/websocket: var upgrader = websocket.Upgrader{}; conn, err := upgrader.Upgrade(w, r, nil)",
-      "nhooyr.io/websocket: websocket.Accept(w, r, nil)",
+      "github.com/coder/websocket (форк nhooyr.io/websocket, активно поддерживается): websocket.Accept(w, r, nil)",
       "Gorilla и nhooyr одинаково популярны; в stdlib websocket нет"
     ],
     correct: 3,
-    explanation: "В stdlib нет WebSocket пакета. gorilla/websocket исторически самый популярный. nhooyr.io/websocket — более современная альтернатива с context-поддержкой. gobwas/ws — низкоуровневая zero-allocation библиотека."
+    explanation: "В stdlib нет WebSocket пакета. gorilla/websocket исторически самый популярный. github.com/coder/websocket (форк nhooyr.io/websocket, активно поддерживается) — более современная альтернатива с context-поддержкой. gobwas/ws — низкоуровневая zero-allocation библиотека."
   },
   {
     id: 28,
@@ -565,13 +577,13 @@ go srv.ListenAndServe()
     id: 45,
     question: "Что возвращает grpc.Dial (устаревший) и почему нужен grpc.NewClient?",
     options: [
-      "grpc.Dial устарел в gRPC Go v1.69.0; grpc.NewClient создаёт соединение явно без немедленного подключения",
+      "grpc.Dial устарел в gRPC Go v1.64.0; grpc.NewClient создаёт соединение явно без немедленного подключения",
       "grpc.NewClient — просто новое название grpc.Dial без изменений",
       "grpc.Dial синхронно подключается, grpc.NewClient — асинхронно",
       "grpc.NewClient требует явного вызова conn.Connect()"
     ],
     correct: 0,
-    explanation: "grpc.Dial устарел в v1.69.0. grpc.NewClient — рекомендуемая замена. Ключевое отличие: grpc.Dial по умолчанию не блокирует и начинает подключение; поведение было непредсказуемым. grpc.NewClient явнее управляет lifecycle соединения."
+    explanation: "grpc.Dial устарел в v1.64.0. grpc.NewClient — рекомендуемая замена. Ключевое отличие: grpc.Dial по умолчанию не блокирует и начинает подключение; поведение было непредсказуемым. grpc.NewClient явнее управляет lifecycle соединения."
   },
   {
     id: 46,

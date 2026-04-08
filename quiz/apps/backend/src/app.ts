@@ -6,6 +6,7 @@ import { errorHandler } from './middleware/errorHandler.js'
 import { questionsRouter } from './routes/questions.js'
 import { blocksRouter } from './routes/blocks.js'
 import { progressRouter } from './routes/progress.js'
+import { playgroundRouter } from './routes/playground.js'
 
 const app = new Hono()
 
@@ -25,6 +26,7 @@ const apiRoutes = app
   .route('/api/questions', questionsRouter)
   .route('/api/blocks', blocksRouter)
   .route('/api/progress', progressRouter)
+  .route('/api/playground', playgroundRouter)
 
 // Health check
 app.get('/health', (c) =>

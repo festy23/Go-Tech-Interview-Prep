@@ -24,9 +24,10 @@ interface QuizProps {
   questions: Question[];
   onHome: () => void;
   onComplete?: (score: number, total: number) => void;
+  onOpenInPlayground?: (code: string) => void;
 }
 
-export function Quiz({ title, questions, onHome, onComplete }: QuizProps) {
+export function Quiz({ title, questions, onHome, onComplete, onOpenInPlayground }: QuizProps) {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -121,7 +122,7 @@ export function Quiz({ title, questions, onHome, onComplete }: QuizProps) {
         <h2 className="text-lg font-semibold leading-[1.55] text-carbon-100 mb-6 tracking-[-0.2px] max-[480px]:text-base">{current.question}</h2>
 
         {current.code && (
-          <CodeBlock code={current.code} />
+          <CodeBlock code={current.code} onOpenInPlayground={onOpenInPlayground} />
         )}
 
         <div className="flex flex-col gap-3">

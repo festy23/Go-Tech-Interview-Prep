@@ -188,16 +188,16 @@ export const questions2: Question[] = [
   },
   {
     id: 15,
-    question: "Какая проблема в коде: for i, v := range s { go func() { fmt.Println(i, v) }() }?",
+    question: "Какая проблема была в коде до Go 1.22: for i, v := range s { go func() { fmt.Println(i, v) }() }?",
     options: [
       "Код не скомпилируется — range нельзя использовать с горутинами",
       "Горутины выполнятся строго в порядке итерации слайса",
-      "Все горутины могут захватить последние значения i и v из цикла",
+      "До Go 1.22 все горутины захватывали последние значения i и v из цикла",
       "Программа завершится с паникой из-за гонки данных в цикле",
     ],
     correct: 2,
     explanation:
-      "Горутины захватывают переменные i и v по ссылке, а не по значению. К моменту выполнения горутины цикл может завершиться, и все горутины увидят последние значения i и v. Фикс: go func(i, v int) { fmt.Println(i, v) }(i, v).",
+      "До Go 1.22 переменные range-цикла i и v были одни на все итерации — горутины захватывали их по ссылке и видели последние значения. Фикс: go func(i, v int) { fmt.Println(i, v) }(i, v). Начиная с Go 1.22 переменные цикла создаются заново на каждой итерации, и эта ловушка больше не актуальна.",
   },
   {
     id: 16,
@@ -608,7 +608,7 @@ export const questions2: Question[] = [
     ],
     correct: 3,
     explanation:
-      "errors.As разворачивает цепочку и ищет ошибку, которую можно привести к типу target, затем записывает её в target. Использование: var myErr *MyError; if errors.As(err, &myErr) { // myErr заполнен }. errors.Is проверяет конкретное значение.",
+      "errors.As разворачивает цепочку и ищет ошибку, которую можно привести к типу target, затем записывает её в target. Использование: var myErr *MyError; if errors.As(err, &myErr) { // myErr заполнен }. errors.Is проверяет конкретное значение. С Go 1.26+ доступен errors.AsType[T](err) — типобезопасная альтернатива: if pathErr, ok := errors.AsType[*os.PathError](err); ok { ... }.",
   },
   {
     id: 47,
@@ -651,15 +651,15 @@ export const questions2: Question[] = [
   },
   {
     id: 50,
-    question: "Что вернёт recover(), вызванный вне deferred функции?",
+    question: "Чем errors.AsType[T] из Go 1.26 лучше errors.As?",
     options: [
-      "Значение последней паники, независимо от места вызова",
-      "nil — recover работает только внутри deferred функции",
-      "Компилятор не допустит вызов recover() вне defer",
-      "Панику — рекурсивный вызов recover нарушает рантайм Go",
+      "errors.AsType быстрее за счёт отсутствия рефлексии",
+      "errors.AsType[T] — типобезопасная обёртка: if pathErr, ok := errors.AsType[*os.PathError](err); ok { ... }",
+      "errors.AsType работает только с интерфейсами, не с конкретными типами",
+      "errors.AsType автоматически оборачивает ошибку через fmt.Errorf",
     ],
     correct: 1,
     explanation:
-      "Вызов recover() вне deferred функции — компилируется, но всегда возвращает nil и не перехватывает панику. Это тихая ошибка. Правильный паттерн: defer func() { if r := recover(); r != nil { /* обработка */ } }().",
+      "errors.AsType[T](err) — дженерик-версия errors.As из Go 1.26. Вместо var target *T; errors.As(err, &target) можно написать if t, ok := errors.AsType[*T](err); ok { ... }. Типобезопаснее: нельзя передать неверный тип target. Нет промежуточной переменной.",
   },
 ];

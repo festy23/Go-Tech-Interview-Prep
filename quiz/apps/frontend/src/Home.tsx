@@ -26,9 +26,10 @@ function blockDtoToRoadmapBlock(dto: BlockDTO): RoadmapBlock {
 interface HomeProps {
   onOpenBlock: (blockId: string) => void;
   onStartQuiz: (quizId: number, title: string) => void;
+  onOpenPlayground?: () => void;
 }
 
-export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
+export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground }: HomeProps) {
   const { t, i18n } = useTranslation();
   const progress = useMemo(() => loadProgress(), []);
 
@@ -71,6 +72,14 @@ export function Home({ onOpenBlock, onStartQuiz }: HomeProps) {
           <div className="text-left mb-0 animate-fade-slide-up [animation-delay:0.05s] max-[768px]:text-center">
             <h1 className="text-4xl font-extrabold text-carbon-100 tracking-[-0.8px] mb-3.5 leading-[1.15] max-[480px]:text-2xl">{t("home.title", "Go Interview Prep")}</h1>
             <p className="text-[15px] text-carbon-300 leading-relaxed max-w-[340px] max-[768px]:max-w-none">{t("home.tagline")}</p>
+            {onOpenPlayground && (
+              <button
+                onClick={() => onOpenPlayground()}
+                className="mt-5 inline-flex items-center gap-2 bg-teal-400/10 text-teal-400 hover:bg-teal-400/20 font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors border border-teal-400/20 [@media(pointer:coarse)]:min-h-12"
+              >
+                <span className="text-base">▶</span> {t("home.playground")}
+              </button>
+            )}
           </div>
         </div>
 

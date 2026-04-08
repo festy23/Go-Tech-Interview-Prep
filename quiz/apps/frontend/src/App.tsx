@@ -1,9 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Home } from "./Home";
 import { Quiz } from "./Quiz";
 import { BlockDetail } from "./BlockDetail";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+
+const Playground = lazy(() =>
+  import("./Playground").then((m) => ({ default: m.Playground }))
+);
 import type { Question } from "./data/questions";
 import { saveBlockProgress } from "./data/progress";
 import { saveProgress, fetchQuestions, fetchBlocks } from "./api/client";
@@ -11,7 +15,7 @@ import { getSessionId } from "./api/session";
 import { QUIZ_TO_BLOCK } from "./data/blocks";
 import type { QuestionDTO, BlockDTO } from "@quiz/shared";
 
-type Screen = "home" | "quiz" | "block";
+type Screen = "home" | "quiz" | "block" | "playground";
 
 /** Map API QuestionDTO to the shape Quiz component expects */
 function dtoToQuestion(dto: QuestionDTO): Question {
@@ -29,6 +33,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>("home");
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [playgroundCode, setPlaygroundCode] = useState<string>("");
 
   // Quiz state
   const [activeQuizId, setActiveQuizId] = useState<number | null>(null);
@@ -59,6 +64,11 @@ export default function App() {
     setActiveBlockId(null);
     setQuizTitle("");
     setQuizQuestions([]);
+  }, []);
+
+  const openPlayground = useCallback((code?: string) => {
+    setPlaygroundCode(code ?? "");
+    setScreen("playground");
   }, []);
 
   const openBlock = useCallback((blockId: string) => {
@@ -118,6 +128,17 @@ export default function App() {
     [blockQuizMap],
   );
 
+  if (screen === "playground") {
+    return (
+      <>
+        <LanguageSwitcher />
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-carbon-400">Loading...</div>}>
+          <Playground code={playgroundCode} onHome={goHome} />
+        </Suspense>
+      </>
+    );
+  }
+
   if (screen === "quiz" && (activeQuizId || activeBlockId)) {
     if (quizLoading) {
       return (
@@ -147,6 +168,7 @@ export default function App() {
           title={quizTitle}
           questions={quizQuestions}
           onHome={goHome}
+          onOpenInPlayground={openPlayground}
           onComplete={(s, total) => {
             if (activeQuizId) {
               handleQuizComplete(activeQuizId, s, total);
@@ -175,5 +197,5 @@ export default function App() {
     );
   }
 
-  return <Home onOpenBlock={openBlock} onStartQuiz={startQuiz} />;
+  return <Home onOpenBlock={openBlock} onStartQuiz={startQuiz} onOpenPlayground={openPlayground} />;
 }

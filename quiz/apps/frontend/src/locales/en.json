@@ -36,5 +36,17 @@
   "difficulty.intermediate-advanced": "Intermediate+",
   "difficulty.advanced": "Advanced",
 
-  "lang.switch": "RU"
+  "lang.switch": "RU",
+
+  "playground.title": "Go Playground",
+  "playground.run": "Run",
+  "playground.running": "Running...",
+  "playground.clear": "Clear",
+  "playground.version": "Go Version",
+  "playground.back": "← Back",
+  "playground.emptyOutput": "Run your code to see output here",
+  "playground.error": "Compilation Error",
+  "playground.openInPlayground": "▶ Playground",
+  "home.playground": "Go Playground",
+  "home.playgroundDesc": "Write and run Go code right in the browser"
 }
