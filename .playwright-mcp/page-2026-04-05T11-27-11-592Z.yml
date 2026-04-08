@@ -1,0 +1,29 @@
+- generic [ref=e2]:
+  - button "Switch language" [ref=e55] [cursor=pointer]: EN
+  - generic [ref=e56]:
+    - banner [ref=e57]:
+      - button "← Назад" [ref=e58] [cursor=pointer]
+      - generic [ref=e59]: Средний
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - heading "Конкурентность в Go" [level=1] [ref=e62]
+        - generic [ref=e64]: ~50 вопросов
+      - generic [ref=e65]:
+        - img [ref=e66]
+        - generic: —
+    - heading "Темы" [level=2] [ref=e69]
+    - generic [ref=e70]:
+      - generic [ref=e71]: Горутины и планировщик GMP
+      - generic [ref=e72]: "Каналы: буферизованные и нет"
+      - generic [ref=e73]: select и паттерны на каналах
+      - generic [ref=e74]: Pipeline, Fan-out/Fan-in
+      - generic [ref=e75]: Семафор через канал
+      - generic [ref=e76]: sync.Mutex и RWMutex
+      - generic [ref=e77]: sync.WaitGroup, sync.Once
+      - generic [ref=e78]: sync/atomic
+      - generic [ref=e79]: sync.Pool
+      - generic [ref=e80]: Data race и -race детектор
+      - generic [ref=e81]: Goroutine leak и context.Context
+      - generic [ref=e82]: errgroup
+      - generic [ref=e83]: Паттерн Worker Pool
+    - button "Пройти квиз → →" [ref=e84] [cursor=pointer]

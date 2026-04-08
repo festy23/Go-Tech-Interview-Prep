@@ -190,8 +190,8 @@ const questions: Q[] = [
       en: 'How to efficiently concatenate many strings in a loop?',
     },
     options: {
-      ru: ['Оператором +', 'fmt.Sprintf()', 'strings.Builder', 'bytes.Buffer (устарел для строк)'],
-      en: ['Using + operator', 'fmt.Sprintf()', 'strings.Builder', 'bytes.Buffer (deprecated for strings)'],
+      ru: ['Оператором +', 'fmt.Sprintf()', 'strings.Builder', 'bytes.Buffer (менее эффективен для строк)'],
+      en: ['Using + operator', 'fmt.Sprintf()', 'strings.Builder', 'bytes.Buffer (less efficient for strings)'],
     },
     correct: 2,
     explanation: {
@@ -437,8 +437,8 @@ const questions: Q[] = [
     },
     correct: 1,
     explanation: {
-      ru: 'Когда cap исчерпан, append выделяет новый массив (обычно ×2 для маленьких слайсов, ~×1.25 для больших), копирует данные и возвращает слайс с новым указателем. Старый массив остаётся неизменным.',
-      en: 'When cap is exhausted, append allocates a new array (usually ×2 for small slices, ~×1.25 for large ones), copies data, and returns a slice with a new pointer. The old array remains unchanged.',
+      ru: 'Когда cap исчерпан, append выделяет новый массив с увеличенной ёмкостью, копирует данные и возвращает слайс с новым указателем. Старый массив остаётся неизменным. Алгоритм роста: до Go 1.18 — ×2 до 1024 элементов, затем ×1.25; с Go 1.18+ — плавная кривая роста. Не следует полагаться на конкретный коэффициент.',
+      en: 'When cap is exhausted, append allocates a new array with increased capacity, copies data, and returns a slice with a new pointer. The old array remains unchanged. Growth algorithm: before Go 1.18 — ×2 up to 1024 elements, then ×1.25; since Go 1.18+ — smooth growth curve. Do not rely on specific growth factors.',
     },
     difficulty: 'basic-intermediate',
     tags: ['slices', 'append'],
@@ -730,10 +730,10 @@ const questions: Q[] = [
       ru: ['0 1 2', '3 3 3', '2 2 2', 'Ошибка компиляции'],
       en: ['0 1 2', '3 3 3', '2 2 2', 'Compilation error'],
     },
-    correct: 1,
+    correct: 0,
     explanation: {
-      ru: 'Классическая ловушка замыканий: все три функции захватывают одну и ту же переменную i. К моменту вызова i = 3 (после цикла). Начиная с Go 1.22, переменная цикла for создаётся заново на каждой итерации, поэтому в новых версиях выведет 0 1 2. Но в версиях до 1.22 — 3 3 3.',
-      en: 'Classic closure trap: all three functions capture the same variable i. By the time they are called, i = 3 (after the loop). Starting with Go 1.22, the loop variable is recreated each iteration, so newer versions print 0 1 2. Before 1.22 — 3 3 3.',
+      ru: 'Начиная с Go 1.22, переменная цикла for создаётся заново на каждой итерации — каждое замыкание захватывает своё значение i, поэтому выведет 0 1 2. В версиях до 1.22 все три функции захватывали одну и ту же переменную i, и результат был 3 3 3.',
+      en: 'Starting with Go 1.22, the loop variable is recreated each iteration — each closure captures its own value of i, so it prints 0 1 2. Before 1.22, all three functions captured the same variable i, resulting in 3 3 3.',
     },
     difficulty: 'intermediate',
     tags: ['closures', 'code-review', 'gotchas'],
@@ -810,7 +810,7 @@ const questions: Q[] = [
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ПАКЕТЫ, МОДУЛИ, ВИДИМОСТЬ, init() (44-47)
+  // ПАКЕТЫ, ВИДИМОСТЬ, MODERN GO (44-47)
   // ═══════════════════════════════════════════════════════════════════════════
   {
     question: {
@@ -831,55 +831,57 @@ const questions: Q[] = [
   },
   {
     question: {
-      ru: 'В каком порядке выполняются функции init()?',
-      en: 'In what order are init() functions executed?',
+      ru: 'Какой новый синтаксис цикла появился в Go 1.22?',
+      en: 'What new loop syntax was introduced in Go 1.22?',
     },
+    code: 'for i := range 5 {\n  fmt.Println(i)\n}',
     options: {
-      ru: ['В алфавитном порядке файлов', 'В порядке импорта зависимостей, затем по файлам', 'Случайный порядок', 'Только одна init() может существовать в пакете'],
-      en: ['In alphabetical file order', 'In dependency import order, then by file', 'Random order', 'Only one init() can exist per package'],
+      ru: ['Выведет 0 1 2 3 4 — range по целому числу итерирует от 0 до N-1', 'Ошибка компиляции — range работает только с коллекциями', 'Выведет 1 2 3 4 5 — range по числу итерирует от 1 до N', 'Бесконечный цикл — range не поддерживает числа'],
+      en: ['Prints 0 1 2 3 4 — range over integer iterates from 0 to N-1', 'Compilation error — range only works with collections', 'Prints 1 2 3 4 5 — range over number iterates from 1 to N', 'Infinite loop — range does not support numbers'],
     },
-    correct: 1,
+    correct: 0,
     explanation: {
-      ru: 'Сначала выполняются init() всех импортируемых пакетов (в порядке зависимостей). Внутри пакета — по файлам (в порядке, переданном компилятору). В одном файле может быть несколько init() — выполняются сверху вниз.',
-      en: 'First, init() of all imported packages execute (in dependency order). Within a package — by file (in order passed to compiler). Multiple init() per file are allowed — executed top to bottom.',
+      ru: 'В Go 1.22 добавлен range по целому числу: `for i := range N` эквивалентен `for i := 0; i < N; i++`. Итерация от 0 до N-1. Это лаконичнее и идиоматичнее для простых циклов.',
+      en: 'Go 1.22 added range over integers: `for i := range N` is equivalent to `for i := 0; i < N; i++`. Iterates from 0 to N-1. More concise and idiomatic for simple loops.',
     },
-    difficulty: 'intermediate',
-    tags: ['init', 'packages'],
+    difficulty: 'basic',
+    tags: ['loops', 'go1.22', 'modern-go'],
   },
   {
     question: {
-      ru: 'Для чего используется blank import?',
-      en: 'What is a blank import used for?',
+      ru: 'Что делает cmp.Or из Go 1.22?',
+      en: 'What does cmp.Or from Go 1.22 do?',
     },
-    code: 'import _ "github.com/lib/pq"',
+    code: 'name := cmp.Or(os.Getenv("NAME"), cfg.Name, "default")',
     options: {
-      ru: ['Игнорирует ошибки импорта', 'Выполняет init() пакета без использования его экспортов', 'Импортирует все экспорты в текущее пространство имён', 'Откладывает загрузку пакета до первого использования'],
-      en: ['Ignores import errors', 'Executes the package init() without using its exports', 'Imports all exports into current namespace', 'Defers package loading until first use'],
+      ru: ['Возвращает первое ненулевое значение из аргументов', 'Сравнивает все аргументы и возвращает наибольший', 'Возвращает true, если хотя бы один аргумент ненулевой', 'Паникует, если все аргументы нулевые'],
+      en: ['Returns the first non-zero value from arguments', 'Compares all arguments and returns the largest', 'Returns true if at least one argument is non-zero', 'Panics if all arguments are zero'],
     },
-    correct: 1,
+    correct: 0,
     explanation: {
-      ru: 'Blank import (_ "pkg") выполняет функции init() пакета, но не позволяет использовать его экспорты. Классический пример: драйверы баз данных регистрируют себя в init() через database/sql.Register().',
-      en: 'Blank import (_ "pkg") executes package init() functions but does not allow using its exports. Classic example: database drivers register themselves in init() via database/sql.Register().',
+      ru: 'cmp.Or возвращает первое ненулевое значение из списка. Если все нулевые — возвращает zero value типа. Заменяет цепочку if/else для выбора дефолтов: cmp.Or(flag, env, config, "default").',
+      en: 'cmp.Or returns the first non-zero value from the list. If all are zero, returns the zero value of the type. Replaces if/else chains for default selection: cmp.Or(flag, env, config, "default").',
     },
-    difficulty: 'basic-intermediate',
-    tags: ['packages', 'init'],
+    difficulty: 'intermediate',
+    tags: ['cmp', 'go1.22', 'modern-go'],
   },
   {
     question: {
-      ru: 'Что такое internal packages в Go?',
-      en: 'What are internal packages in Go?',
+      ru: 'Что нового даёт расширенный new() в Go 1.26?',
+      en: 'What does the extended new() in Go 1.26 provide?',
     },
+    code: 'cfg := Config{\n  Timeout: new(30),    // *int\n  Debug:   new(true),  // *bool\n  Name:    new("app"), // *string\n}',
     options: {
-      ru: ['Пакеты, начинающиеся с underscore', 'Пакеты в директории internal/ — доступны только родительскому дереву', 'Встроенные пакеты стандартной библиотеки', 'Пакеты без go.mod файла'],
-      en: ['Packages starting with underscore', 'Packages in internal/ directory — accessible only to parent tree', 'Built-in standard library packages', 'Packages without go.mod file'],
+      ru: ['new() в Go 1.26 принимает выражения, не только типы — возвращает указатель на значение', 'Ошибка компиляции — new() принимает только типы', 'new(30) создаёт массив из 30 элементов', 'new() с выражением работает только для примитивов'],
+      en: ['new() in Go 1.26 accepts expressions, not just types — returns pointer to value', 'Compilation error — new() only accepts types', 'new(30) creates an array of 30 elements', 'new() with expression only works for primitives'],
     },
-    correct: 1,
+    correct: 0,
     explanation: {
-      ru: 'Пакеты в директории internal/ доступны только коду в родительском дереве директорий. Например, a/b/internal/c доступен из a/b, но не из a/d. Это обеспечивает инкапсуляцию на уровне модуля.',
-      en: 'Packages in internal/ directory are accessible only to code in the parent directory tree. E.g., a/b/internal/c is accessible from a/b but not from a/d. This provides module-level encapsulation.',
+      ru: 'В Go 1.26 new() расширен: new(val) возвращает указатель на val. Тип выводится автоматически: new(0) → *int, new("s") → *string, new(T{}) → *T. Заменяет паттерн `x := val; &x` для заполнения полей со звёздочкой в структурах.',
+      en: 'Go 1.26 extends new(): new(val) returns a pointer to val. Type is inferred: new(0) → *int, new("s") → *string, new(T{}) → *T. Replaces the `x := val; &x` pattern for filling pointer fields in structs.',
     },
     difficulty: 'intermediate',
-    tags: ['packages', 'modules'],
+    tags: ['new', 'go1.26', 'modern-go'],
   },
 
   // ═══════════════════════════════════════════════════════════════════════════

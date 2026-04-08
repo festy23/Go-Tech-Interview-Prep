@@ -16,6 +16,7 @@ export interface RoadmapBlock {
   gridRow: number;
   gridCol: number;
   color: string;
+  parentBlockId?: string;
 }
 
 export interface GraphEdge {
@@ -33,6 +34,7 @@ export const GRAPH_EDGES: GraphEdge[] = [
   { from: "concurrency", to: "server" },
   { from: "networks", to: "server" },
   { from: "server", to: "sysdesign" },
+  { from: "concurrency", to: "runtime" },
 ];
 
 // quiz id -> block id that it contributes progress to (fallback mapping).

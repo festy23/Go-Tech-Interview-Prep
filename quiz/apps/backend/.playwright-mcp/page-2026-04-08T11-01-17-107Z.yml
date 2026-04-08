@@ -1,0 +1,3 @@
+- generic [ref=e3]:
+  - button "Switch language" [ref=e4] [cursor=pointer]: EN
+  - paragraph [ref=e5]: Loading...

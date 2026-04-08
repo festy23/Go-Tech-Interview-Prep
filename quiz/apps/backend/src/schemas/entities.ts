@@ -35,6 +35,7 @@ export type QuestionEntity = MCQQuestionEntity
 export interface BlockEntity {
   _id: ObjectId
   blockId: string          // stable string id e.g. "concurrency"
+  parentBlockId?: string   // parent block for sub-quizzes
   title: { ru: string; en: string }
   subtitle: { ru: string; en: string }
   difficulty: DifficultyLevel

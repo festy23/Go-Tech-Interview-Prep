@@ -5,7 +5,21 @@ import type { QuestionDTO, MCQQuestionDTO, CreateMCQQuestionInput, Lang } from '
 
 // ── Converters ───────────────────────────────────────────────────────────────
 
-function toDTO(entity: QuestionEntity, lang: Lang = 'ru'): QuestionDTO {
+/** Shuffle options and adjust correct index accordingly */
+function shuffleOptions(options: string[], correct: number): { options: string[]; correct: number } {
+  const indices = options.map((_, i) => i)
+  // Fisher-Yates
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[indices[i], indices[j]] = [indices[j]!, indices[i]!]
+  }
+  return {
+    options: indices.map((i) => options[i]!),
+    correct: indices.indexOf(correct),
+  }
+}
+
+function toDTO(entity: QuestionEntity, lang: Lang = 'ru', shuffle = false): QuestionDTO {
   const base = {
     id: entity._id.toHexString(),
     quizId: entity.quizId,
@@ -18,12 +32,17 @@ function toDTO(entity: QuestionEntity, lang: Lang = 'ru'): QuestionDTO {
   }
 
   if (entity.type === 'mcq') {
+    const opts = entity.options[lang]
+    const { options, correct } = shuffle
+      ? shuffleOptions(opts, entity.correct)
+      : { options: opts, correct: entity.correct }
+
     const dto: MCQQuestionDTO = {
       ...base,
       type: 'mcq',
       question: entity.question[lang],
-      options: entity.options[lang],
-      correct: entity.correct,
+      options,
+      correct,
       ...(entity.code ? { code: entity.code } : {}),
     }
     return dto
@@ -52,10 +71,11 @@ export async function getQuestions(params: {
   const cursor = col.find(filter)
   const docs = await cursor.toArray()
 
-  let results = docs.map((doc) => toDTO(doc, lang))
+  const shouldShuffle = !!params.shuffle
+  let results = docs.map((doc) => toDTO(doc, lang, shouldShuffle))
 
-  if (params.shuffle) {
-    // Fisher-Yates shuffle
+  if (shouldShuffle) {
+    // Fisher-Yates shuffle question order
     for (let i = results.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[results[i], results[j]] = [results[j]!, results[i]!]

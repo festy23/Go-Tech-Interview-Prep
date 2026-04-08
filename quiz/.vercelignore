@@ -1,0 +1,11 @@
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+apps/backend/dist
+packages/shared/dist
+apps/backend/scripts
+docker-compose.yml
+*.pdf
+*.aux
+*.log
+*.tex

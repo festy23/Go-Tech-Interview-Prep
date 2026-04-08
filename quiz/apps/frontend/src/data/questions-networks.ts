@@ -130,7 +130,7 @@ export const questionsNetworks: Question[] = [
     ],
     correct: 0,
     explanation:
-      "Начиная с Go 1.6, пакет net/http автоматически поддерживает HTTP/2 при использовании TLS (ListenAndServeTLS). Протокол согласовывается через ALPN (Application-Layer Protocol Negotiation) во время TLS handshake. Для HTTP/2 без TLS (h2c) или для более тонкой настройки можно использовать пакет golang.org/x/net/http2, но для большинства случаев достаточно стандартного подхода.",
+      "Начиная с Go 1.6, пакет net/http автоматически поддерживает HTTP/2 при использовании TLS (ListenAndServeTLS). Протокол согласовывается через ALPN (Application-Layer Protocol Negotiation) во время TLS handshake. Для HTTP/2 без TLS (h2c) или для более тонкой настройки можно использовать пакет golang.org/x/net/http2, но для большинства случаев достаточно стандартного подхода. http2.ConfigureServer() из golang.org/x/net/http2 также является валидным подходом для тонкой настройки HTTP/2 параметров, но не обязателен для базового включения HTTP/2.",
   },
   {
     id: 10,
@@ -181,7 +181,7 @@ export const questionsNetworks: Question[] = [
     id: 13,
     question:
       "Как настроить Go HTTP-сервер для mTLS с проверкой клиентского сертификата?",
-    code: "tlsConfig := &tls.Config{\n    ClientCAs:  caCertPool,\n    ClientAuth: tls.RequireAndVerifyClientCert,\n    MinVersion: tls.VersionTLS12,\n}\nsrv := &http.Server{\n    Addr:      \":443\",\n    TLSConfig: tlsConfig,\n}",
+    code: "tlsConfig := &tls.Config{\n    ClientCAs:  caCertPool,\n    ClientAuth: tls.RequireAndVerifyClientCert,\n    MinVersion: tls.VersionTLS13,\n}\nsrv := &http.Server{\n    Addr:      \":443\",\n    TLSConfig: tlsConfig,\n}",
     options: [
       "Установить ClientAuth в RequireAndVerifyClientCert и добавить CA-пул в ClientCAs",
       "Установить InsecureSkipVerify в true для обхода проверки",
@@ -190,7 +190,7 @@ export const questionsNetworks: Question[] = [
     ],
     correct: 0,
     explanation:
-      "Для mTLS в Go нужно: 1) создать пул CA-сертификатов (x509.CertPool), которыми подписаны клиентские сертификаты; 2) установить ClientCAs в этот пул; 3) установить ClientAuth в tls.RequireAndVerifyClientCert — сервер потребует и проверит клиентский сертификат. Другие значения ClientAuth: NoClientCert (по умолчанию), RequestClientCert (запросить, но не проверять), RequireAnyClientCert (потребовать, но не проверять).",
+      "Для mTLS в Go нужно: 1) создать пул CA-сертификатов (x509.CertPool), которыми подписаны клиентские сертификаты; 2) установить ClientCAs в этот пул; 3) установить ClientAuth в tls.RequireAndVerifyClientCert — сервер потребует и проверит клиентский сертификат. Другие значения ClientAuth: NoClientCert (по умолчанию), RequestClientCert (запросить, но не проверять), RequireAnyClientCert (потребовать, но не проверять). TLS 1.2 поддерживается Go для совместимости, но для новых сервисов рекомендуется TLS 1.3 как минимальная версия.",
   },
   {
     id: 14,
