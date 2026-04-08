@@ -7380,6 +7380,9 @@ async function main() {
   const questionsCol = db.collection('questions')
   const blocksCol = db.collection('blocks')
 
+  // ── Drop old non-partial unique index (blocks bilingual inserts with null legacyId) ──
+  try { await questionsCol.dropIndex('legacyId_1_quizId_1') } catch { /* may not exist */ }
+
   // ── Seed blocks ──────────────────────────────────────────────────────────────
   console.log('\n[seed] Seeding blocks...')
   let blockUpserts = 0
@@ -7470,7 +7473,10 @@ async function main() {
   // ── Create indexes ─────────────────────────────────────────────────────────
   await questionsCol.createIndex({ quizId: 1 })
   await questionsCol.createIndex({ blockId: 1 })
-  await questionsCol.createIndex({ legacyId: 1, quizId: 1 }, { unique: true })
+  await questionsCol.createIndex(
+    { legacyId: 1, quizId: 1 },
+    { unique: true, partialFilterExpression: { legacyId: { $type: 'number' } } },
+  )
   await blocksCol.createIndex({ blockId: 1 }, { unique: true })
   await blocksCol.createIndex({ parentBlockId: 1 })
   console.log('[seed] Indexes created')
