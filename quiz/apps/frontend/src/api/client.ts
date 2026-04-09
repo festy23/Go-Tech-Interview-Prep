@@ -6,9 +6,9 @@
  * to avoid build-time dependency on the backend source.
  * Types are validated at runtime with Zod (shared package).
  */
-import { QuestionDTOSchema, BlockDTOSchema, SessionProgressDTOSchema } from '@quiz/shared'
+import { QuestionDTOSchema, BlockDTOSchema, SessionProgressDTOSchema, UserDTOSchema } from '@quiz/shared'
 import { z } from 'zod'
-import type { QuestionDTO, BlockDTO, SessionProgressDTO, SaveProgressInput } from '@quiz/shared'
+import type { QuestionDTO, BlockDTO, SessionProgressDTO, SaveProgressInput, UserDTO } from '@quiz/shared'
 import i18n from '../i18n'
 
 const BASE = '/api'
@@ -23,6 +23,7 @@ async function apiFetch<T>(
 ): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     ...options,
   })
 
@@ -80,6 +81,58 @@ export async function fetchSessionProgress(
 ): Promise<SessionProgressDTO> {
   const res = await apiFetch<{ data: unknown }>(`/progress/${sessionId}`)
   return SessionProgressDTOSchema.parse(res.data)
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+export async function fetchMe(): Promise<UserDTO | null> {
+  try {
+    const res = await apiFetch<{ data: unknown }>('/auth/me')
+    return UserDTOSchema.parse(res.data)
+  } catch {
+    return null
+  }
+}
+
+export async function refreshAuth(): Promise<UserDTO | null> {
+  try {
+    const res = await apiFetch<{ data: unknown }>('/auth/refresh', {
+      method: 'POST',
+    })
+    return UserDTOSchema.parse(res.data)
+  } catch {
+    return null
+  }
+}
+
+export async function logoutAuth(): Promise<void> {
+  try {
+    await apiFetch('/auth/logout', { method: 'POST' })
+  } catch {
+    // Ignore errors on logout
+  }
+}
+
+export async function fetchMyProgress(): Promise<SessionProgressDTO> {
+  const res = await apiFetch<{ data: unknown }>('/progress/me')
+  return SessionProgressDTOSchema.parse(res.data)
+}
+
+export async function migrateProgressToUser(
+  sessionId: string,
+): Promise<number> {
+  try {
+    const res = await apiFetch<{ data: { migratedCount: number } }>(
+      '/auth/migrate-progress',
+      {
+        method: 'POST',
+        body: JSON.stringify({ sessionId }),
+      },
+    )
+    return res.data.migratedCount
+  } catch {
+    return 0
+  }
 }
 
 // ── Playground ───────────────────────────────────────────────────────────────

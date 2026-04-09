@@ -10,6 +10,15 @@ export const env = createEnv({
       .enum(['development', 'production', 'test'])
       .default('development'),
     CORS_ORIGIN: z.string().default('http://localhost:5173'),
+
+    // Auth
+    JWT_SECRET: z.string().min(32).default('dev-jwt-secret-change-in-production-please'),
+    GOOGLE_CLIENT_ID: z.string().min(1).optional(),
+    GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
+    GITHUB_CLIENT_ID: z.string().min(1).optional(),
+    GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
+    YANDEX_CLIENT_ID: z.string().min(1).optional(),
+    YANDEX_CLIENT_SECRET: z.string().min(1).optional(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

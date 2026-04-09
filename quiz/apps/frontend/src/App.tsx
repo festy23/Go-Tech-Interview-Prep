@@ -4,14 +4,15 @@ import { Home } from "./Home";
 import { Quiz } from "./Quiz";
 import { SubQuizList } from "./SubQuizList";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { AuthProvider } from "./auth/AuthContext";
+import { HeaderAuth } from "./auth/HeaderAuth";
+import { ProgressProvider, useProgress } from "./data/ProgressContext";
 
 const Playground = lazy(() =>
   import("./Playground").then((m) => ({ default: m.Playground }))
 );
 import type { Question } from "./data/questions";
-import { saveBlockProgress, loadProgress } from "./data/progress";
-import { saveProgress, fetchQuestions, fetchBlocks } from "./api/client";
-import { getSessionId } from "./api/session";
+import { fetchQuestions, fetchBlocks } from "./api/client";
 import { QUIZ_TO_BLOCK } from "./data/blocks";
 import type { QuestionDTO, BlockDTO } from "@quiz/shared";
 
@@ -31,6 +32,7 @@ function dtoToQuestion(dto: QuestionDTO): Question {
 
 export default function App() {
   const { t, i18n } = useTranslation();
+  const { progress, recordProgress } = useProgress();
   const [screen, setScreen] = useState<Screen>("home");
 
   // All blocks — used for subquiz-list and blockQuizMap
@@ -140,26 +142,17 @@ export default function App() {
 
   const handleQuizComplete = useCallback(
     (quizId: number, score: number, total: number) => {
-      const blockId = blockQuizMap[quizId] ?? null;
-      if (blockId) {
-        saveBlockProgress({ blockId, score, total, completedAt: new Date().toISOString() });
-      }
-      saveProgress({
-        sessionId: getSessionId(),
-        blockId: blockId ?? `quiz${quizId}`,
-        quizId,
-        score,
-        total,
-      }).catch((err) => console.warn("[progress] Failed to sync to backend:", err));
+      const blockId = blockQuizMap[quizId] ?? `quiz${quizId}`;
+      recordProgress(blockId, score, total, quizId);
     },
-    [blockQuizMap],
+    [blockQuizMap, recordProgress],
   );
 
   // ── Playground screen ────────────────────────────────────────────────────────
   if (screen === "playground") {
     return (
       <>
-        <LanguageSwitcher />
+
         <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-carbon-400">Loading...</div>}>
           <Playground code={playgroundCode} onHome={goHome} />
         </Suspense>
@@ -172,7 +165,7 @@ export default function App() {
     if (quizLoading) {
       return (
         <div className="max-w-[720px] mx-auto px-4 pb-10 pt-5 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
-          <LanguageSwitcher />
+  
           <p style={{ color: "#78788A" }}>{t("quiz.loading", "Loading...")}</p>
         </div>
       );
@@ -181,7 +174,7 @@ export default function App() {
     if (quizQuestions.length === 0) {
       return (
         <div className="max-w-[720px] mx-auto px-4 pb-10 pt-5 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
-          <LanguageSwitcher />
+  
           <p style={{ color: "#78788A" }}>{t("quiz.noQuestions", "No questions available.")}</p>
           <button className="py-3.5 px-8 bg-white/4 text-carbon-100 text-base font-semibold font-sans border border-white/6 rounded-xl cursor-pointer transition-all duration-200 hover:bg-white/7 hover:border-white/12 hover:-translate-y-px" onClick={goHome} style={{ marginTop: 16 }}>
             {t("quiz.home")}
@@ -192,7 +185,7 @@ export default function App() {
 
     return (
       <>
-        <LanguageSwitcher />
+
         <Quiz
           title={quizTitle}
           questions={quizQuestions}
@@ -202,9 +195,7 @@ export default function App() {
             if (activeQuizId) {
               handleQuizComplete(activeQuizId, s, total);
             } else if (activeBlockId) {
-              saveBlockProgress({ blockId: activeBlockId, score: s, total, completedAt: new Date().toISOString() });
-              saveProgress({ sessionId: getSessionId(), blockId: activeBlockId, quizId: null as any, score: s, total })
-                .catch((err) => console.warn("[progress] Failed to sync:", err));
+              recordProgress(activeBlockId, s, total, null);
             }
           }}
         />
@@ -220,7 +211,7 @@ export default function App() {
     if (!parentBlock) {
       return (
         <div className="max-w-[720px] mx-auto px-4 pb-10 pt-5 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
-          <LanguageSwitcher />
+  
           <p style={{ color: "#78788A" }}>{t("block.notFound")}</p>
           <button className="py-3.5 px-8 bg-white/4 text-carbon-100 text-base font-semibold font-sans border border-white/6 rounded-xl cursor-pointer mt-4" onClick={goHome}>
             {t("quiz.home")}
@@ -231,11 +222,11 @@ export default function App() {
 
     return (
       <>
-        <LanguageSwitcher />
+
         <SubQuizList
           parentBlock={parentBlock}
           subBlocks={subBlocks}
-          progress={loadProgress()}
+          progress={progress}
           onSelectSubQuiz={handleSelectSubQuiz}
           onBack={goHome}
         />
@@ -251,5 +242,18 @@ export default function App() {
       onOpenPlayground={openPlayground}
       childrenByParent={childrenByParent}
     />
+  );
+}
+
+/** Root wrapper with auth + progress providers */
+export function AppWithAuth() {
+  return (
+    <AuthProvider>
+      <ProgressProvider>
+        <HeaderAuth />
+        <LanguageSwitcher />
+        <App />
+      </ProgressProvider>
+    </AuthProvider>
   );
 }

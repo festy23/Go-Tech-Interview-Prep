@@ -1,10 +1,10 @@
 import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from "./LanguageSwitcher";
 import { RoadmapGraph } from "./RoadmapGraph";
 import { GRAPH_EDGES } from "./data/blocks";
 import type { RoadmapBlock } from "./data/blocks";
-import { loadProgress, getProgressPct, getSubQuizProgress } from "./data/progress";
+import { getProgressPct, getSubQuizProgress } from "./data/progress";
+import { useProgress } from "./data/ProgressContext";
 import { fetchBlocks } from "./api/client";
 import type { BlockDTO } from "@quiz/shared";
 
@@ -33,7 +33,7 @@ interface HomeProps {
 
 export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, childrenByParent }: HomeProps) {
   const { t, i18n } = useTranslation();
-  const progress = useMemo(() => loadProgress(), []);
+  const { progress } = useProgress();
 
   const [blocks, setBlocks] = useState<RoadmapBlock[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +59,6 @@ export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, childrenByPar
   if (loading) {
     return (
       <div className="max-w-[1100px] mx-auto px-6 pb-15 pt-10 min-h-screen flex flex-col animate-fade-slide-up" style={{ textAlign: "center", paddingTop: 80 }}>
-        <LanguageSwitcher />
         <p style={{ color: "#78788A" }}>{t("home.loading", "Loading...")}</p>
       </div>
     );
@@ -67,7 +66,6 @@ export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, childrenByPar
 
   return (
     <div className="max-w-[1100px] mx-auto px-6 pb-15 pt-10 min-h-screen flex flex-col animate-fade-slide-up">
-      <LanguageSwitcher />
 
       <div className="flex gap-15 items-start min-h-[500px] mb-15 max-[768px]:flex-col max-[768px]:gap-8 max-[768px]:min-h-auto max-[768px]:mb-10">
         <div className="flex-[0_0_380px] pt-15 max-[768px]:flex-none max-[768px]:pt-5 max-[768px]:w-full">
