@@ -6,6 +6,7 @@ export const UserDTOSchema = z.object({
   name: z.string(),
   avatarUrl: z.string().url().nullable(),
   providers: z.array(z.enum(['google', 'yandex', 'github'])),
+  telegramId: z.number().nullable(),
 })
 export type UserDTO = z.infer<typeof UserDTOSchema>
 
