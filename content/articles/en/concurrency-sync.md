@@ -238,6 +238,13 @@ func getTimeout() time.Duration {
 
 `sync.Pool` caches temporary objects, reducing GC pressure. The typical scenario is buffers or complex structs that are frequently created and discarded.
 
+Go 1.26 introduced the `new(val)` expression, which creates a pointer to a value directly — without an intermediate variable. For example, `new(0)` returns `*int` pointing to `0`; `new(false)` returns `*bool`. This is handy in `sync.Pool.New` fields and anywhere else a pointer to a primitive is needed:
+
+```go
+// Go 1.26: new(val) — pointer to a value, no intermediate variable
+limit := new(100) // *int → 100, instead of: n := 100; &n
+```
+
 ```go
 var bufPool = sync.Pool{
     New: func() any {
@@ -382,6 +389,33 @@ for _, url := range urls {
 
 ---
 
+## Go 1.26: new(val)
+
+Go 1.26 extended the built-in `new` function: it now accepts a value, not just a type, creating a pointer to it directly:
+
+```go
+// Before Go 1.26
+n := 42
+p := &n // *int → 42
+
+// Go 1.26
+p := new(42) // *int → 42, one line
+
+// Useful for pointers to bool, int, and other primitives
+enabled := new(true)    // *bool
+timeout := new(30)      // *int
+```
+
+This removes the need for an intermediate variable when initialising struct fields, passing arguments, or working with `atomic.Pointer`:
+
+```go
+// Initialising atomic.Pointer without an intermediate variable
+var p atomic.Pointer[int]
+p.Store(new(42)) // ← Go 1.26
+```
+
+---
+
 ## Summary
 
 | Primitive | When to use |
@@ -393,5 +427,6 @@ for _, url := range urls {
 | `atomic.*` | Simple counters and flags without a mutex |
 | `sync.Pool` | Reusing expensive-to-allocate objects |
 | `errgroup` | Goroutines that need to return errors |
+| `new(val)` (Go 1.26) | Pointer to a value without an intermediate variable |
 
 The `-race` detector should be part of CI — run `go test -race ./...` on every PR.

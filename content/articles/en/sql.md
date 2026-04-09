@@ -115,7 +115,7 @@ db.SetMaxIdleConns(5)
 db.SetConnMaxLifetime(5 * time.Minute)
 ```
 
-`sql.DB` is a connection pool, not a single connection. Go 1.25 guarantees the pool is goroutine-safe: a single `*sql.DB` can be shared freely across goroutines.
+`sql.DB` is a connection pool, not a single connection. Go 1.26 guarantees the pool is goroutine-safe: a single `*sql.DB` can be shared freely across goroutines.
 
 Core methods:
 
@@ -136,4 +136,4 @@ Typical SQL block questions:
 5. Show how to work with transactions in Go.
 6. Identify an N+1 problem in code and propose a fix.
 
-The remaining articles in this block cover each topic in depth with Go 1.25 code examples.
+The remaining articles in this block cover each topic in depth with Go 1.26 code examples.

@@ -125,16 +125,14 @@ Redis is the dominant external cache for Go services. The standard Go client is 
 ```go
 import "github.com/redis/go-redis/v9"
 
-rdb := redis.NewClient(&redis.Options{
-    Addr:         "localhost:6379",
-    Password:     "",
-    DB:           0,
-    PoolSize:     10,              // connection pool
-    MinIdleConns: 2,
-    DialTimeout:  5 * time.Second,
-    ReadTimeout:  3 * time.Second,
-    WriteTimeout: 3 * time.Second,
-})
+opts := new(redis.Options) // Go 1.26: new(T) returns *T, convenient for configs with pointer fields
+opts.Addr = "localhost:6379"
+opts.PoolSize = 10             // connection pool
+opts.MinIdleConns = 2
+opts.DialTimeout = 5 * time.Second
+opts.ReadTimeout = 3 * time.Second
+opts.WriteTimeout = 3 * time.Second
+rdb := redis.NewClient(opts)
 
 // Atomic increment — safe under concurrent access
 count, err := rdb.Incr(ctx, "page:views").Result()

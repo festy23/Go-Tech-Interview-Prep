@@ -186,6 +186,25 @@ func TestGetUser_NotFound(t *testing.T) {
 
 The test uses no real database. Execution time: microseconds.
 
+### errors.AsType (Go 1.26)
+
+When a repository returns a typed error, Go 1.26 provides a more concise way to extract it — `errors.AsType[T]`:
+
+```go
+// Before Go 1.26 — errors.As with an intermediate variable
+var dbErr *DBError
+if errors.As(err, &dbErr) {
+    log.Printf("db error code: %d", dbErr.Code)
+}
+
+// Go 1.26 — errors.AsType[T] without an intermediate variable
+if dbErr, ok := errors.AsType[*DBError](err); ok {
+    log.Printf("db error code: %d", dbErr.Code)
+}
+```
+
+`errors.AsType` is especially convenient in tests when checking error details without needing to declare a variable upfront.
+
 ## Wire — Code-generated Dependency Graph
 
 As an application grows, the manual `main()` assembly grows with it. Google Wire solves this through **code generation** — you describe "providers" (constructors) and Wire generates the wiring code.

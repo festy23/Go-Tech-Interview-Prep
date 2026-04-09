@@ -67,11 +67,11 @@ Key concepts:
 - **mTLS**: mutual authentication — the server also verifies the client's certificate. The standard for internal microservices.
 
 ```go
-tlsCfg := &tls.Config{
+tlsCfg := new(tls.Config{
     MinVersion: tls.VersionTLS13,
     ClientAuth: tls.RequireAndVerifyClientCert,
     ClientCAs:  certPool,
-}
+})
 ```
 
 For deeper coverage, see the **TLS** article.

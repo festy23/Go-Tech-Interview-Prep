@@ -88,14 +88,13 @@ Idiomatic error handling is one of Go's most distinctive traits. There are no ex
 
 In server code this manifests in three patterns:
 
-1. **Error wrapping** via `fmt.Errorf("operation: %w", err)` preserves the chain for `errors.Is`/`errors.As`.
+1. **Error wrapping** via `fmt.Errorf("operation: %w", err)` preserves the chain for `errors.Is`/`errors.AsType`.
 2. **Centralised error writer** — a single function turns a Go error into an HTTP response with the correct status and JSON body.
 3. **Panic recovery middleware** — `recover()` in a deferred function catches unexpected panics and returns 500 instead of crashing the server.
 
 ```go
 func writeError(w http.ResponseWriter, err error) {
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         respond(w, httpErr.Status, httpErr)
         return
     }
@@ -169,7 +168,7 @@ This article is a high-level overview of server development in Go. Each topic is
 
 - **Handlers** — `http.Handler`, `ServeMux` Go 1.22, `r.PathValue()`, middleware, routers.
 - **Authentication** — JWT, sessions, OAuth2, bcrypt, CORS, CSRF.
-- **Error Handling** — error types, `errors.Is/As`, HTTP responses, panic recovery.
+- **Error Handling** — error types, `errors.Is`/`errors.AsType`, HTTP responses, panic recovery.
 - **Testing** — `httptest`, `t.Context()`, testcontainers, benchmarks with `b.Loop()`.
 
 Recommended order: handlers → error handling → authentication → testing. Then practise building a complete CRUD API with a middleware stack and integration tests.

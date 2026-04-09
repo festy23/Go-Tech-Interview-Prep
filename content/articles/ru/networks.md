@@ -67,11 +67,11 @@ TLS шифрует соединение и аутентифицирует сто
 - **mTLS**: взаимная аутентификация — сервер тоже проверяет сертификат клиента. Стандарт для internal microservices.
 
 ```go
-tlsCfg := &tls.Config{
+tlsCfg := new(tls.Config{
     MinVersion: tls.VersionTLS13,
     ClientAuth: tls.RequireAndVerifyClientCert,
     ClientCAs:  certPool,
-}
+})
 ```
 
 Подробнее — в статье **«TLS»**.

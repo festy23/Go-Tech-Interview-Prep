@@ -40,7 +40,7 @@ func (u *User) SetEmail(email string) {
 
 The receiver `u User` is a copy (value receiver); `u *User` is a pointer. The rule is straightforward: if the method mutates the struct or the struct is large, use a pointer. Otherwise use a value. For a given type, stick to one style throughout.
 
-Go 1.25 did not add new syntax for method definitions — this mechanism has been stable since Go 1.0.
+Go 1.26 did not add new syntax for method definitions — this mechanism has been stable since Go 1.0.
 
 ## Encapsulation via Packages
 

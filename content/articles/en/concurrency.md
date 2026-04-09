@@ -106,6 +106,8 @@ func getInstance() *MyService {
 
 **`sync/atomic`** — atomic operations on integers and pointers without a mutex. Used in hot paths where mutex overhead is measurable.
 
+**Go 1.26: `new(val)`** — the built-in `new` now accepts a value, returning a pointer to it without an intermediate variable: `new(0)` gives `*int` pointing to zero, `new(true)` gives `*bool`. Handy when initialising `atomic.Pointer` or passing optional arguments.
+
 For detailed coverage of each primitive and when to choose one over another, see the **sync Package** article.
 
 ## Context — Lifecycle Management
@@ -125,6 +127,8 @@ Three key constructors:
 - `context.WithDeadline` — automatic cancellation at a specific point in time.
 
 Context must be passed explicitly as the first argument — never stored in a struct. Child contexts are automatically cancelled when their parent is cancelled.
+
+**Go 1.26: `errors.AsType[T](err)`** — a generic version of `errors.As` that requires no target variable: `if e := errors.AsType[*url.Error](err); e != nil { ... }`. Particularly concise when unwrapping errors that arise from context cancellation.
 
 For detailed coverage of the context tree, value propagation, and best practices, see the **Context** article.
 

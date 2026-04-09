@@ -166,6 +166,8 @@ func main() {
 
 ### `go func()` — basic syntax
 
+The classic way to launch goroutines with `sync.WaitGroup`. Since Go 1.25 the preferred approach is `wg.Go()` (see below), but understanding the manual `Add/Done` pattern matters for working with legacy code.
+
 ```go
 package main
 
@@ -177,7 +179,7 @@ import (
 func main() {
     var wg sync.WaitGroup
 
-    // Named function
+    // Named function (old style: Add + Done manually)
     wg.Add(1)
     go sayHello(&wg, "world")
 
@@ -190,6 +192,7 @@ func main() {
     }()
 
     // Go 1.22+: loop variable is safe — each iteration gets its own copy of i
+    // Go 1.25+: prefer wg.Go(func() { ... })
     for i := range 5 {
         wg.Add(1)
         go func() {
@@ -314,11 +317,9 @@ Multiple goroutines reading and writing the same variable without synchronisatio
 var counter int
 var wg sync.WaitGroup
 for range 1000 {
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() { // Go 1.25+: wg.Go replaces wg.Add(1) + go func() + defer wg.Done()
         counter++ // not atomic
-    }()
+    })
 }
 wg.Wait()
 fmt.Println(counter) // undefined result
@@ -326,11 +327,9 @@ fmt.Println(counter) // undefined result
 // GOOD: atomic operation
 var counter atomic.Int64
 for range 1000 {
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() {
         counter.Add(1)
-    }()
+    })
 }
 wg.Wait()
 fmt.Println(counter.Load()) // always 1000
@@ -354,11 +353,9 @@ func main() {
 // GOOD: wait for completion
 func main() {
     var wg sync.WaitGroup
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() { // Go 1.25+: wg.Go replaces wg.Add(1) + go func() + defer wg.Done()
         fmt.Println("goroutine")
-    }()
+    })
     wg.Wait()
 }
 ```

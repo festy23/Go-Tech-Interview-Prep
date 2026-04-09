@@ -138,8 +138,7 @@ func retryWithBackoff(ctx context.Context, maxRetries int, fn func() error) erro
 }
 
 func isRetryable(err error) bool {
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         // Retry on 5xx and 429 (rate limited), not on 4xx (client errors)
         return httpErr.StatusCode >= 500 || httpErr.StatusCode == 429
     }
@@ -346,10 +345,21 @@ func healthHandler(db *pgxpool.Pool, rdb *redis.Client) http.HandlerFunc {
         ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
         defer cancel()
 
-        checks := map[string]error{
-            "postgres": db.Ping(ctx),
-            "redis":    rdb.Ping(ctx).Err(),
-        }
+        // Go 1.25: wg.Go(fn) — run dependency checks in parallel
+        var mu sync.Mutex
+        checks := map[string]error{}
+        var g errgroup.Group
+        g.Go(func() error {
+            err := db.Ping(ctx)
+            mu.Lock(); checks["postgres"] = err; mu.Unlock()
+            return nil
+        })
+        g.Go(func() error {
+            err := rdb.Ping(ctx).Err()
+            mu.Lock(); checks["redis"] = err; mu.Unlock()
+            return nil
+        })
+        g.Wait()
 
         healthy := true
         for _, err := range checks {
@@ -408,7 +418,9 @@ func main() {
 
     // Dependencies
     db, _ := pgxpool.New(ctx, os.Getenv("DATABASE_URL"))
-    rdb := redis.NewClient(&redis.Options{Addr: os.Getenv("REDIS_ADDR")})
+    opts := new(redis.Options) // Go 1.26: new(val) — pointer to value
+    opts.Addr = os.Getenv("REDIS_ADDR")
+    rdb := redis.NewClient(opts)
 
     // Circuit breaker for downstream calls
     cb := gobreaker.NewCircuitBreaker[*http.Response](gobreaker.Settings{

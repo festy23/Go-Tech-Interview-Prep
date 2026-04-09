@@ -57,6 +57,8 @@ srv := NewServer(":8080",
     WithTimeout(60*time.Second),
     WithMaxConnections(500),
     WithLogger(myLogger),
+    // Go 1.26: new(tls.Config{...}) returns *tls.Config without a temp variable
+    WithTLS(new(tls.Config{MinVersion: tls.VersionTLS13})),
 )
 ```
 
@@ -142,6 +144,22 @@ func NewNotification(ch Channel, cfg map[string]string) (Notification, error) {
 }
 ```
 
+When sending a notification, a typed error may be returned. Go 1.26 added `errors.AsType[T]` — a generic wrapper over `errors.As` that eliminates the need for an intermediate variable:
+
+```go
+type SendError struct {
+    Channel Channel
+    Cause   error
+}
+func (e *SendError) Error() string { return fmt.Sprintf("send via %s: %v", e.Channel, e.Cause) }
+func (e *SendError) Unwrap() error { return e.Cause }
+
+// Go 1.26: errors.AsType instead of errors.As + intermediate variable
+if sendErr, ok := errors.AsType[*SendError](err); ok {
+    log.Printf("channel %s failed: %v", sendErr.Channel, sendErr.Cause)
+}
+```
+
 ## Singleton — via sync.OnceValue (Go 1.21+)
 
 Singleton ensures a single instance. Go 1.21 added `sync.OnceValue`, which makes this elegant:
@@ -156,17 +174,18 @@ type Config struct {
 
 var getConfig = sync.OnceValue(func() *Config {
     // expensive initialization — runs exactly once
-    return &Config{
+    // Go 1.26: new(Config{...}) returns a pointer to a value without a temp variable
+    return new(Config{
         DBUrl:  os.Getenv("DATABASE_URL"),
         APIKey: os.Getenv("API_KEY"),
-    }
+    })
 })
 
 // use anywhere in the program
 cfg := getConfig()
 ```
 
-Go 1.25 retains `sync.OnceValue`. This is goroutine-safe: initialization runs exactly once even under concurrent calls.
+Go 1.26 retains `sync.OnceValue`. This is goroutine-safe: initialization runs exactly once even under concurrent calls.
 
 Before Go 1.21, Singleton was implemented with `sync.Once`:
 

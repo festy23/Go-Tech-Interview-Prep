@@ -154,15 +154,13 @@ func main() {
     // 100 конкурентных HTTP-запросов: каждая горутина "паркуется" на I/O,
     // не занимая OS-поток.
     for i := range 100 {
-        wg.Add(1)
-        go func() {
-            defer wg.Done()
+        wg.Go(func() { // Go 1.25: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
             resp, err := http.Get("https://go.dev")
             if err == nil {
                 results[i] = resp.StatusCode
                 resp.Body.Close()
             }
-        }()
+        })
     }
     wg.Wait()
     fmt.Println("done, first status:", results[0])

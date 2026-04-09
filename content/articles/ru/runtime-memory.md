@@ -55,6 +55,11 @@ func newResult() *Result {
     result := Result{Value: 42}
     return &result // escape!
 }
+
+// Go 1.26: new(val) — выражение «указатель на значение», то же поведение escape
+func newResult() *Result {
+    return new(Result{Value: 42}) // эквивалентно: аллоцирует на куче, возвращает указатель
+}
 ```
 
 **2. Переменная передаётся в интерфейс:**

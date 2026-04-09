@@ -352,6 +352,21 @@ default:
 }
 ```
 
+Тот же поиск по хешу `itab` лежит в основе `errors.As`. В Go 1.26 появился `errors.AsType[T]` — дженерик-обёртка, которая устраняет необходимость в промежуточной переменной:
+
+```go
+// Go <1.26: errors.As требует типизированную переменную-цель
+var ve *ValidationError
+if errors.As(err, &ve) {
+    fmt.Println(ve.Field)
+}
+
+// Go 1.26: errors.AsType[T] — переменная-цель не нужна
+if ve, ok := errors.AsType[*ValidationError](err); ok {
+    fmt.Println(ve.Field)
+}
+```
+
 ---
 
 ## defer / panic / recover

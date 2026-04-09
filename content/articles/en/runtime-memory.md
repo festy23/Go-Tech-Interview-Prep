@@ -55,6 +55,11 @@ func newResult() *Result {
     result := Result{Value: 42}
     return &result // escape!
 }
+
+// Go 1.26: new(val) — pointer to a value expression, same escape behaviour
+func newResult() *Result {
+    return new(Result{Value: 42}) // equivalent: allocates on heap, returns pointer
+}
 ```
 
 **2. The variable is passed as an interface value:**

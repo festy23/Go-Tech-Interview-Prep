@@ -105,9 +105,10 @@ func (e *SlackExporter) Export(data []byte) error { ... }
 
 ```go
 type Server struct {
-    addr    string
-    timeout time.Duration
-    logger  *slog.Logger
+    addr      string
+    timeout   time.Duration
+    logger    *slog.Logger
+    maxConns  *int          // указатель: nil = не ограничено
 }
 
 type Option func(*Server)
@@ -120,6 +121,11 @@ func WithLogger(l *slog.Logger) Option {
     return func(s *Server) { s.logger = l }
 }
 
+func WithMaxConns(n int) Option {
+    // Go 1.26: new(n) возвращает *int без промежуточной переменной
+    return func(s *Server) { s.maxConns = new(n) }
+}
+
 func NewServer(addr string, opts ...Option) *Server {
     s := &Server{addr: addr, timeout: 30 * time.Second}
     for _, opt := range opts {
@@ -129,7 +135,7 @@ func NewServer(addr string, opts ...Option) *Server {
 }
 
 // использование
-srv := NewServer(":8080", WithTimeout(60*time.Second), WithLogger(myLogger))
+srv := NewServer(":8080", WithTimeout(60*time.Second), WithLogger(myLogger), WithMaxConns(500))
 ```
 
 ## L — Liskov Substitution Principle (Принцип подстановки Лисков)
@@ -167,7 +173,7 @@ func (c *BrokenCache) Get(key string) ([]byte, bool) {
 
 Практическое правило: реализация интерфейса не должна сужать поведение (паниковать там, где оригинал возвращает ошибку, игнорировать параметры, возвращать nil там, где ожидается значение).
 
-В Go 1.25 можно проверить соответствие типа интерфейсу статически на этапе компиляции:
+В Go 1.26 можно проверить соответствие типа интерфейсу статически на этапе компиляции:
 
 ```go
 var _ Cache = (*MemoryCache)(nil)  // компилятор выдаст ошибку, если тип не реализует Cache

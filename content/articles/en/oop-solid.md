@@ -105,9 +105,10 @@ Another idiomatic tool is the **Functional Options** pattern. New configuration 
 
 ```go
 type Server struct {
-    addr    string
-    timeout time.Duration
-    logger  *slog.Logger
+    addr      string
+    timeout   time.Duration
+    logger    *slog.Logger
+    maxConns  *int          // pointer: nil = unlimited
 }
 
 type Option func(*Server)
@@ -120,6 +121,11 @@ func WithLogger(l *slog.Logger) Option {
     return func(s *Server) { s.logger = l }
 }
 
+func WithMaxConns(n int) Option {
+    // Go 1.26: new(n) returns a *int without a temp variable
+    return func(s *Server) { s.maxConns = new(n) }
+}
+
 func NewServer(addr string, opts ...Option) *Server {
     s := &Server{addr: addr, timeout: 30 * time.Second}
     for _, opt := range opts {
@@ -128,7 +134,7 @@ func NewServer(addr string, opts ...Option) *Server {
     return s
 }
 
-srv := NewServer(":8080", WithTimeout(60*time.Second), WithLogger(myLogger))
+srv := NewServer(":8080", WithTimeout(60*time.Second), WithLogger(myLogger), WithMaxConns(500))
 ```
 
 ## L — Liskov Substitution Principle
@@ -166,7 +172,7 @@ func (c *BrokenCache) Get(key string) ([]byte, bool) {
 
 Practical rule: an interface implementation must not narrow behavior — it must not panic where the contract says return an error, ignore parameters, or return nil where a value is expected.
 
-In Go 1.25 you can verify interface compliance statically at compile time:
+In Go 1.26 you can verify interface compliance statically at compile time:
 
 ```go
 var _ Cache = (*MemoryCache)(nil)  // compiler error if the type does not implement Cache

@@ -215,9 +215,8 @@ func (e *ValidationError) Error() string {
 // Usage
 var err error = &ValidationError{Field: "email", Message: "invalid format"}
 
-// Unwrapping via errors.As
-var ve *ValidationError
-if errors.As(err, &ve) {
+// Unwrapping via errors.AsType (Go 1.26)
+if ve, ok := errors.AsType[*ValidationError](err); ok {
     fmt.Println(ve.Field) // email
 }
 ```

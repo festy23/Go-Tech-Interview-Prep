@@ -352,6 +352,21 @@ default:
 }
 ```
 
+The same `itab` hash lookup powers `errors.As`. Go 1.26 introduces `errors.AsType[T]` as a generic wrapper that eliminates the target variable:
+
+```go
+// Go <1.26: errors.As requires a typed target variable
+var ve *ValidationError
+if errors.As(err, &ve) {
+    fmt.Println(ve.Field)
+}
+
+// Go 1.26: errors.AsType[T] — no target variable needed
+if ve, ok := errors.AsType[*ValidationError](err); ok {
+    fmt.Println(ve.Field)
+}
+```
+
 ---
 
 ## defer / panic / recover

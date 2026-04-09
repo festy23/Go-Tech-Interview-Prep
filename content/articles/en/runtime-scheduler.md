@@ -154,15 +154,13 @@ func main() {
     // 100 concurrent HTTP requests: each goroutine parks on I/O
     // without holding an OS thread.
     for i := range 100 {
-        wg.Add(1)
-        go func() {
-            defer wg.Done()
+        wg.Go(func() { // Go 1.25: wg.Go replaces wg.Add(1) + go func() + defer wg.Done()
             resp, err := http.Get("https://go.dev")
             if err == nil {
                 results[i] = resp.StatusCode
                 resp.Body.Close()
             }
-        }()
+        })
     }
     wg.Wait()
     fmt.Println("done, first status:", results[0])

@@ -121,8 +121,8 @@ _ = v
 // clear is a built-in function (Go 1.21)
 clear(m) // removes all elements
 
-// maps.Keys (Go 1.23)
-keys := maps.Keys(m)
+// maps.Keys (Go 1.23) — returns iter.Seq[K]
+keys := slices.Collect(maps.Keys(m))
 _ = keys
 ```
 
@@ -151,7 +151,7 @@ The most common pitfall is confusing a nil interface with an interface holding a
 
 See the **Interfaces** article for full details.
 
-## Modern Go (1.21–1.25)
+## Modern Go (1.21–1.26)
 
 Recent Go versions have added many useful features:
 
@@ -159,10 +159,11 @@ Recent Go versions have added many useful features:
 |---------|----------|
 | 1.21 | `min`, `max`, `clear` builtins; `slices`, `maps`, `cmp` packages |
 | 1.21 | `slices.Sort`, `slices.Contains`, `slices.Compact` |
-| 1.22 | `for i := range n` — range over integers |
-| 1.23 | `maps.Keys`, `maps.Values` return iterators |
+| 1.22 | `for i := range n` — range over integers; `cmp.Or` |
+| 1.23 | `maps.Keys`, `maps.Values` return iterators (`iter.Seq`) |
 | 1.24 | Runtime improvements, Swiss Tables for maps |
-| 1.25 | Further performance improvements, `cmp.Or` |
+| 1.25 | `wg.Go(fn)`, `sync.OnceValue`, `b.Loop()` in benchmarks |
+| 1.26 | `new(val)` — pointer to any value; `errors.AsType[T](err)` |
 
 The `for i := range n` loop replaces verbose `for i := 0; i < n; i++`:
 
@@ -176,6 +177,27 @@ for i := range 5 {
 
 ```go
 name := cmp.Or(os.Getenv("NAME"), "anonymous")
+```
+
+Go 1.26 added `new(val)` — creates a pointer to any value without an intermediate variable:
+
+```go
+// Go 1.26: new takes a value, not just a type
+p := new(0)        // *int, points to 0
+b := new(true)     // *bool, points to true
+
+// Instead of:
+// x := 0; &x
+// b := true; &b
+```
+
+And `errors.AsType[T]` — a type-safe replacement for `errors.As`:
+
+```go
+// Go 1.26: errors.AsType[T] instead of errors.As(err, &target)
+if pathErr, ok := errors.AsType[*os.PathError](err); ok {
+    fmt.Println(pathErr.Path)
+}
 ```
 
 ## Common Interview Questions
@@ -205,4 +227,4 @@ func reverseWords(s string) string {
 
 Go primitives are not just syntax. Each has precise semantics and internal structure that directly affect performance and correctness. Strings are immutable and UTF-8. Slices are three-field headers over arrays. Maps are hash tables with intentionally randomized iteration. Interfaces are pointer pairs with implicit implementation.
 
-Study the detailed articles for each type to be prepared for any interview question.
+Current Go (1.26): `new(val)` creates a pointer without an intermediate variable; `errors.AsType[T](err)` replaces `errors.As`. Study the detailed articles for each type to be prepared for any interview question.

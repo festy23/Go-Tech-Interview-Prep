@@ -57,6 +57,8 @@ srv := NewServer(":8080",
     WithTimeout(60*time.Second),
     WithMaxConnections(500),
     WithLogger(myLogger),
+    // Go 1.26: new(tls.Config{...}) возвращает *tls.Config без промежуточной переменной
+    WithTLS(new(tls.Config{MinVersion: tls.VersionTLS13})),
 )
 ```
 
@@ -142,6 +144,22 @@ func NewNotification(ch Channel, cfg map[string]string) (Notification, error) {
 }
 ```
 
+При отправке уведомления может вернуться типизированная ошибка. Go 1.26 добавил `errors.AsType[T]` — дженерик-обёртку над `errors.As`, устраняющую необходимость в промежуточной переменной:
+
+```go
+type SendError struct {
+    Channel Channel
+    Cause   error
+}
+func (e *SendError) Error() string { return fmt.Sprintf("send via %s: %v", e.Channel, e.Cause) }
+func (e *SendError) Unwrap() error { return e.Cause }
+
+// Go 1.26: errors.AsType вместо errors.As + промежуточная переменная
+if sendErr, ok := errors.AsType[*SendError](err); ok {
+    log.Printf("channel %s failed: %v", sendErr.Channel, sendErr.Cause)
+}
+```
+
 ## Singleton — через sync.OnceValue (Go 1.21+)
 
 Синглтон обеспечивает единственный экземпляр объекта. В Go 1.21 появился `sync.OnceValue`, который делает это элегантно:
@@ -156,17 +174,18 @@ type Config struct {
 
 var getConfig = sync.OnceValue(func() *Config {
     // дорогостоящая инициализация — выполняется один раз
-    return &Config{
+    // Go 1.26: new(Config{...}) возвращает указатель на значение без промежуточной переменной
+    return new(Config{
         DBUrl:  os.Getenv("DATABASE_URL"),
         APIKey: os.Getenv("API_KEY"),
-    }
+    })
 })
 
 // использование в любом месте программы
 cfg := getConfig()
 ```
 
-Go 1.25 сохранил `sync.OnceValue`. Это потокобезопасно: инициализация запускается ровно один раз, даже при конкурентных вызовах.
+Go 1.26 сохранил `sync.OnceValue`. Это потокобезопасно: инициализация запускается ровно один раз, даже при конкурентных вызовах.
 
 До Go 1.21 синглтон реализовывали через `sync.Once`:
 

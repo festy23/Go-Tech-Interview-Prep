@@ -125,16 +125,14 @@ Redis — доминирующий внешний кэш для Go-сервис�
 ```go
 import "github.com/redis/go-redis/v9"
 
-rdb := redis.NewClient(&redis.Options{
-    Addr:         "localhost:6379",
-    Password:     "",
-    DB:           0,
-    PoolSize:     10,              // пул соединений
-    MinIdleConns: 2,
-    DialTimeout:  5 * time.Second,
-    ReadTimeout:  3 * time.Second,
-    WriteTimeout: 3 * time.Second,
-})
+opts := new(redis.Options) // Go 1.26: new(T) возвращает *T, удобно для конфигов с полями-указателями
+opts.Addr = "localhost:6379"
+opts.PoolSize = 10             // пул соединений
+opts.MinIdleConns = 2
+opts.DialTimeout = 5 * time.Second
+opts.ReadTimeout = 3 * time.Second
+opts.WriteTimeout = 3 * time.Second
+rdb := redis.NewClient(opts)
 
 // Атомарный инкремент — безопасен при конкурентном доступе
 count, err := rdb.Incr(ctx, "page:views").Result()

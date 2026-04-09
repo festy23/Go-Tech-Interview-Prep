@@ -363,7 +363,8 @@ func extractID(data string) string {
 ```go
 func wordCount(s string) map[string]int {
     counts := make(map[string]int)
-    for _, word := range strings.Fields(s) {
+    // Go 1.25: strings.FieldsSeq — iterator, avoids allocating []string
+    for word := range strings.FieldsSeq(s) {
         counts[strings.ToLower(word)]++
     }
     return counts
@@ -399,4 +400,4 @@ func parseConfig(line string) (key, value string, ok bool) {
 
 ## Summary
 
-Strings in Go are immutable, stored as UTF-8, and `len()` returns bytes. Working with individual characters requires runes. Efficient string construction uses `strings.Builder`. Modern utilities from Go 1.18–1.20 (`strings.Cut`, `strings.CutPrefix`, `strings.Clone`) significantly simplify common patterns. Conversions between `string`, `[]byte`, and `[]rune` always copy data — keep this in mind in performance-sensitive code.
+Strings in Go are immutable, stored as UTF-8, and `len()` returns bytes. Working with individual characters requires runes. Efficient string construction uses `strings.Builder`. Modern utilities from Go 1.18–1.20 (`strings.Cut`, `strings.CutPrefix`, `strings.Clone`) significantly simplify common patterns. Go 1.25 added `strings.FieldsSeq` and `strings.SplitSeq` — iterators that avoid allocating `[]string` when you only need to iterate. Conversions between `string`, `[]byte`, and `[]rune` always copy data — keep this in mind in performance-sensitive code.

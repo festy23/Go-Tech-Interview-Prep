@@ -176,10 +176,10 @@ When the context is cancelled, PostgreSQL receives a cancel signal via the proto
 import "github.com/jmoiron/sqlx"
 
 type User struct {
-    ID        int64     `db:"id"`
-    Name      string    `db:"name"`
-    Email     string    `db:"email"`
-    CreatedAt time.Time `db:"created_at"`
+    ID        int64     `db:"id"    json:"id"`
+    Name      string    `db:"name"  json:"name"`
+    Email     string    `db:"email" json:"email"`
+    CreatedAt time.Time `db:"created_at" json:"created_at,omitzero"`
 }
 
 db, _ := sqlx.Connect("postgres", dsn)

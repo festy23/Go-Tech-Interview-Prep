@@ -325,12 +325,10 @@ func fanOut(ctx context.Context, jobs <-chan int, n int) <-chan int {
     results := make(chan int, n)
     var wg sync.WaitGroup
 
-    for i := range n { // Go 1.22: for i := range n
-        wg.Add(1)
-        go func() {
-            defer wg.Done()
+    for i := range n { // Go 1.22+: for i := range n
+        wg.Go(func() { // Go 1.25+: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
             worker(ctx, i+1, jobs, results)
-        }()
+        })
     }
 
     // Закрываем results, когда все воркеры завершились
@@ -390,8 +388,7 @@ func main() {
     g, ctx := errgroup.WithContext(ctx)
     results := make(chan int, len(urls))
 
-    for _, url := range urls {
-        url := url
+    for _, url := range urls { // Go 1.22+: url := url больше не нужен
         g.Go(func() error { // wg.Go() — запуск горутины с обработкой ошибок
             resp, err := http.Get(url)
             if err != nil {
@@ -447,9 +444,7 @@ func newSemaphore(n int) semaphore {
 func (s semaphore) acquire() { s <- struct{}{} }
 func (s semaphore) release() { <-s }
 
-func fetchURL(ctx context.Context, sem semaphore, wg *sync.WaitGroup, id int) {
-    defer wg.Done()
-
+func fetchURL(ctx context.Context, sem semaphore, id int) {
     sem.acquire()         // занять слот
     defer sem.release()   // освободить слот при выходе
 
@@ -468,8 +463,9 @@ func main() {
     var wg sync.WaitGroup
 
     for i := range 10 {
-        wg.Add(1)
-        go fetchURL(ctx, sem, &wg, i+1)
+        wg.Go(func() { // Go 1.25+: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
+            fetchURL(ctx, sem, i+1)
+        })
     }
 
     wg.Wait()
@@ -608,11 +604,9 @@ var wg sync.WaitGroup
 ch := make(chan int)
 
 for i := range 5 {
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() { // Go 1.25+: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
         ch <- i
-    }()
+    })
 }
 
 go func() {

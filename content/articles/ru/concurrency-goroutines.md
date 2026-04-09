@@ -166,6 +166,8 @@ func main() {
 
 ### `go func()` — базовый синтаксис
 
+Классический способ запуска горутин с `sync.WaitGroup`. Начиная с Go 1.25 предпочтительнее использовать `wg.Go()` (см. ниже), но понимание базового паттерна `Add/Done` важно для работы с унаследованным кодом.
+
 ```go
 package main
 
@@ -177,7 +179,7 @@ import (
 func main() {
     var wg sync.WaitGroup
 
-    // Именованная функция
+    // Именованная функция (старый стиль: Add + Done вручную)
     wg.Add(1)
     go sayHello(&wg, "мир")
 
@@ -190,6 +192,7 @@ func main() {
     }()
 
     // Go 1.22+: переменные цикла безопасны — каждая итерация своя копия i
+    // Go 1.25+: предпочтительнее wg.Go(func() { ... })
     for i := range 5 {
         wg.Add(1)
         go func() {
@@ -314,11 +317,9 @@ func TestNoLeak(t *testing.T) {
 var counter int
 var wg sync.WaitGroup
 for range 1000 {
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() { // Go 1.25+: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
         counter++ // не атомарно
-    }()
+    })
 }
 wg.Wait()
 fmt.Println(counter) // неопределённый результат
@@ -326,11 +327,9 @@ fmt.Println(counter) // неопределённый результат
 // ХОРОШО: атомарная операция
 var counter atomic.Int64
 for range 1000 {
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() {
         counter.Add(1)
-    }()
+    })
 }
 wg.Wait()
 fmt.Println(counter.Load()) // всегда 1000
@@ -354,11 +353,9 @@ func main() {
 // ХОРОШО: ждём завершения
 func main() {
     var wg sync.WaitGroup
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
+    wg.Go(func() { // Go 1.25+: wg.Go заменяет wg.Add(1) + go func() + defer wg.Done()
         fmt.Println("горутина")
-    }()
+    })
     wg.Wait()
 }
 ```

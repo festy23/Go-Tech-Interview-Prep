@@ -355,10 +355,7 @@ func BenchmarkHandlerJSON(b *testing.B) {
     body := `{"name":"Alice","email":"alice@example.com","password":"pass123"}`
     handler := NewHandler(newTestRepo(), slog.Default())
 
-    // Setup — не входит в измерение
-    b.ResetTimer()
-
-    for b.Loop() {  // Go 1.24: заменяет for range b.N
+    for b.Loop() {  // Go 1.24: заменяет for range b.N, setup выше не входит в измерение
         req := httptest.NewRequest(http.MethodPost, "/api/users",
             strings.NewReader(body))
         req.Header.Set("Content-Type", "application/json")

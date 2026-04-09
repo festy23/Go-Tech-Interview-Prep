@@ -53,7 +53,7 @@ for k, v := range m {
 ```go
 m := map[string]int{"banana": 2, "apple": 1, "cherry": 3}
 
-keys := maps.Keys(m) // Go 1.23
+keys := slices.Collect(maps.Keys(m)) // Go 1.23: maps.Keys возвращает iter.Seq[K]
 slices.Sort(keys)
 
 for _, k := range keys {

@@ -75,7 +75,7 @@ func NewForbidden() *HTTPError {
 }
 ```
 
-Кастомный тип позволяет использовать `errors.As` для извлечения в обработчике ошибок.
+Кастомный тип позволяет использовать `errors.AsType` для извлечения в обработчике ошибок.
 
 ## Обёртка ошибок: fmt.Errorf и %w
 
@@ -112,7 +112,7 @@ if errors.Is(err, sql.ErrNoRows) {
 }
 ```
 
-## errors.Is и errors.As
+## errors.Is и errors.AsType
 
 **`errors.Is(err, target)`** — проверяет, содержит ли цепочка ошибок конкретное значение. Работает с сентинель-ошибками:
 
@@ -132,17 +132,18 @@ if errors.Is(err, ErrUserNotFound) {
 }
 ```
 
-**`errors.As(err, &target)`** — извлекает первый элемент цепочки нужного типа:
+**`errors.AsType[T](err)`** (Go 1.26) — извлекает первый элемент цепочки нужного типа и возвращает его напрямую:
 
 ```go
-var httpErr *HTTPError
-if errors.As(err, &httpErr) {
+if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
     respond(w, httpErr.Status, httpErr)
     return
 }
 ```
 
-Разница: `errors.Is` для конкретных значений (sentinel errors), `errors.As` для типов с данными.
+До Go 1.26 требовался промежуточный `var httpErr *HTTPError; errors.As(err, &httpErr)`. Новый вариант короче и устраняет временную переменную.
+
+Разница: `errors.Is` для конкретных значений (sentinel errors), `errors.AsType` для типов с данными.
 
 ## Централизованный обработчик ошибок
 
@@ -152,15 +153,13 @@ if errors.As(err, &httpErr) {
 // writeError — преобразует Go-ошибку в HTTP-ответ
 func writeError(w http.ResponseWriter, r *http.Request, err error) {
     // 1. HTTPError с явным статусом
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         respond(w, httpErr.Status, httpErr)
         return
     }
 
     // 2. Ошибки валидации
-    var validErr *ValidationError
-    if errors.As(err, &validErr) {
+    if validErr := errors.AsType[*ValidationError](err); validErr != nil {
         respond(w, http.StatusUnprocessableEntity, map[string]any{
             "status":  http.StatusUnprocessableEntity,
             "code":    "VALIDATION_ERROR",
@@ -352,8 +351,7 @@ type ErrorResponse struct {
 
 ```go
 func writeError(w http.ResponseWriter, r *http.Request, err error) {
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         // 4xx — предупреждение (ошибка клиента, ожидаема)
         if httpErr.Status >= 400 && httpErr.Status < 500 {
             slog.Warn("client error",
@@ -404,7 +402,7 @@ func (h *Handler) slowEndpoint(w http.ResponseWriter, r *http.Request) {
 
 ## Типичные вопросы на собеседовании
 
-**Чем `errors.Is` отличается от `errors.As`?** `errors.Is` сравнивает значения в цепочке с целевым значением — используется для sentinel errors. `errors.As` ищет в цепочке тип и записывает его в target — используется для типов с данными.
+**Чем `errors.Is` отличается от `errors.AsType`?** `errors.Is` сравнивает значения в цепочке с целевым значением — используется для sentinel errors. `errors.AsType[T]` (Go 1.26) ищет в цепочке тип T и возвращает его напрямую — используется для типов с данными.
 
 **Нужно ли логировать ошибку на каждом уровне?** Нет. Логируйте один раз на верхнем уровне (в обработчике HTTP). На нижних уровнях — только обёртка с контекстом. Иначе одна ошибка будет залогирована 5 раз.
 
@@ -412,4 +410,4 @@ func (h *Handler) slowEndpoint(w http.ResponseWriter, r *http.Request) {
 
 ## Итог
 
-Архитектура ошибок в Go-сервере: кастомные типы с HTTP-статусом → обёртка с `%w` на каждом слое → `errors.Is/As` в централизованном обработчике → дифференцированное логирование → panic recovery middleware. Это даёт читаемые ошибки для клиента, полную цепочку для разработчика и устойчивый сервер, который не падает при неожиданных ситуациях.
+Архитектура ошибок в Go-сервере: кастомные типы с HTTP-статусом → обёртка с `%w` на каждом слое → `errors.Is`/`errors.AsType` в централизованном обработчике → дифференцированное логирование → panic recovery middleware. Это даёт читаемые ошибки для клиента, полную цепочку для разработчика и устойчивый сервер, который не падает при неожиданных ситуациях.

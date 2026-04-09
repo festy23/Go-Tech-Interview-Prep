@@ -88,14 +88,13 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 В серверном коде это выражается в трёх паттернах:
 
-1. **Обёртка ошибок** через `fmt.Errorf("операция: %w", err)` сохраняет цепочку для `errors.Is`/`errors.As`.
+1. **Обёртка ошибок** через `fmt.Errorf("операция: %w", err)` сохраняет цепочку для `errors.Is`/`errors.AsType`.
 2. **Централизованный обработчик ошибок** — единая функция превращает Go-ошибку в HTTP-ответ с правильным статусом и JSON-телом.
 3. **Middleware паники** — `recover()` в defer перехватывает неожиданную панику и возвращает 500 вместо падения сервера.
 
 ```go
 func writeError(w http.ResponseWriter, err error) {
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         respond(w, httpErr.Status, httpErr)
         return
     }
@@ -169,7 +168,7 @@ func (s *Server) handleUsers(w http.ResponseWriter, r *http.Request) {
 
 - **Обработчики** — `http.Handler`, `ServeMux` Go 1.22, `r.PathValue()`, middleware, роутеры.
 - **Аутентификация** — JWT, сессии, OAuth2, bcrypt, CORS, CSRF.
-- **Обработка ошибок** — типы ошибок, `errors.Is/As`, HTTP-ответы, panic recovery.
+- **Обработка ошибок** — типы ошибок, `errors.Is`/`errors.AsType`, HTTP-ответы, panic recovery.
 - **Тестирование** — `httptest`, `t.Context()`, testcontainers, бенчмарки с `b.Loop()`.
 
 Рекомендуемый порядок: обработчики → ошибки → аутентификация → тестирование. После этого практикуйте построение полного CRUD API с middleware-стеком и интеграционными тестами.

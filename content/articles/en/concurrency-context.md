@@ -142,6 +142,10 @@ func callExternalAPI(ctx context.Context) (*Response, error) {
         if errors.Is(err, context.DeadlineExceeded) {
             return nil, fmt.Errorf("API timeout after 3s")
         }
+        // Go 1.26: errors.AsType[T] — extract a typed error without a &target variable
+        if urlErr := errors.AsType[*url.Error](err); urlErr != nil {
+            return nil, fmt.Errorf("network error at %s: %w", urlErr.URL, urlErr.Err)
+        }
         return nil, err
     }
     defer resp.Body.Close()
@@ -407,6 +411,27 @@ go func() {
 
 ---
 
+## errors.AsType[T] (Go 1.26)
+
+Go 1.26 added `errors.AsType[T](err)` — a generic version of `errors.As` that does not require a target variable:
+
+```go
+// Before Go 1.26 — needs an intermediate variable
+var urlErr *url.Error
+if errors.As(err, &urlErr) {
+    fmt.Println(urlErr.URL)
+}
+
+// Go 1.26 — one line, no &target
+if urlErr := errors.AsType[*url.Error](err); urlErr != nil {
+    fmt.Println(urlErr.URL)
+}
+```
+
+This is especially convenient with `context`: cancellation often wraps errors in multiple layers, and `errors.AsType` lets you extract the needed type without declaring an extra variable.
+
+---
+
 ## Summary
 
 Context is a contract between the caller and the callee: "if I am cancelled, I will tell you." Core rules:
@@ -417,3 +442,4 @@ Context is a contract between the caller and the callee: "if I am cancelled, I w
 4. Check `ctx.Done()` in long-running operations and loops.
 5. Use `context.Cause` for detailed error diagnostics.
 6. Use `context.AfterFunc` to integrate with code that does not support context natively.
+7. Use `errors.AsType[T]` (Go 1.26) to extract typed errors without a target variable.

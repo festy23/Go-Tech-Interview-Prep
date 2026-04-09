@@ -363,7 +363,8 @@ func extractID(data string) string {
 ```go
 func wordCount(s string) map[string]int {
     counts := make(map[string]int)
-    for _, word := range strings.Fields(s) {
+    // Go 1.25: strings.FieldsSeq — итератор, не выделяет []string
+    for word := range strings.FieldsSeq(s) {
         counts[strings.ToLower(word)]++
     }
     return counts
@@ -399,4 +400,4 @@ func parseConfig(line string) (key, value string, ok bool) {
 
 ## Итог
 
-Строки в Go неизменяемы, хранятся в UTF-8, и `len()` возвращает байты. Для работы с символами нужны руны. Эффективное построение строк — через `strings.Builder`. Современные утилиты Go 1.18–1.20 (`strings.Cut`, `strings.CutPrefix`, `strings.Clone`) существенно упрощают типовой код. Конвертации между `string`, `[]byte` и `[]rune` всегда создают копии — это важно учитывать в производительном коде.
+Строки в Go неизменяемы, хранятся в UTF-8, и `len()` возвращает байты. Для работы с символами нужны руны. Эффективное построение строк — через `strings.Builder`. Современные утилиты Go 1.18–1.20 (`strings.Cut`, `strings.CutPrefix`, `strings.Clone`) существенно упрощают типовой код. Go 1.25 добавил `strings.FieldsSeq` и `strings.SplitSeq` — итераторы, которые не выделяют `[]string` при переборе. Конвертации между `string`, `[]byte` и `[]rune` всегда создают копии — это важно учитывать в производительном коде.

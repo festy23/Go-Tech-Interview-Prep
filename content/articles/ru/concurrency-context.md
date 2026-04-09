@@ -142,6 +142,10 @@ func callExternalAPI(ctx context.Context) (*Response, error) {
         if errors.Is(err, context.DeadlineExceeded) {
             return nil, fmt.Errorf("API timeout after 3s")
         }
+        // Go 1.26: errors.AsType[T] — извлечь типизированную ошибку без &target
+        if urlErr := errors.AsType[*url.Error](err); urlErr != nil {
+            return nil, fmt.Errorf("сетевая ошибка %s: %w", urlErr.URL, urlErr.Err)
+        }
         return nil, err
     }
     defer resp.Body.Close()
@@ -408,6 +412,27 @@ go func() {
 
 ---
 
+## errors.AsType[T] (Go 1.26)
+
+Go 1.26 добавил `errors.AsType[T](err)` — обобщённую версию `errors.As`, не требующую переменной-цели:
+
+```go
+// До Go 1.26 — нужна промежуточная переменная
+var urlErr *url.Error
+if errors.As(err, &urlErr) {
+    fmt.Println(urlErr.URL)
+}
+
+// Go 1.26 — одна строка, никакого &target
+if urlErr := errors.AsType[*url.Error](err); urlErr != nil {
+    fmt.Println(urlErr.URL)
+}
+```
+
+Это особенно удобно в связке с `context`: отмена контекста часто оборачивает ошибки в несколько слоёв, и `errors.AsType` позволяет извлечь нужный тип без объявления лишней переменной.
+
+---
+
 ## Итоги
 
 Контекст — это договор между вызывающим кодом и вызываемым: «если меня отменят, я скажу тебе». Основные правила:
@@ -418,3 +443,4 @@ go func() {
 4. Проверяйте `ctx.Done()` в долгих операциях и циклах.
 5. Используйте `context.Cause` для детальной диагностики ошибок.
 6. `context.AfterFunc` — для интеграции с кодом без поддержки контекста.
+7. `errors.AsType[T]` (Go 1.26) — извлечение типизированных ошибок без переменной-цели.

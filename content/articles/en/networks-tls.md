@@ -155,7 +155,7 @@ func main() {
         w.Write([]byte("Hello, TLS!"))
     })
 
-    tlsCfg := &tls.Config{
+    tlsCfg := new(tls.Config{
         MinVersion: tls.VersionTLS12,
         CurvePreferences: []tls.CurveID{
             tls.X25519,
@@ -168,7 +168,7 @@ func main() {
             tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
             tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
         },
-    }
+    })
 
     srv := &http.Server{
         Addr:         ":443",
@@ -206,10 +206,10 @@ func newHTTPSClient(caFile string) (*http.Client, error) {
 
     return &http.Client{
         Transport: &http.Transport{
-            TLSClientConfig: &tls.Config{
+            TLSClientConfig: new(tls.Config{
                 RootCAs:    pool,
                 MinVersion: tls.VersionTLS12,
-            },
+            }),
         },
         Timeout: 10 * time.Second,
     }, nil
@@ -251,12 +251,12 @@ func newMTLSServer(certFile, keyFile, clientCAFile string) (*http.Server, error)
         return nil, fmt.Errorf("load server cert: %w", err)
     }
 
-    tlsCfg := &tls.Config{
+    tlsCfg := new(tls.Config{
         Certificates: []tls.Certificate{serverCert},
         ClientAuth:   tls.RequireAndVerifyClientCert, // mandatory client verification
         ClientCAs:    clientCAPool,
         MinVersion:   tls.VersionTLS13,
-    }
+    })
 
     return &http.Server{
         Addr:      ":443",
@@ -285,11 +285,11 @@ func newMTLSClient(clientCertFile, clientKeyFile, serverCAFile string) (*http.Cl
 
     return &http.Client{
         Transport: &http.Transport{
-            TLSClientConfig: &tls.Config{
+            TLSClientConfig: new(tls.Config{
                 Certificates: []tls.Certificate{clientCert}, // present client certificate
                 RootCAs:      serverCAPool,
                 MinVersion:   tls.VersionTLS13,
-            },
+            }),
         },
         Timeout: 10 * time.Second,
     }, nil
@@ -318,7 +318,7 @@ mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 func newPinnedClient(expectedFingerprint [32]byte) *http.Client {
     return &http.Client{
         Transport: &http.Transport{
-            TLSClientConfig: &tls.Config{
+            TLSClientConfig: new(tls.Config{
                 VerifyConnection: func(cs tls.ConnectionState) error {
                     if len(cs.PeerCertificates) == 0 {
                         return fmt.Errorf("no server certificate")
@@ -331,7 +331,7 @@ func newPinnedClient(expectedFingerprint [32]byte) *http.Client {
                     }
                     return nil
                 },
-            },
+            }),
         },
     }
 }

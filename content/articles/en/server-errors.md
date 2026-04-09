@@ -75,7 +75,7 @@ func NewForbidden() *HTTPError {
 }
 ```
 
-A custom type lets you use `errors.As` to extract it in the centralised error handler.
+A custom type lets you use `errors.AsType` to extract it in the centralised error handler.
 
 ## Error Wrapping: fmt.Errorf and %w
 
@@ -111,7 +111,7 @@ if errors.Is(err, sql.ErrNoRows) {
 }
 ```
 
-## errors.Is and errors.As
+## errors.Is and errors.AsType
 
 **`errors.Is(err, target)`** — checks whether the error chain contains a specific value. Works with sentinel errors:
 
@@ -131,17 +131,18 @@ if errors.Is(err, ErrUserNotFound) {
 }
 ```
 
-**`errors.As(err, &target)`** — extracts the first element in the chain of the given type:
+**`errors.AsType[T](err)`** (Go 1.26) — extracts the first element in the chain of the given type and returns it directly:
 
 ```go
-var httpErr *HTTPError
-if errors.As(err, &httpErr) {
+if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
     respond(w, httpErr.Status, httpErr)
     return
 }
 ```
 
-Difference: `errors.Is` for specific values (sentinel errors), `errors.As` for types that carry data.
+Before Go 1.26 this required a temporary variable: `var httpErr *HTTPError; errors.As(err, &httpErr)`. The new form is shorter and eliminates the intermediate declaration.
+
+Difference: `errors.Is` for specific values (sentinel errors), `errors.AsType` for types that carry data.
 
 ## Centralised Error Handler
 
@@ -150,15 +151,13 @@ An anti-pattern: different error handling in every HTTP handler. Better: a singl
 ```go
 func writeError(w http.ResponseWriter, r *http.Request, err error) {
     // 1. HTTPError with an explicit status
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         respond(w, httpErr.Status, httpErr)
         return
     }
 
     // 2. Validation errors
-    var validErr *ValidationError
-    if errors.As(err, &validErr) {
+    if validErr := errors.AsType[*ValidationError](err); validErr != nil {
         respond(w, http.StatusUnprocessableEntity, map[string]any{
             "status":  http.StatusUnprocessableEntity,
             "code":    "VALIDATION_ERROR",
@@ -347,8 +346,7 @@ Not all errors deserve the same log level:
 
 ```go
 func writeError(w http.ResponseWriter, r *http.Request, err error) {
-    var httpErr *HTTPError
-    if errors.As(err, &httpErr) {
+    if httpErr := errors.AsType[*HTTPError](err); httpErr != nil {
         // 4xx — warn (client's fault, expected)
         if httpErr.Status >= 400 && httpErr.Status < 500 {
             slog.Warn("client error",
@@ -397,7 +395,7 @@ func (h *Handler) slowEndpoint(w http.ResponseWriter, r *http.Request) {
 
 ## Common Interview Questions
 
-**What is the difference between `errors.Is` and `errors.As`?** `errors.Is` walks the chain comparing values — used for sentinel errors. `errors.As` walks the chain looking for a type match and writes it to the target — used for error types that carry data.
+**What is the difference between `errors.Is` and `errors.AsType`?** `errors.Is` walks the chain comparing values — used for sentinel errors. `errors.AsType[T]` (Go 1.26) walks the chain looking for a type match and returns it directly — used for error types that carry data.
 
 **Should you log an error at every layer?** No. Log once at the top level (in the HTTP handler). At lower levels only wrap with context. Otherwise one error appears in the logs five times.
 
@@ -405,4 +403,4 @@ func (h *Handler) slowEndpoint(w http.ResponseWriter, r *http.Request) {
 
 ## Summary
 
-The error architecture of a Go server: custom types with HTTP status → wrap with `%w` at every layer → `errors.Is/As` in a centralised handler → differentiated logging → panic recovery middleware. This yields readable errors for the client, a full chain for the developer, and a resilient server that does not crash on unexpected situations.
+The error architecture of a Go server: custom types with HTTP status → wrap with `%w` at every layer → `errors.Is`/`errors.AsType` in a centralised handler → differentiated logging → panic recovery middleware. This yields readable errors for the client, a full chain for the developer, and a resilient server that does not crash on unexpected situations.

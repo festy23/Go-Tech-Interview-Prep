@@ -338,7 +338,7 @@ func main() {
     conn, err := grpc.NewClient("localhost:50051",
         grpc.WithTransportCredentials(insecure.NewCredentials()),
         // In production use TLS:
-        // grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})),
+        // grpc.WithTransportCredentials(credentials.NewTLS(new(tls.Config{}))),
     )
     if err != nil {
         slog.Error("dial failed", "err", err)
@@ -562,8 +562,7 @@ func withRetry(ctx context.Context, maxAttempts int, fn func() error) error {
         }
 
         // Do not retry client errors (4xx)
-        var apiErr *APIError
-        if errors.As(err, &apiErr) && apiErr.StatusCode < 500 {
+        if apiErr, ok := errors.AsType[*APIError](err); ok && apiErr.StatusCode < 500 {
             return err
         }
 
