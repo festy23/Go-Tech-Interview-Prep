@@ -63,6 +63,7 @@ export async function ensureIndexes(): Promise<void> {
       { 'providers.provider': 1, 'providers.providerUserId': 1 },
       { unique: true },
     ),
+    uCol.createIndex({ telegramId: 1 }, { sparse: true, unique: true }),
     rtCol.createIndex({ tokenHash: 1 }, { unique: true }),
     rtCol.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     rtCol.createIndex({ userId: 1 }),
