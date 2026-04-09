@@ -1,0 +1,17 @@
+services:
+  telegram-bot:
+    build: .
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
