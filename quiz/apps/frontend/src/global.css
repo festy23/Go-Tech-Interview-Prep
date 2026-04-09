@@ -133,13 +133,28 @@
   @apply text-teal-400 hover:text-teal-300 underline;
 }
 .article-prose code {
-  @apply bg-carbon-800 text-teal-300 px-1.5 py-0.5 rounded text-sm font-mono;
+  background: #1a1b26;
+  color: #7dcfff;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: "JetBrains Mono", monospace;
 }
 .article-prose pre {
-  @apply bg-carbon-900 border border-white/6 rounded-xl p-4 mb-6 overflow-x-auto;
+  background: #1a1b26;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 .article-prose pre code {
-  @apply bg-transparent p-0 text-carbon-200;
+  background: transparent;
+  padding: 0;
+  color: #c9d1d9;
+  font-family: "JetBrains Mono", monospace;
 }
 .article-prose ul {
   @apply list-disc pl-6 mb-4 space-y-1;
@@ -164,4 +179,80 @@
 }
 .article-prose hr {
   @apply border-white/6 my-8;
+}
+
+/* ── Code highlight: Tokyo Night Dark ─────────────────────────── */
+/* Source: https://github.com/enkia/tokyo-night-vscode-theme     */
+.hljs {
+  background: #1a1b26;
+  color: #9aa5ce;
+}
+.hljs-meta,
+.hljs-comment {
+  color: #565f89;
+  font-style: italic;
+}
+.hljs-tag,
+.hljs-doctag,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-template-tag,
+.hljs-selector-pseudo,
+.hljs-selector-attr,
+.hljs-variable.language_,
+.hljs-deletion {
+  color: #f7768e;
+}
+.hljs-variable,
+.hljs-template-variable,
+.hljs-number,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-link {
+  color: #ff9e64;
+}
+.hljs-built_in,
+.hljs-attribute {
+  color: #e0af68;
+}
+.hljs-keyword,
+.hljs-title.function_,
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-subst,
+.hljs-property {
+  color: #7dcfff;
+}
+.hljs-quote,
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #9ece6a;
+}
+.hljs-code,
+.hljs-formula,
+.hljs-section {
+  color: #7aa2f7;
+}
+.hljs-name,
+.hljs-operator,
+.hljs-char.escape_,
+.hljs-attr {
+  color: #bb9af7;
+}
+.hljs-punctuation {
+  color: #c0caf5;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
+}
+.hljs-selector-tag {
+  color: #73daca;
 }
