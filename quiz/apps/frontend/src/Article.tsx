@@ -124,7 +124,10 @@ export function Article({ blockId, onBack, onStartQuiz }: ArticleProps) {
           <div className="article-prose">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight, rehypeSlug]}
+              rehypePlugins={[
+                [rehypeHighlight, { detect: true }],
+                rehypeSlug,
+              ]}
             >
               {article.content}
             </ReactMarkdown>
