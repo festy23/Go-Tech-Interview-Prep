@@ -21,6 +21,7 @@ import {
   REFRESH_TOKEN_TTL,
 } from '../auth/tokenService.js'
 import { requireAuth } from '../middleware/authMiddleware.js'
+import { usersCol } from '../db/collections.js'
 import type { OAuthProviderName } from '../schemas/entities.js'
 
 const VALID_PROVIDERS = new Set<string>(['google', 'github', 'yandex'])
@@ -146,6 +147,15 @@ export const authRouter = new Hono()
         404,
       )
     }
+
+    // Track last seen for smart reminders (fire-and-forget)
+    usersCol().then((col) =>
+      col.updateOne(
+        { _id: user._id },
+        { $set: { lastSeenAt: new Date() } },
+      ),
+    )
+
     return c.json({ data: toUserDTO(user) })
   })
 
