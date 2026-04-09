@@ -31,6 +31,27 @@ export function saveBlockProgress(p: BlockProgress): void {
   }
 }
 
+export function clearProgress(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY)
+  } catch {
+    // silently ignore
+  }
+}
+
+export function sessionProgressToMap(byBlock: Record<string, { score: number; total: number; completedAt: string }>): ProgressMap {
+  const map: ProgressMap = {}
+  for (const [blockId, entry] of Object.entries(byBlock)) {
+    map[blockId] = {
+      blockId,
+      score: entry.score,
+      total: entry.total,
+      completedAt: entry.completedAt,
+    }
+  }
+  return map
+}
+
 export function getProgressPct(progress: ProgressMap, blockId: string): number {
   const entry = progress[blockId];
   if (!entry || entry.total === 0) return 0;

@@ -52,5 +52,15 @@
   "playground.error": "Ошибка компиляции",
   "playground.openInPlayground": "▶ Playground",
   "home.playground": "Go Песочница",
-  "home.playgroundDesc": "Пишите и запускайте Go код прямо в браузере"
+  "home.playgroundDesc": "Пишите и запускайте Go код прямо в браузере",
+
+  "auth.login": "Войти",
+  "auth.loginTitle": "Вход",
+  "auth.loginSubtitle": "Войдите, чтобы сохранить прогресс",
+  "auth.continueWith": "Продолжить через",
+  "auth.loginWith": "Войти через",
+  "auth.logout": "Выйти",
+  "auth.google": "Google",
+  "auth.yandex": "Яндекс",
+  "auth.github": "GitHub"
 }

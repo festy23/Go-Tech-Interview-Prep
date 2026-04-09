@@ -1,4 +1,4 @@
-import { progressCol } from '../db/collections.js'
+import { progressCol, ObjectId } from '../db/collections.js'
 import type { ProgressEntity } from '../schemas/entities.js'
 import type { SaveProgressInput, SessionProgressDTO, ProgressEntryDTO } from '@quiz/shared'
 
@@ -17,6 +17,7 @@ function toEntryDTO(entity: ProgressEntity): ProgressEntryDTO {
 
 export async function saveProgress(
   input: SaveProgressInput,
+  userId?: string,
 ): Promise<ProgressEntryDTO> {
   const col = await progressCol()
 
@@ -27,6 +28,7 @@ export async function saveProgress(
     score: input.score,
     total: input.total,
     completedAt: new Date(),
+    ...(userId ? { userId: new ObjectId(userId) } : {}),
   }
 
   // Always insert a new attempt (full history); best score computed on read
@@ -57,4 +59,26 @@ export async function getSessionProgress(
   }
 
   return { sessionId, byBlock }
+}
+
+export async function getUserProgress(
+  userId: string,
+): Promise<SessionProgressDTO> {
+  const col = await progressCol()
+
+  const entries = await col
+    .find({ userId: new ObjectId(userId) })
+    .sort({ completedAt: -1 })
+    .toArray()
+
+  const byBlock: Record<string, ProgressEntryDTO> = {}
+  for (const entry of entries) {
+    const dto = toEntryDTO(entry)
+    const existing = byBlock[entry.blockId]
+    if (!existing || dto.score > existing.score) {
+      byBlock[entry.blockId] = dto
+    }
+  }
+
+  return { sessionId: userId, byBlock }
 }

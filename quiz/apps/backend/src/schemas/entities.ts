@@ -6,6 +6,42 @@
 import { ObjectId } from 'mongodb'
 import type { DifficultyLevel } from '@quiz/shared'
 
+// ── Auth ────────────────────────────────────────────────────────────────────
+
+export type OAuthProviderName = 'google' | 'yandex' | 'github'
+
+export interface UserEntity {
+  _id: ObjectId
+  email: string | null
+  name: string
+  avatarUrl: string | null
+  providers: {
+    provider: OAuthProviderName
+    providerUserId: string
+    linkedAt: Date
+  }[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface RefreshTokenEntity {
+  _id: ObjectId
+  userId: ObjectId
+  tokenHash: string
+  expiresAt: Date
+  createdAt: Date
+}
+
+export interface OAuthStateEntity {
+  _id: ObjectId
+  state: string
+  provider: OAuthProviderName
+  codeVerifier: string | null
+  anonymousSessionId: string | null
+  expiresAt: Date
+  createdAt: Date
+}
+
 // ── Questions ───────────────────────────────────────────────────────────────
 
 interface BaseQuestionEntity {
@@ -54,6 +90,7 @@ export interface BlockEntity {
 export interface ProgressEntity {
   _id: ObjectId
   sessionId: string
+  userId?: ObjectId
   blockId: string
   quizId: number | null
   score: number

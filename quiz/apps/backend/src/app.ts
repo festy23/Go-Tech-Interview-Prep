@@ -7,6 +7,7 @@ import { questionsRouter } from './routes/questions.js'
 import { blocksRouter } from './routes/blocks.js'
 import { progressRouter } from './routes/progress.js'
 import { playgroundRouter } from './routes/playground.js'
+import { authRouter } from './routes/auth.js'
 
 const app = new Hono()
 
@@ -18,11 +19,13 @@ app.use(
     origin: env.CORS_ORIGIN,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   }),
 )
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 const apiRoutes = app
+  .route('/api/auth', authRouter)
   .route('/api/questions', questionsRouter)
   .route('/api/blocks', blocksRouter)
   .route('/api/progress', progressRouter)
