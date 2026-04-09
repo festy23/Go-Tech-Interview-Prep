@@ -83,7 +83,7 @@ export function toUserDTO(user: UserEntity): UserDTO {
     name: user.name,
     avatarUrl: user.avatarUrl,
     providers: user.providers.map((p) => p.provider),
-    telegramId: user.telegramId,
+    telegramId: user.telegramId ?? null,
   }
 }
 
