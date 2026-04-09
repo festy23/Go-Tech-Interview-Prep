@@ -135,6 +135,38 @@ export async function migrateProgressToUser(
   }
 }
 
+// ── Telegram ────────────────────────────────────────────────────────────────
+
+export async function linkTelegram(data: {
+  id: number
+  first_name: string
+  last_name?: string
+  username?: string
+  photo_url?: string
+  auth_date: number
+  hash: string
+}): Promise<{ linked: boolean; telegramId: number }> {
+  const res = await apiFetch<{ data: { linked: boolean; telegramId: number } }>(
+    '/telegram/link',
+    { method: 'POST', body: JSON.stringify(data) },
+  )
+  return res.data
+}
+
+export async function getTelegramStatus(): Promise<{
+  linked: boolean
+  telegramId: number | null
+}> {
+  const res = await apiFetch<{
+    data: { linked: boolean; telegramId: number | null }
+  }>('/telegram/status')
+  return res.data
+}
+
+export async function unlinkTelegram(): Promise<void> {
+  await apiFetch('/telegram/link', { method: 'DELETE' })
+}
+
 // ── Playground ───────────────────────────────────────────────────────────────
 
 export interface PlaygroundEvent {
