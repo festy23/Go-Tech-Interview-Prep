@@ -1,4 +1,8 @@
+from collections.abc import Callable
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+from bot.utils import ANSWER_LABELS
 
 
 def blocks_keyboard(blocks: list[dict]) -> InlineKeyboardMarkup:
@@ -14,32 +18,25 @@ def blocks_keyboard(blocks: list[dict]) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def answer_keyboard(question_index: int, options: list[str]) -> InlineKeyboardMarkup:
-    labels = ["A", "B", "C", "D"]
-    buttons = []
-    for i, option in enumerate(options):
-        text = f"{labels[i]}. {option[:40]}"
-        buttons.append([
-            InlineKeyboardButton(
-                text=text,
-                callback_data=f"answer:{question_index}:{i}",
-            )
-        ])
+def _options_keyboard(
+    options: list[str], make_callback: Callable[[int], str],
+) -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton(
+            text=f"{ANSWER_LABELS[i]}. {opt[:40]}",
+            callback_data=make_callback(i),
+        )]
+        for i, opt in enumerate(options)
+    ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def answer_keyboard(question_index: int, options: list[str]) -> InlineKeyboardMarkup:
+    return _options_keyboard(options, lambda i: f"answer:{question_index}:{i}")
 
 
 def daily_answer_keyboard(options: list[str]) -> InlineKeyboardMarkup:
-    labels = ["A", "B", "C", "D"]
-    buttons = []
-    for i, option in enumerate(options):
-        text = f"{labels[i]}. {option[:40]}"
-        buttons.append([
-            InlineKeyboardButton(
-                text=text,
-                callback_data=f"daily:{i}",
-            )
-        ])
-    return InlineKeyboardMarkup(inline_keyboard=buttons)
+    return _options_keyboard(options, lambda i: f"daily:{i}")
 
 
 def remind_keyboard() -> InlineKeyboardMarkup:

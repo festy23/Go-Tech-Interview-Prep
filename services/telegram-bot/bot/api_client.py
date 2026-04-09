@@ -45,12 +45,12 @@ class BackendClient:
         return result["data"]
 
     async def get_random_questions(
-        self, block_id: str, limit: int = 5, lang: str = "ru",
+        self, block_id: str | None = None, limit: int = 5, lang: str = "ru",
     ) -> list[dict]:
-        result = await self._get(
-            "/internal/questions/random",
-            params={"blockId": block_id, "limit": str(limit), "lang": lang},
-        )
+        params: dict[str, str] = {"limit": str(limit), "lang": lang}
+        if block_id:
+            params["blockId"] = block_id
+        result = await self._get("/internal/questions/random", params=params)
         return result["data"]
 
     async def get_user_progress(self, user_id: str) -> dict:
@@ -59,7 +59,7 @@ class BackendClient:
 
     async def save_progress(
         self, user_id: str, session_id: str, block_id: str,
-        quiz_id: int | None, score: int, total: int,
+        quiz_id: int, score: int, total: int,
     ) -> dict:
         result = await self._post(
             "/internal/progress",

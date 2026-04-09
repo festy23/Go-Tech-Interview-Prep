@@ -1,6 +1,8 @@
 from aiogram import F, Router
 from aiogram.types import CallbackQuery
 
+from bot.utils import answer_feedback
+
 router = Router()
 
 _daily_answers: dict[tuple[int, int], int] = {}
@@ -21,11 +23,7 @@ async def on_daily_answer(callback: CallbackQuery) -> None:
         await callback.answer("Время ответа истекло")
         return
 
-    labels = ["A", "B", "C", "D"]
-    if chosen == correct:
-        text = f"✅ Верно! Ответ: {labels[correct]}"
-    else:
-        text = f"❌ Неверно. Правильный ответ: {labels[correct]}"
+    text = answer_feedback(chosen, correct)
 
     await callback.message.edit_text(
         callback.message.text + f"\n\n{text}",

@@ -9,6 +9,7 @@ from bot.api_client import BackendClient
 from bot.handlers.daily import store_daily_answer
 from bot.handlers.remind import is_reminder_enabled
 from bot.keyboards.inline import daily_answer_keyboard
+from bot.utils import format_question_text
 
 logger = logging.getLogger(__name__)
 
@@ -19,14 +20,12 @@ async def send_daily_question(bot: Bot, api: BackendClient) -> None:
         if not tg_users:
             return
 
-        questions = await api.get_random_questions(block_id="", limit=1, lang="ru")
+        questions = await api.get_random_questions(limit=1, lang="ru")
         if not questions:
             return
 
         q = questions[0]
-        text = f"🎯 Вопрос дня\n\n{q['question']}"
-        if q.get("code"):
-            text += f"\n\n```go\n{q['code']}\n```"
+        text = format_question_text(q["question"], q.get("code"), "🎯 Вопрос дня")
 
         keyboard = daily_answer_keyboard(q["options"])
 

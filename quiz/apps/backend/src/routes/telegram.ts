@@ -48,7 +48,10 @@ export const telegramRouter = new Hono()
   .get('/status', requireAuth, async (c) => {
     const authUser = c.get('user')
     const col = await usersCol()
-    const user = await col.findOne({ _id: new ObjectId(authUser.id) })
+    const user = await col.findOne(
+      { _id: new ObjectId(authUser.id) },
+      { projection: { telegramId: 1 } },
+    )
     return c.json({
       data: { linked: !!user?.telegramId, telegramId: user?.telegramId ?? null },
     })

@@ -8,6 +8,7 @@ from aiogram.types import CallbackQuery, Message
 from bot.api_client import BackendClient
 from bot.keyboards.inline import answer_keyboard, blocks_keyboard
 from bot.states.quiz import QuizState
+from bot.utils import answer_feedback, format_question_text
 
 router = Router()
 
@@ -72,12 +73,7 @@ async def on_answer(
     if is_correct:
         score += 1
 
-    labels = ["A", "B", "C", "D"]
-    correct_label = labels[q["correct"]]
-    if is_correct:
-        feedback = f"✅ Верно! Ответ: {correct_label}"
-    else:
-        feedback = f"❌ Неверно. Правильный ответ: {correct_label}"
+    feedback = answer_feedback(chosen, q["correct"])
 
     if q.get("explanation"):
         feedback += f"\n\n💡 {q['explanation']}"
@@ -108,12 +104,10 @@ async def on_answer(
     await callback.answer()
 
 
-async def _send_question(message, questions: list[dict], index: int) -> None:
+async def _send_question(message: Message, questions: list[dict], index: int) -> None:
     q = questions[index]
-    total = len(questions)
-    text = f"❓ Вопрос {index + 1}/{total}\n\n{q['question']}"
-    if q.get("code"):
-        text += f"\n\n```go\n{q['code']}\n```"
+    header = f"❓ Вопрос {index + 1}/{len(questions)}"
+    text = format_question_text(q["question"], q.get("code"), header)
     await message.answer(
         text,
         reply_markup=answer_keyboard(index, q["options"]),

@@ -8,7 +8,7 @@ import { getAllBlocks } from '../services/blockService.js'
 import { usersCol, ObjectId } from '../db/collections.js'
 import type { Lang } from '@quiz/shared'
 
-const UserActivityQuerySchema = z.object({
+const UserIdQuerySchema = z.object({
   userId: z.string().min(1),
 })
 
@@ -16,10 +16,6 @@ const QuestionsRandomQuerySchema = z.object({
   blockId: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(5),
   lang: z.enum(['ru', 'en']).default('ru'),
-})
-
-const ProgressQuerySchema = z.object({
-  userId: z.string().min(1),
 })
 
 const SaveProgressBodySchema = z.object({
@@ -41,7 +37,7 @@ export const internalRouter = new Hono()
   .use('*', requireInternalKey)
 
   // ── GET /user-activity?userId=X ────────────────────────────────────────────
-  .get('/user-activity', zValidator('query', UserActivityQuerySchema), async (c) => {
+  .get('/user-activity', zValidator('query', UserIdQuerySchema), async (c) => {
     const { userId } = c.req.valid('query')
     const col = await usersCol()
     const user = await col.findOne(
@@ -72,7 +68,7 @@ export const internalRouter = new Hono()
   })
 
   // ── GET /progress?userId=X ─────────────────────────────────────────────────
-  .get('/progress', zValidator('query', ProgressQuerySchema), async (c) => {
+  .get('/progress', zValidator('query', UserIdQuerySchema), async (c) => {
     const { userId } = c.req.valid('query')
     const progress = await getUserProgress(userId)
     return c.json({ data: progress })
@@ -91,7 +87,7 @@ export const internalRouter = new Hono()
     const col = await usersCol()
     const users = await col
       .find(
-        { telegramId: { $ne: null, $exists: true } },
+        { telegramId: { $exists: true } },
         { projection: { _id: 1, name: 1, email: 1, telegramId: 1, lastSeenAt: 1 } },
       )
       .toArray()

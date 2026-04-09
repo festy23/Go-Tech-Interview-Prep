@@ -22,7 +22,7 @@ async def cmd_stats(message: Message, api: BackendClient) -> None:
         )
         return
 
-    progress = await api.get_user_progress(user_entry["userId"])
+    progress = await api.get_user_progress(user_entry["id"])
     by_block = progress.get("byBlock", {})
 
     if not by_block:
