@@ -62,5 +62,9 @@
   "auth.logout": "Выйти",
   "auth.google": "Google",
   "auth.yandex": "Яндекс",
-  "auth.github": "GitHub"
+  "auth.github": "GitHub",
+  "auth.connectTelegram": "Подключить Telegram",
+  "auth.telegramConnected": "Telegram подключён",
+  "auth.disconnectTelegram": "Отключить Telegram",
+  "auth.telegramLinkError": "Не удалось подключить Telegram"
 }
