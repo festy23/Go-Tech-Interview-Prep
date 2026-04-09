@@ -22,6 +22,8 @@ export interface UserEntity {
   }[]
   createdAt: Date
   updatedAt: Date
+  telegramId: number | null
+  lastSeenAt: Date | null
 }
 
 export interface RefreshTokenEntity {
