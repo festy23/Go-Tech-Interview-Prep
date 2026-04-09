@@ -99,3 +99,16 @@ export interface ProgressEntity {
   total: number
   completedAt: Date
 }
+
+// ── Articles ────────────────────────────────────────────────────────────────
+
+export interface ArticleEntity {
+  _id: ObjectId
+  blockId: string
+  parentBlockId: string | null
+  title: { ru: string; en: string }
+  content: { ru: string; en: string }
+  readingTimeMin: number
+  createdAt: Date
+  updatedAt: Date
+}

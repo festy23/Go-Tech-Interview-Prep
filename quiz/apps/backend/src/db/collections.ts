@@ -8,6 +8,7 @@ import type {
   UserEntity,
   RefreshTokenEntity,
   OAuthStateEntity,
+  ArticleEntity,
 } from '../schemas/entities.js'
 
 export async function questionsCol(): Promise<Collection<QuestionEntity>> {
@@ -40,9 +41,15 @@ export async function oauthStatesCol(): Promise<Collection<OAuthStateEntity>> {
   return db.collection<OAuthStateEntity>('oauth_states')
 }
 
+export async function articlesCol(): Promise<Collection<ArticleEntity>> {
+  const db = await getDb()
+  return db.collection<ArticleEntity>('articles')
+}
+
 export { ObjectId }
 
 export async function ensureIndexes(): Promise<void> {
+  const aCol = await articlesCol()
   const [qCol, pCol, uCol, rtCol, osCol] = await Promise.all([
     questionsCol(),
     progressCol(),
@@ -69,6 +76,7 @@ export async function ensureIndexes(): Promise<void> {
     rtCol.createIndex({ userId: 1 }),
     osCol.createIndex({ state: 1 }, { unique: true }),
     osCol.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
+    aCol.createIndex({ blockId: 1 }, { unique: true }),
   ])
 
   console.log('[db] Indexes ensured')

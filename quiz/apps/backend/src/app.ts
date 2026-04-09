@@ -10,6 +10,7 @@ import { playgroundRouter } from './routes/playground.js'
 import { authRouter } from './routes/auth.js'
 import { telegramRouter } from './routes/telegram.js'
 import { internalRouter } from './routes/internal.js'
+import { articlesRouter } from './routes/articles.js'
 
 const app = new Hono()
 
@@ -34,6 +35,7 @@ const apiRoutes = app
   .route('/api/playground', playgroundRouter)
   .route('/api/telegram', telegramRouter)
   .route('/api/internal', internalRouter)
+  .route('/api/articles', articlesRouter)
 
 // Health check
 app.get('/health', (c) =>
