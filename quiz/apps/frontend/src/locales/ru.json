@@ -66,5 +66,14 @@
   "auth.connectTelegram": "Подключить Telegram",
   "auth.telegramConnected": "Telegram подключён",
   "auth.disconnectTelegram": "Отключить Telegram",
-  "auth.telegramLinkError": "Не удалось подключить Telegram"
+  "auth.telegramLinkError": "Не удалось подключить Telegram",
+
+  "article.readingTime": "{{min}} мин чтения",
+  "article.back": "← Назад",
+  "article.theory": "📖 Теория",
+  "article.overview": "📖 Обзор",
+  "article.startQuiz": "Пройти квиз →",
+  "article.toc": "Содержание",
+  "article.prepare": "📖 Подготовиться",
+  "article.notFound": "Статья не найдена"
 }

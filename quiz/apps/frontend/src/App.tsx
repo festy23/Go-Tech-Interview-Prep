@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Home } from "./Home";
 import { Quiz } from "./Quiz";
 import { SubQuizList } from "./SubQuizList";
+import { Article } from "./Article";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AuthProvider } from "./auth/AuthContext";
 import { HeaderAuth } from "./auth/HeaderAuth";
@@ -16,7 +17,7 @@ import { fetchQuestions, fetchBlocks } from "./api/client";
 import { QUIZ_TO_BLOCK } from "./data/blocks";
 import type { QuestionDTO, BlockDTO } from "@quiz/shared";
 
-type Screen = "home" | "subquiz-list" | "quiz" | "playground";
+type Screen = "home" | "subquiz-list" | "quiz" | "playground" | "article";
 
 /** Map API QuestionDTO to the shape Quiz component expects */
 function dtoToQuestion(dto: QuestionDTO): Question {
@@ -41,6 +42,9 @@ export default function App() {
 
   // SubQuizList state
   const [selectedParentBlockId, setSelectedParentBlockId] = useState<string | null>(null);
+
+  // Article state
+  const [activeArticleBlockId, setActiveArticleBlockId] = useState<string | null>(null);
 
   // Playground state
   const [playgroundCode, setPlaygroundCode] = useState<string>("");
@@ -82,8 +86,15 @@ export default function App() {
     setSelectedParentBlockId(null);
     setActiveQuizId(null);
     setActiveBlockId(null);
+    setActiveArticleBlockId(null);
     setQuizTitle("");
     setQuizQuestions([]);
+  }, []);
+
+  const openArticle = useCallback((blockId: string) => {
+    setActiveArticleBlockId(blockId);
+    setScreen("article");
+    window.scrollTo(0, 0);
   }, []);
 
   const openPlayground = useCallback((code?: string) => {
@@ -203,6 +214,26 @@ export default function App() {
     );
   }
 
+  // ── Article screen ────────────────────────────────────────────────────────────
+  if (screen === "article" && activeArticleBlockId) {
+    return (
+      <Article
+        blockId={activeArticleBlockId}
+        onBack={goHome}
+        onStartQuiz={(blockId) => {
+          const block = allBlocks.find((b) => b.id === blockId);
+          if (block) {
+            if (block.quizId) {
+              startQuiz(block.quizId, block.title);
+            } else {
+              startBlockQuiz(block.id, block.title);
+            }
+          }
+        }}
+      />
+    );
+  }
+
   // ── SubQuizList screen ────────────────────────────────────────────────────────
   if (screen === "subquiz-list" && selectedParentBlockId) {
     const parentBlock = allBlocks.find((b) => b.id === selectedParentBlockId);
@@ -229,6 +260,7 @@ export default function App() {
           progress={progress}
           onSelectSubQuiz={handleSelectSubQuiz}
           onBack={goHome}
+          onOpenArticle={openArticle}
         />
       </>
     );
@@ -240,6 +272,7 @@ export default function App() {
       onOpenBlock={openSubQuizList}
       onStartQuiz={startQuiz}
       onOpenPlayground={openPlayground}
+      onOpenArticle={openArticle}
       childrenByParent={childrenByParent}
     />
   );

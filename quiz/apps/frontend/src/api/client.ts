@@ -6,9 +6,9 @@
  * to avoid build-time dependency on the backend source.
  * Types are validated at runtime with Zod (shared package).
  */
-import { QuestionDTOSchema, BlockDTOSchema, SessionProgressDTOSchema, UserDTOSchema } from '@quiz/shared'
+import { QuestionDTOSchema, BlockDTOSchema, SessionProgressDTOSchema, UserDTOSchema, ArticleDTOSchema, ArticleListItemSchema } from '@quiz/shared'
 import { z } from 'zod'
-import type { QuestionDTO, BlockDTO, SessionProgressDTO, SaveProgressInput, UserDTO } from '@quiz/shared'
+import type { QuestionDTO, BlockDTO, SessionProgressDTO, SaveProgressInput, UserDTO, ArticleDTO, ArticleListItem } from '@quiz/shared'
 import i18n from '../i18n'
 
 const BASE = '/api'
@@ -133,6 +133,20 @@ export async function migrateProgressToUser(
   } catch {
     return 0
   }
+}
+
+// ── Articles ────────────────────────────────────────────────────────────────
+
+export async function fetchArticle(blockId: string): Promise<ArticleDTO> {
+  const res = await apiFetch<{ data: unknown }>(`/articles/${blockId}?lang=${getLang()}`)
+  return ArticleDTOSchema.parse(res.data)
+}
+
+export async function fetchArticleList(parentBlockId?: string): Promise<ArticleListItem[]> {
+  const query = new URLSearchParams({ lang: getLang() })
+  if (parentBlockId) query.set('parentBlockId', parentBlockId)
+  const res = await apiFetch<{ data: unknown[] }>(`/articles?${query.toString()}`)
+  return z.array(ArticleListItemSchema).parse(res.data)
 }
 
 // ── Telegram ────────────────────────────────────────────────────────────────

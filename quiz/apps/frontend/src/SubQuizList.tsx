@@ -18,6 +18,7 @@ interface SubQuizListProps {
   progress: ProgressMap;
   onSelectSubQuiz: (block: BlockDTO) => void;
   onBack: () => void;
+  onOpenArticle?: (blockId: string) => void;
 }
 
 export function SubQuizList({
@@ -26,6 +27,7 @@ export function SubQuizList({
   progress,
   onSelectSubQuiz,
   onBack,
+  onOpenArticle,
 }: SubQuizListProps) {
   const { t } = useTranslation();
 
@@ -97,6 +99,17 @@ export function SubQuizList({
                 <span className="text-carbon-500 text-xs font-mono shrink-0">
                   {t("subquiz.notStarted")}
                 </span>
+              )}
+              {onOpenArticle && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenArticle(block.id);
+                  }}
+                  className="shrink-0 text-xs font-sans text-teal-400 bg-teal-400/8 border border-teal-400/20 px-2.5 py-1 rounded-lg cursor-pointer hover:bg-teal-400/15 transition-colors [@media(pointer:coarse)]:min-h-8"
+                >
+                  {t("article.theory")}
+                </button>
               )}
               <span className="text-carbon-500 group-hover:text-carbon-200 transition-colors text-lg leading-none ml-1">
                 ›
