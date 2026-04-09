@@ -8,11 +8,13 @@ from bot.utils import ANSWER_LABELS
 def blocks_keyboard(blocks: list[dict]) -> InlineKeyboardMarkup:
     buttons = []
     for block in blocks:
-        if block.get("quizId") is not None:
+        # Show sub-blocks that have questions (topicCount > 0, has parent)
+        if block.get("topicCount", 0) > 0 and block.get("parentBlockId"):
+            block_id = block.get("id") or block.get("blockId")
             buttons.append([
                 InlineKeyboardButton(
                     text=block["title"],
-                    callback_data=f"quiz_block:{block['blockId']}",
+                    callback_data=f"quiz_block:{block_id}",
                 )
             ])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
