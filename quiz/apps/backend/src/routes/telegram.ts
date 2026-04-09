@@ -1,48 +1,27 @@
 import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
 import { requireAuth } from '../middleware/authMiddleware.js'
-import { verifyTelegramAuth, type TelegramLoginData } from '../auth/telegramAuth.js'
-import { usersCol, ObjectId } from '../db/collections.js'
-
-const TelegramLinkSchema = z.object({
-  id: z.number(),
-  first_name: z.string(),
-  last_name: z.string().optional(),
-  username: z.string().optional(),
-  photo_url: z.string().optional(),
-  auth_date: z.number(),
-  hash: z.string(),
-})
+import { usersCol, ObjectId, telegramLinkTokensCol } from '../db/collections.js'
+import type { TelegramLinkTokenEntity } from '../schemas/entities.js'
 
 export const telegramRouter = new Hono()
 
-  .post('/link', requireAuth, zValidator('json', TelegramLinkSchema), async (c) => {
+  // Generate link token for deep link
+  .post('/generate-link', requireAuth, async (c) => {
     const authUser = c.get('user')
-    const data = c.req.valid('json') as TelegramLoginData
+    const col = await telegramLinkTokensCol()
 
-    if (!verifyTelegramAuth(data)) {
-      return c.json(
-        { error: { code: 'FORBIDDEN', message: 'Invalid Telegram auth data' } },
-        403,
-      )
-    }
+    // Generate random token
+    const token = crypto.randomUUID().replace(/-/g, '')
 
-    const col = await usersCol()
-    const existing = await col.findOne({ telegramId: data.id })
-    if (existing && existing._id.toHexString() !== authUser.id) {
-      return c.json(
-        { error: { code: 'CONFLICT', message: 'Telegram account already linked to another user' } },
-        409,
-      )
-    }
+    // Store with 10 min TTL
+    await col.insertOne({
+      token,
+      userId: new ObjectId(authUser.id),
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      createdAt: new Date(),
+    } as TelegramLinkTokenEntity)
 
-    await col.updateOne(
-      { _id: new ObjectId(authUser.id) },
-      { $set: { telegramId: data.id, updatedAt: new Date() } },
-    )
-
-    return c.json({ data: { linked: true, telegramId: data.id } })
+    return c.json({ data: { token } })
   })
 
   .get('/status', requireAuth, async (c) => {

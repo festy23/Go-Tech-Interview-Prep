@@ -151,18 +151,10 @@ export async function fetchArticleList(parentBlockId?: string): Promise<ArticleL
 
 // ── Telegram ────────────────────────────────────────────────────────────────
 
-export async function linkTelegram(data: {
-  id: number
-  first_name: string
-  last_name?: string
-  username?: string
-  photo_url?: string
-  auth_date: number
-  hash: string
-}): Promise<{ linked: boolean; telegramId: number }> {
-  const res = await apiFetch<{ data: { linked: boolean; telegramId: number } }>(
-    '/telegram/link',
-    { method: 'POST', body: JSON.stringify(data) },
+export async function generateTelegramLink(): Promise<{ token: string }> {
+  const res = await apiFetch<{ data: { token: string } }>(
+    '/telegram/generate-link',
+    { method: 'POST' },
   )
   return res.data
 }

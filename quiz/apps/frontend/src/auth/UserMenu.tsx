@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from './AuthContext'
-import { linkTelegram, unlinkTelegram, getTelegramStatus } from '../api/client'
+import { generateTelegramLink, unlinkTelegram, getTelegramStatus } from '../api/client'
 
 export function UserMenu() {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)
   const [telegramLinked, setTelegramLinked] = useState(false)
+  const [linkUrl, setLinkUrl] = useState<string | null>(null)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -28,34 +29,31 @@ export function UserMenu() {
       .catch(() => {})
   }, [user])
 
-  const handleTelegramConnect = useCallback(() => {
-    const botName = import.meta.env.VITE_TELEGRAM_BOT_NAME
-    if (!botName) return
+  const handleTelegramConnect = useCallback(async () => {
+    try {
+      const { token } = await generateTelegramLink()
+      setLinkUrl(`https://t.me/LeetGoBot?start=link_${token}`)
 
-    ;(window as any).onTelegramAuth = async (tgUser: any) => {
-      try {
-        await linkTelegram(tgUser)
-        setTelegramLinked(true)
-      } catch {
-        alert(t('auth.telegramLinkError'))
-      }
+      // Poll for link completion
+      const interval = setInterval(async () => {
+        try {
+          const status = await getTelegramStatus()
+          if (status.linked) {
+            setTelegramLinked(true)
+            setLinkUrl(null)
+            clearInterval(interval)
+          }
+        } catch {}
+      }, 2000)
+
+      // Stop polling after 10 minutes
+      setTimeout(() => {
+        clearInterval(interval)
+        setLinkUrl(null)
+      }, 10 * 60 * 1000)
+    } catch {
+      alert(t('auth.telegramLinkError'))
     }
-
-    const script = document.createElement('script')
-    script.src = 'https://telegram.org/js/telegram-widget.js?22'
-    script.setAttribute('data-telegram-login', botName)
-    script.setAttribute('data-size', 'medium')
-    script.setAttribute('data-onauth', 'onTelegramAuth(user)')
-    script.setAttribute('data-request-access', 'write')
-    script.async = true
-
-    const container = document.createElement('div')
-    container.style.position = 'fixed'
-    container.style.top = '-9999px'
-    container.appendChild(script)
-    document.body.appendChild(container)
-
-    setTimeout(() => container.remove(), 60000)
   }, [t])
 
   const handleTelegramDisconnect = useCallback(async () => {
@@ -107,7 +105,16 @@ export function UserMenu() {
               </p>
             )}
           </div>
-          {telegramLinked ? (
+          {linkUrl ? (
+            <a
+              href={linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full block text-left px-4 py-2.5 text-teal-400 text-sm font-sans transition-colors duration-150 hover:bg-white/5 hover:text-teal-300"
+            >
+              Открой в Telegram →
+            </a>
+          ) : telegramLinked ? (
             <button
               onClick={handleTelegramDisconnect}
               className="w-full text-left px-4 py-2.5 text-emerald-400 text-sm font-sans cursor-pointer transition-colors duration-150 hover:bg-white/5 hover:text-emerald-300"

@@ -5,7 +5,7 @@ import { requireInternalKey } from '../middleware/internalAuth.js'
 import { getQuestions } from '../services/questionService.js'
 import { getUserProgress, saveProgress } from '../services/progressService.js'
 import { getAllBlocks } from '../services/blockService.js'
-import { usersCol, ObjectId } from '../db/collections.js'
+import { usersCol, ObjectId, telegramLinkTokensCol } from '../db/collections.js'
 import type { Lang } from '@quiz/shared'
 
 const UserIdQuerySchema = z.object({
@@ -107,4 +107,46 @@ export const internalRouter = new Hono()
     const { lang } = c.req.valid('query')
     const blocks = await getAllBlocks(lang as Lang)
     return c.json({ data: blocks })
+  })
+
+  // ── POST /telegram/verify-link ─────────────────────────────────────────────
+  .post('/telegram/verify-link', async (c) => {
+    const body = await c.req.json()
+    const { token, telegramId } = body as { token: string; telegramId: number }
+
+    if (!token || !telegramId) {
+      return c.json({ error: { code: 'BAD_REQUEST', message: 'token and telegramId required' } }, 400)
+    }
+
+    const tlCol = await telegramLinkTokensCol()
+    const linkToken = await tlCol.findOne({ token })
+
+    if (!linkToken) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Invalid or expired token' } }, 404)
+    }
+
+    // Check expiry
+    if (linkToken.expiresAt < new Date()) {
+      await tlCol.deleteOne({ _id: linkToken._id })
+      return c.json({ error: { code: 'EXPIRED', message: 'Token expired' } }, 410)
+    }
+
+    const uCol = await usersCol()
+
+    // Check if telegramId already linked to another user
+    const existing = await uCol.findOne({ telegramId })
+    if (existing && existing._id.toHexString() !== linkToken.userId.toHexString()) {
+      return c.json({ error: { code: 'CONFLICT', message: 'Telegram already linked to another account' } }, 409)
+    }
+
+    // Link telegram
+    await uCol.updateOne(
+      { _id: linkToken.userId },
+      { $set: { telegramId, updatedAt: new Date() } },
+    )
+
+    // Delete used token
+    await tlCol.deleteOne({ _id: linkToken._id })
+
+    return c.json({ data: { linked: true } })
   })

@@ -100,6 +100,16 @@ export interface ProgressEntity {
   completedAt: Date
 }
 
+// ── Telegram Link Tokens ─────────────────────────────────────────────────────
+
+export interface TelegramLinkTokenEntity {
+  _id: ObjectId
+  token: string
+  userId: ObjectId
+  expiresAt: Date
+  createdAt: Date
+}
+
 // ── Articles ────────────────────────────────────────────────────────────────
 
 export interface ArticleEntity {

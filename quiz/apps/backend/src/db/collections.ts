@@ -9,6 +9,7 @@ import type {
   RefreshTokenEntity,
   OAuthStateEntity,
   ArticleEntity,
+  TelegramLinkTokenEntity,
 } from '../schemas/entities.js'
 
 export async function questionsCol(): Promise<Collection<QuestionEntity>> {
@@ -46,10 +47,16 @@ export async function articlesCol(): Promise<Collection<ArticleEntity>> {
   return db.collection<ArticleEntity>('articles')
 }
 
+export async function telegramLinkTokensCol(): Promise<Collection<TelegramLinkTokenEntity>> {
+  const db = await getDb()
+  return db.collection<TelegramLinkTokenEntity>('telegram_link_tokens')
+}
+
 export { ObjectId }
 
 export async function ensureIndexes(): Promise<void> {
   const aCol = await articlesCol()
+  const tlCol = await telegramLinkTokensCol()
   const [qCol, pCol, uCol, rtCol, osCol] = await Promise.all([
     questionsCol(),
     progressCol(),
@@ -77,6 +84,8 @@ export async function ensureIndexes(): Promise<void> {
     osCol.createIndex({ state: 1 }, { unique: true }),
     osCol.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     aCol.createIndex({ blockId: 1 }, { unique: true }),
+    tlCol.createIndex({ token: 1 }, { unique: true }),
+    tlCol.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   ])
 
   console.log('[db] Indexes ensured')

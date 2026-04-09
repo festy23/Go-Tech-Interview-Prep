@@ -78,3 +78,10 @@ class BackendClient:
     async def get_telegram_users(self) -> list[dict]:
         result = await self._get("/internal/users/telegram")
         return result["data"]
+
+    async def verify_telegram_link(self, token: str, telegram_id: int) -> dict:
+        result = await self._post(
+            "/internal/telegram/verify-link",
+            json={"token": token, "telegramId": telegram_id},
+        )
+        return result["data"]
