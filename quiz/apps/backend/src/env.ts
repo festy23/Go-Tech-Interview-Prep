@@ -19,6 +19,15 @@ export const env = createEnv({
     GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
     YANDEX_CLIENT_ID: z.string().min(1).optional(),
     YANDEX_CLIENT_SECRET: z.string().min(1).optional(),
+    TELEGRAM_BOT_TOKEN: z.string().min(1).optional(),
+    INTERNAL_API_KEY: z.string().min(32).optional(),
+
+    // MinIO
+    MINIO_ENDPOINT: z.string().default('localhost:9000'),
+    MINIO_ACCESS_KEY: z.string().default('minioadmin'),
+    MINIO_SECRET_KEY: z.string().default('minioadmin'),
+    MINIO_BUCKET: z.string().default('articles-images'),
+    MINIO_PUBLIC_URL: z.string().default('http://localhost:9000/articles-images'),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

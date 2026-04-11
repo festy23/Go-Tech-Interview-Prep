@@ -115,3 +115,144 @@
     }
   }
 }
+
+/* Article prose — dark theme markdown styling */
+.article-prose {
+  @apply text-carbon-200 font-sans leading-relaxed;
+}
+.article-prose h2 {
+  @apply text-xl font-bold text-carbon-100 mt-10 mb-4 font-sans;
+}
+.article-prose h3 {
+  @apply text-lg font-semibold text-carbon-100 mt-8 mb-3 font-sans;
+}
+.article-prose p {
+  @apply mb-4;
+}
+.article-prose a {
+  @apply text-teal-400 hover:text-teal-300 underline;
+}
+.article-prose code {
+  background: #1a1b26;
+  color: #7dcfff;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: "JetBrains Mono", monospace;
+}
+.article-prose pre {
+  background: #1a1b26;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.article-prose pre code {
+  background: transparent;
+  padding: 0;
+  color: #c9d1d9;
+  font-family: "JetBrains Mono", monospace;
+}
+.article-prose ul {
+  @apply list-disc pl-6 mb-4 space-y-1;
+}
+.article-prose ol {
+  @apply list-decimal pl-6 mb-4 space-y-1;
+}
+.article-prose blockquote {
+  @apply border-l-4 border-teal-400/30 pl-4 italic text-carbon-300 my-4;
+}
+.article-prose table {
+  @apply w-full border-collapse mb-6;
+}
+.article-prose th {
+  @apply text-left p-2 border-b border-white/10 text-carbon-300 font-semibold text-sm;
+}
+.article-prose td {
+  @apply p-2 border-b border-white/6 text-sm;
+}
+.article-prose img {
+  @apply rounded-xl my-6 max-w-full;
+}
+.article-prose hr {
+  @apply border-white/6 my-8;
+}
+
+/* ── Code highlight: Tokyo Night Dark ─────────────────────────── */
+/* Source: https://github.com/enkia/tokyo-night-vscode-theme     */
+.hljs {
+  background: #1a1b26;
+  color: #9aa5ce;
+}
+.hljs-meta,
+.hljs-comment {
+  color: #565f89;
+  font-style: italic;
+}
+.hljs-tag,
+.hljs-doctag,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-template-tag,
+.hljs-selector-pseudo,
+.hljs-selector-attr,
+.hljs-variable.language_,
+.hljs-deletion {
+  color: #f7768e;
+}
+.hljs-variable,
+.hljs-template-variable,
+.hljs-number,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-link {
+  color: #ff9e64;
+}
+.hljs-built_in,
+.hljs-attribute {
+  color: #e0af68;
+}
+.hljs-keyword,
+.hljs-title.function_,
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-subst,
+.hljs-property {
+  color: #7dcfff;
+}
+.hljs-quote,
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #9ece6a;
+}
+.hljs-code,
+.hljs-formula,
+.hljs-section {
+  color: #7aa2f7;
+}
+.hljs-name,
+.hljs-operator,
+.hljs-char.escape_,
+.hljs-attr {
+  color: #bb9af7;
+}
+.hljs-punctuation {
+  color: #c0caf5;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
+}
+.hljs-selector-tag {
+  color: #73daca;
+}

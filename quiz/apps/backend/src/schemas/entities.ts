@@ -22,6 +22,8 @@ export interface UserEntity {
   }[]
   createdAt: Date
   updatedAt: Date
+  telegramId: number | null
+  lastSeenAt: Date | null
 }
 
 export interface RefreshTokenEntity {
@@ -96,4 +98,27 @@ export interface ProgressEntity {
   score: number
   total: number
   completedAt: Date
+}
+
+// ── Telegram Link Tokens ─────────────────────────────────────────────────────
+
+export interface TelegramLinkTokenEntity {
+  _id: ObjectId
+  token: string
+  userId: ObjectId
+  expiresAt: Date
+  createdAt: Date
+}
+
+// ── Articles ────────────────────────────────────────────────────────────────
+
+export interface ArticleEntity {
+  _id: ObjectId
+  blockId: string
+  parentBlockId: string | null
+  title: { ru: string; en: string }
+  content: { ru: string; en: string }
+  readingTimeMin: number
+  createdAt: Date
+  updatedAt: Date
 }

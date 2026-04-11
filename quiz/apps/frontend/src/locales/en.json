@@ -62,5 +62,18 @@
   "auth.logout": "Sign out",
   "auth.google": "Google",
   "auth.yandex": "Yandex",
-  "auth.github": "GitHub"
+  "auth.github": "GitHub",
+  "auth.connectTelegram": "Connect Telegram",
+  "auth.telegramConnected": "Telegram connected",
+  "auth.disconnectTelegram": "Disconnect Telegram",
+  "auth.telegramLinkError": "Failed to connect Telegram",
+
+  "article.readingTime": "{{min}} min read",
+  "article.back": "← Back",
+  "article.theory": "📖 Theory",
+  "article.overview": "📖 Overview",
+  "article.startQuiz": "Start quiz →",
+  "article.toc": "Contents",
+  "article.prepare": "📖 Prepare",
+  "article.notFound": "Article not found"
 }

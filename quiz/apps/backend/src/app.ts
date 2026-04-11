@@ -8,6 +8,9 @@ import { blocksRouter } from './routes/blocks.js'
 import { progressRouter } from './routes/progress.js'
 import { playgroundRouter } from './routes/playground.js'
 import { authRouter } from './routes/auth.js'
+import { telegramRouter } from './routes/telegram.js'
+import { internalRouter } from './routes/internal.js'
+import { articlesRouter } from './routes/articles.js'
 
 const app = new Hono()
 
@@ -18,7 +21,7 @@ app.use(
   cors({
     origin: env.CORS_ORIGIN,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
     credentials: true,
   }),
 )
@@ -30,6 +33,9 @@ const apiRoutes = app
   .route('/api/blocks', blocksRouter)
   .route('/api/progress', progressRouter)
   .route('/api/playground', playgroundRouter)
+  .route('/api/telegram', telegramRouter)
+  .route('/api/internal', internalRouter)
+  .route('/api/articles', articlesRouter)
 
 // Health check
 app.get('/health', (c) =>

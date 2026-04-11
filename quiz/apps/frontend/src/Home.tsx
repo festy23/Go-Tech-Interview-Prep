@@ -28,10 +28,11 @@ interface HomeProps {
   onOpenBlock: (blockId: string) => void;
   onStartQuiz: (quizId: number, title: string) => void;
   onOpenPlayground?: () => void;
+  onOpenArticle?: (blockId: string) => void;
   childrenByParent: Record<string, BlockDTO[]>;
 }
 
-export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, childrenByParent }: HomeProps) {
+export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, onOpenArticle, childrenByParent }: HomeProps) {
   const { t, i18n } = useTranslation();
   const { progress } = useProgress();
 
@@ -150,9 +151,22 @@ export function Home({ onOpenBlock, onStartQuiz, onOpenPlayground, childrenByPar
                   <div className="text-sm font-semibold tracking-[0.3px] transition-[letter-spacing] duration-200 group-hover:tracking-[1px]" style={{ color: q.color }}>
                     {t("home.start")}
                   </div>
-                  {progressLabel && (
-                    <div className="text-xs font-mono text-carbon-400">{progressLabel}</div>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {onOpenArticle && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenArticle(q.id);
+                        }}
+                        className="text-xs font-sans text-carbon-400 hover:text-teal-400 transition-colors cursor-pointer"
+                      >
+                        {t("article.overview")}
+                      </button>
+                    )}
+                    {progressLabel && (
+                      <div className="text-xs font-mono text-carbon-400">{progressLabel}</div>
+                    )}
+                  </div>
                 </div>
               </button>
             );

@@ -63,6 +63,8 @@ export async function findOrCreateUser(
     ],
     createdAt: now,
     updatedAt: now,
+    telegramId: null,
+    lastSeenAt: now,
   }
 
   const result = await col.insertOne(newUser as UserEntity)
@@ -81,6 +83,7 @@ export function toUserDTO(user: UserEntity): UserDTO {
     name: user.name,
     avatarUrl: user.avatarUrl,
     providers: user.providers.map((p) => p.provider),
+    telegramId: user.telegramId ?? null,
   }
 }
 
